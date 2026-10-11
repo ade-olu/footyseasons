@@ -120,6 +120,7 @@ def build_club_stats(standings):
             entry = stats[club_id]
 
             if table_type == "TOTAL":
+                entry["position"] = row["position"]
                 entry["games_played"] = row["playedGames"]
                 entry["wins"] = row["won"]
                 entry["draws"] = row["draw"]
@@ -169,16 +170,17 @@ def save_club_stats(cursor, stats, season_id):
 
         cursor.execute(
             """INSERT OR REPLACE INTO club_season_stats
-               (season_id, club_id, games_played, wins, draws, losses,
+               (season_id, club_id, position, games_played, wins, draws, losses,
                 points, goals_for, goals_against,
                 home_points, home_wins, home_draws, home_losses,
                 home_goals_for, home_goals_against,
                 away_points, away_wins, away_draws, away_losses,
                 away_goals_for, away_goals_against)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 season_id,
                 club_id,
+                entry.get("position"),
                 entry.get("games_played"),
                 entry.get("wins"),
                 entry.get("draws"),
