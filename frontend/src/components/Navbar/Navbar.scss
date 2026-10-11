@@ -8,6 +8,10 @@ $navbar-text: #0b0f0e;
 $navbar-text-muted: #7d8180;
 $navbar-accent: #2fe6b8; // Same accent as the sidebar
 $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
+$navbar-dropdown-shadow:
+  0 1px 2px 0 rgba(11, 15, 14, 0.06),
+  0 4px 8px -2px rgba(11, 15, 14, 0.06),
+  0 12px 24px -4px rgba(11, 15, 14, 0.1);
 
 .navbar {
   display: flex;
@@ -113,7 +117,7 @@ $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     border-radius: 12px;
     border: 1px solid $navbar-border;
     background-color: $navbar-inner-bg;
-    box-shadow: $navbar-shadow;
+    box-shadow: $navbar-dropdown-shadow;
 
     // Focus sits on the list itself; the highlighted option shows where you are
     &:focus-visible {
