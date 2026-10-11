@@ -4,7 +4,7 @@ import "./HighlightCard.scss";
 // Club shown next to the value (e.g. the club with the best win streak)
 type HighlightClub = {
   name: string;
-  crestUrl: string;
+  crestUrl: string | null;
 };
 
 // Props for the HighlightCard component: a title, the headline value and a line of context under it
