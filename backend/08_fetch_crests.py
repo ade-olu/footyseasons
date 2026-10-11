@@ -1,5 +1,5 @@
 """
-07_fetch_crests.py
+08_fetch_crests.py
 
 Downloads an SVG crest for every club in CLUB_CRESTS from footylogos.com
 into frontend/public/crests/, and points clubs.crest_url at it
@@ -158,6 +158,62 @@ CLUB_CRESTS = {
     529: "stade-rennais",                # Stade Rennais FC 1901
     547: "stade-de-reims",               # Stade de Reims
     511: "toulouse-fc",                  # Toulouse FC
+
+    # Clubs that only played before 2023, added by
+    # 05_fetch_understat_history.py with negative ids. Évian Thonon
+    # Gaillard (-209) isn't on footylogos, so it shows the fallback shield
+    # Premier League
+    -227: "cardiff-city",                # Cardiff City FC
+    -219: "huddersfield-town",           # Huddersfield Town AFC
+    -91: "hull-city",                    # Hull City AFC
+    -93: "middlesbrough",                # Middlesbrough FC
+    -79: "norwich-city",                 # Norwich City FC
+    -202: "queens-park-rangers",         # Queens Park Rangers FC
+    -85: "stoke-city",                   # Stoke City FC
+    -84: "swansea-city",                 # Swansea City AFC
+    -90: "watford",                      # Watford FC
+    -76: "west-bromwich-albion",         # West Bromwich Albion FC
+    # La Liga
+    -206: "cordoba",                     # Córdoba CF
+    -139: "deportivo-la-coruna",         # RC Deportivo La Coruña
+    -156: "sd-eibar",                    # SD Eibar
+    -137: "malaga-cf",                   # Málaga CF
+    -232: "sd-huesca",                   # SD Huesca
+    -149: "sporting-gijon",              # Real Sporting de Gijón
+    # Serie A
+    -222: "benevento",                   # Benevento Calcio
+    -242: "brescia",                     # Brescia Calcio
+    -103: "ac-carpi",                    # Carpi FC 1909
+    -203: "cesena-fc",                   # AC Cesena
+    -109: "chievo",                      # AC Chievo Verona
+    -115: "fc-crotone",                  # FC Crotone
+    -100: "palermo-fc",                  # US Città di Palermo
+    -114: "pescara-calcio",              # Delfino Pescara 1936
+    -221: "spal",                        # SPAL
+    -102: "uc-sampdoria",                # UC Sampdoria
+    -260: "spezia",                      # Spezia Calcio
+    # Bundesliga
+    -262: "arminia-bielefeld",           # DSC Arminia Bielefeld
+    -233: "fortuna-dusseldorf",          # Fortuna Düsseldorf
+    -267: "spvgg-greuther-furth",        # SpVgg Greuther Fürth
+    -128: "hannover-96",                 # Hannover 96
+    -122: "hertha-bsc",                  # Hertha BSC
+    -126: "fc-ingolstadt",               # FC Ingolstadt 04
+    -234: "fc-nurnberg",                 # 1. FC Nürnberg
+    -205: "sc-paderborn-07",             # SC Paderborn 07
+    -124: "schalke-04",                  # FC Schalke 04
+    # Ligue 1
+    -274: "ac-ajaccio",                  # AC Ajaccio
+    -224: "amiens-sc",                   # Amiens SC
+    -176: "bordeaux",                    # FC Girondins de Bordeaux
+    -165: "sm-caen",                     # Stade Malherbe Caen
+    -181: "dijon-fco",                   # Dijon FCO
+    -173: "gazelec-ajaccio",             # GFC Ajaccio
+    -169: "ea-guingamp",                 # En Avant Guingamp
+    -182: "nancy-lorraine",              # AS Nancy-Lorraine
+    -235: "nimes-olympique",             # Nîmes Olympique
+    -162: "sc-bastia",                   # SC Bastia
+    -172: "troyes",                      # ES Troyes AC
 }
 
 # Pause between downloads so we don't hammer the site (it starts
@@ -260,8 +316,9 @@ def main():
 
     if missing:
         print(
-            "These clubs aren't in CLUB_CRESTS and keep their "
-            "football-data.org crest:"
+            "These clubs aren't in CLUB_CRESTS and keep their current "
+            "crest_url (football-data.org's, or none for clubs added by 05, "
+            "which the frontend shows as a shield):"
         )
         for name in missing:
             print(f"  - {name}")
