@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./HeroBanner.scss";
+import ClubCrest from "../ClubCrest/ClubCrest";
 
 import type { LeagueCode } from "../Sidebar/Sidebar";
 import type { Match, Standing, StandingsResponse } from "../../types/api"; // Types for API responses
@@ -217,10 +218,10 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
         {/* Champion card in the bottom-right corner */}
         <div className="hero-banner__champion">
           <div className="hero-banner__champion-club">
-            <img
+            <ClubCrest
               className="hero-banner__champion-crest"
               src={champion.crestUrl}
-              alt={`${champion.shortName} crest`}
+              name={champion.shortName}
             />
             <div className="hero-banner__champion-text">
               <p className="hero-banner__champion-label">Champions</p>

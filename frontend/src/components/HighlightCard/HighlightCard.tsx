@@ -1,3 +1,4 @@
+import ClubCrest from "../ClubCrest/ClubCrest";
 import "./HighlightCard.scss";
 
 // Club shown next to the value (e.g. the club with the best win streak)
@@ -30,10 +31,10 @@ export default function HighlightCard({
           className={`highlight-card__value${club ? " highlight-card__value--club" : ""}`}
         >
           {club && (
-            <img
+            <ClubCrest
               className="highlight-card__crest"
               src={club.crestUrl}
-              alt={`${club.name} crest`}
+              name={club.name}
             />
           )}
           <span className="highlight-card__value-text" title={club?.name}>
