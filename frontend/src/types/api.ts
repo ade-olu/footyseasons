@@ -20,7 +20,8 @@ export type Standing = {
   name: string;
   shortName: string;
   tla: string; // Three-letter abbreviation for the club
-  crestUrl: string;
+  crestUrl: string | null; // Null for a club without a crest (ClubCrest shows a shield)
+  position: number | null; // Official league position, tie-breakers included
   gamesPlayed: number;
   wins: number;
   draws: number;
