@@ -1,0 +1,20 @@
+// Club Crest color variables
+$club-crest-fallback: #b7b9b8;
+
+.club-crest {
+  object-fit: contain;
+
+  // Placeholder shield: square, sized by the parent's className like the image would be
+  &--fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    color: $club-crest-fallback;
+  }
+
+  &__icon {
+    width: 100%;
+    height: 100%;
+  }
+}
