@@ -1,11 +1,12 @@
 """
-05_calculate_aggregates.py
+06_calculate_aggregates.py
 
 Calculates 5 stats per club per season that need actual game logic
 rather than a direct API value: clean sheets, biggest win, biggest
 loss, longest win streak, and longest winless streak. Works entirely
 from data already in football.db (the matches table from
-02_fetch_matches.py). No API calls, no api_key.txt needed.
+02_fetch_matches.py and 05_fetch_understat_history.py). No API calls,
+no api_key.txt needed.
 
 Safe to re-run anytime, including mid-season: each run recalculates
 these 5 columns from whatever matches currently exist and overwrites
