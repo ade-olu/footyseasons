@@ -93,6 +93,7 @@ router.get("/:code/standings", (req, res) => {
     SELECT
       c.club_id AS clubId, c.name, c.short_name AS shortName, c.tla,
       c.crest_url AS crestUrl,
+      cs.position,
       cs.games_played AS gamesPlayed, cs.wins, cs.draws, cs.losses, cs.points,
       cs.goals_for AS goalsFor, cs.goals_against AS goalsAgainst,
       cs.clean_sheets AS cleanSheets,
@@ -101,7 +102,10 @@ router.get("/:code/standings", (req, res) => {
     FROM club_season_stats cs
     JOIN clubs c ON c.club_id = cs.club_id
     WHERE cs.season_id = ?
-    ORDER BY cs.points DESC, (cs.goals_for - cs.goals_against) DESC
+    ORDER BY
+      -- Official position (tie-breakers included) when we have it, otherwise points then goal difference.
+      cs.position IS NULL, cs.position,
+      cs.points DESC, (cs.goals_for - cs.goals_against) DESC
   `,
     )
     .all(season.seasonId);
