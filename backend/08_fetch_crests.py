@@ -160,8 +160,7 @@ CLUB_CRESTS = {
     511: "toulouse-fc",                  # Toulouse FC
 
     # Clubs that only played before 2023, added by
-    # 05_fetch_understat_history.py with negative ids. Évian Thonon
-    # Gaillard (-209) isn't on footylogos, so it shows the fallback shield
+    # 05_fetch_understat_history.py with negative ids
     # Premier League
     -227: "cardiff-city",                # Cardiff City FC
     -219: "huddersfield-town",           # Huddersfield Town AFC
@@ -213,6 +212,11 @@ CLUB_CRESTS = {
     -182: "nancy-lorraine",              # AS Nancy-Lorraine
     -235: "nimes-olympique",             # Nîmes Olympique
     -162: "sc-bastia",                   # SC Bastia
+    # Not on footylogos, so this file was added by hand: the current crest of
+    # Thonon Évian Grand Genève FC (the club refounded after Évian's 2016
+    # bankruptcy) from football-logos.cc. The script never downloads it
+    # because it's already in frontend/public/crests/
+    -209: "evian-thonon-gaillard",       # Évian Thonon Gaillard FC
     -172: "troyes",                      # ES Troyes AC
 }
 
