@@ -1,5 +1,5 @@
 """
-06_fetch_understat.py
+07_fetch_understat.py
 
 Fetches stats for EVERY player in each league-season from understat.com
 (goals, assists, minutes, xG, xA and more) and loads them into
@@ -17,8 +17,8 @@ matched automatically go in UNDERSTAT_CLUB_NAMES below.
 
 Safe to re-run anytime, including mid-season: each league-season's
 rows are deleted and re-inserted, so stats always reflect the latest
-fetch. Run 02_fetch_matches.py first, since clubs are matched against
-the matches table.
+fetch. Run 02_fetch_matches.py and 05_fetch_understat_history.py first,
+since clubs are matched against the matches table.
 """
 
 import re
@@ -30,8 +30,9 @@ import requests
 
 DB_FILE = "football.db"
 
-# Kept in sync with SEASONS in 02_fetch_matches.py
-SEASONS = [2023, 2024, 2025]
+# Every season in the database: 2014-2022 come from
+# 05_fetch_understat_history.py, 2023 onwards from 02_fetch_matches.py
+SEASONS = list(range(2014, 2026))
 
 # Kept as its own copy (rather than imported from 02_fetch_matches.py)
 # so this script can run independently on its own. "understat" is the
@@ -53,6 +54,13 @@ UNDERSTAT_CLUB_NAMES = {
     "Borussia M.Gladbach": "Borussia Mönchengladbach",
     "RasenBallsport Leipzig": "RB Leipzig",
     "Rennes": "Stade Rennais FC 1901",
+    # "Verona" also fits AC Chievo Verona, which shared the league until 2019
+    "Verona": "Hellas Verona FC",
+    "Hertha Berlin": "Hertha BSC",
+    "SPAL 2013": "SPAL",
+    "Fortuna Duesseldorf": "Fortuna Düsseldorf",
+    "Nuernberg": "1. FC Nürnberg",
+    "Greuther Fuerth": "SpVgg Greuther Fürth",
 }
 
 # Understat only answers this endpoint for requests that look like
