@@ -2,6 +2,7 @@
 
 // Navbar color variables
 $navbar-bg: #eff4f3;
+$navbar-bg-blur: rgba(239, 244, 243, 0.8);
 $navbar-inner-bg: #ffffff;
 $navbar-border: #dadbdb;
 $navbar-text: #0b0f0e;
@@ -14,13 +15,17 @@ $navbar-dropdown-shadow:
   0 12px 24px -4px rgba(11, 15, 14, 0.1);
 
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: rem(88);
-  background-color: $navbar-bg;
+  background-color: $navbar-bg-blur;
   border-bottom: 1px solid $navbar-border;
+  backdrop-filter: blur(24px);
   padding: rem(32);
 
   &__league {
