@@ -1,0 +1,52 @@
+@use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
+
+// Section Header color variables
+$section-header-text: #0b0f0e;
+$section-header-text-muted: #7d8180;
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: rem(24);
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    min-width: 0;
+  }
+
+  &__title {
+    @include text(24);
+    font-weight: 600;
+    color: $section-header-text;
+  }
+
+  &__description {
+    @include text(14);
+    color: $section-header-text-muted;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    flex-shrink: 0;
+    @include text(14);
+    color: $section-header-text-muted;
+    text-decoration: none;
+    transition: color 0.15s;
+
+    &:hover,
+    &:focus-visible {
+      color: $section-header-text;
+    }
+  }
+
+  &__action-icon {
+    width: rem(16);
+    height: rem(16);
+  }
+}
