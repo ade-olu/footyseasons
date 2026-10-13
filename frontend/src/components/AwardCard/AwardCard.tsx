@@ -44,7 +44,9 @@ export default function AwardCard({
                 src={club.crestUrl}
                 name={club.name}
               />
-              {club.name}
+              <span className="award-card__club-name" title={club.name}>
+                {club.name}
+              </span>
             </p>
           </div>
           <p className="award-card__stats">{stats}</p>

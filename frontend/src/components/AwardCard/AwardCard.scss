@@ -35,11 +35,13 @@ $award-card-photo-bg: rgba(255, 255, 255, 0.08);
     color: $award-card-trophy;
   }
 
+  // margin-top: auto keeps the body at the bottom when a card in the same row is taller
   &__body {
+    margin-top: auto;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    gap: rem(16);
+    gap: rem(32);
   }
 
   // min-width: 0 lets long names shrink and get an ellipsis instead of pushing the photo out
@@ -58,12 +60,15 @@ $award-card-photo-bg: rgba(255, 255, 255, 0.08);
     max-width: 100%;
   }
 
+  // Wraps onto 2 lines at most, then cuts off with an ellipsis
   &__name {
-    @include text(32);
+    @include text(28);
     font-weight: 600;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   &__club {
@@ -74,11 +79,19 @@ $award-card-photo-bg: rgba(255, 255, 255, 0.08);
     color: $award-card-text-muted;
   }
 
+  // Long club names get cut off with an ellipsis (full name is in the title attribute)
+  &__club-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &__crest {
     flex-shrink: 0;
     width: auto;
-    height: rem(17);
-    max-width: rem(17);
+    height: rem(16);
+    max-width: rem(16);
     object-fit: contain;
   }
 
