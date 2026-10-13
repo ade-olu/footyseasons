@@ -1,4 +1,5 @@
 import HeroBanner from "../../components/HeroBanner/HeroBanner";
+import SeasonAwards from "../../components/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "../../components/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "../../components/Sidebar/Sidebar";
 import "./OverviewPage.scss";
@@ -19,6 +20,8 @@ export default function OverviewPage({ league, season }: OverviewPageProps) {
       <section className="overview-page__grid">
         {/* Season highlight cards */}
         <SeasonHighlights league={league} season={season} />
+        {/* Season award winners */}
+        <SeasonAwards league={league} season={season} />
       </section>
     </>
   );
