@@ -1,4 +1,5 @@
 @use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
 
 // Sidebar styles using SCSS variables for colors
 $sidebar-bg: #0b0f0e;
@@ -19,7 +20,6 @@ $sidebar-accent: #2fe6b8;
   top: 0;
   overflow: hidden auto;
   background: $sidebar-bg;
-  line-height: normal;
   color: $sidebar-text-muted;
   scrollbar-width: none; // Hides scrollbar in Firefox
   -ms-overflow-style: none; // Hides scrollbar in IE and Edge
@@ -79,9 +79,8 @@ $sidebar-accent: #2fe6b8;
     border-radius: 12px;
     border: 0;
     background: transparent;
-    font-size: rem(14);
+    @include text(14);
     font-weight: 500;
-    line-height: normal;
     color: $sidebar-text-muted;
     text-decoration: none;
     white-space: nowrap;
@@ -123,7 +122,7 @@ $sidebar-accent: #2fe6b8;
 
   // Sidebar section title styles
   &__section-title {
-    font-size: rem(14);
+    @include text(14);
     font-weight: 500;
     letter-spacing: 0.5px;
     text-transform: uppercase;

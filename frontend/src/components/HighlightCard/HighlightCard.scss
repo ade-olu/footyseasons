@@ -1,4 +1,5 @@
 @use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
 
 // Highlight Card color variables
 $highlight-card-bg: #ffffff;
@@ -22,9 +23,8 @@ $highlight-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   border-radius: 16px;
 
   &__title {
-    font-size: rem(14);
+    @include text(14);
     font-weight: 500;
-    line-height: 1.2;
     color: $highlight-card-text-muted;
   }
 
@@ -39,14 +39,12 @@ $highlight-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     align-items: center;
     gap: rem(16);
     min-width: 0;
-    font-size: rem(32);
+    @include text(32);
     font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
 
     // Crest + club name instead of a single number
     &--club {
-      font-size: rem(24);
+      @include text(24);
     }
   }
 
@@ -67,8 +65,7 @@ $highlight-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   }
 
   &__description {
-    font-size: rem(12);
-    line-height: 1.2;
+    @include text(12);
     color: $highlight-card-text-muted;
   }
 }

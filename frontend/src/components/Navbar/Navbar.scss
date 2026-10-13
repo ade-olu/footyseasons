@@ -1,4 +1,5 @@
 @use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
 
 // Navbar color variables
 $navbar-bg: #eff4f3;
@@ -41,11 +42,10 @@ $navbar-dropdown-shadow:
   }
 
   &__league-name {
+    @include text(24);
     margin: 0;
     font-weight: 600;
     color: $navbar-text;
-    letter-spacing: -0.5px;
-    line-height: 1;
   }
 
   // Positions the option list under the button
@@ -59,7 +59,7 @@ $navbar-dropdown-shadow:
     justify-content: space-between;
     width: rem(240);
     cursor: pointer;
-    font-size: rem(16);
+    @include text(16);
     color: $navbar-text;
     border-radius: 12px;
     border: 1px solid $navbar-border;
@@ -92,12 +92,12 @@ $navbar-dropdown-shadow:
   }
 
   &__dropdown-label {
-    font-size: rem(12);
+    @include text(12);
     color: $navbar-text-muted;
   }
 
   &__dropdown-value {
-    font-size: rem(14);
+    @include text(14);
     color: $navbar-text;
     font-weight: 500;
   }
@@ -136,7 +136,7 @@ $navbar-dropdown-shadow:
     justify-content: space-between;
     padding: rem(8) rem(12);
     border-radius: 8px;
-    font-size: rem(14);
+    @include text(14);
     font-weight: 500;
     color: $navbar-text-muted;
     cursor: pointer;
