@@ -1,0 +1,35 @@
+@use "sass:map";
+@use "functions" as *;
+
+// Type scale (px font sizes from Figma) and the line height for each.
+// Bigger text gets tighter lines; large text also gets the -0.5px tracking used in Figma.
+$type-scale: (
+  12: normal,
+  14: normal,
+  16: normal,
+  20: 1.2,
+  24: 1.2,
+  32: 1.2,
+  48: 1.2,
+);
+
+// Sets font size, line height and letter spacing from the scale.
+// $wrap: true for text that runs onto several lines (e.g. a paragraph).
+// Font weight and color stay in each component.
+@mixin text($size, $wrap: false) {
+  @if not map.has-key($type-scale, $size) {
+    @error "text(#{$size}) isn't in the type scale: #{map.keys($type-scale)}";
+  }
+
+  font-size: rem($size);
+
+  @if $wrap {
+    line-height: 1.5;
+  } @else {
+    line-height: map.get($type-scale, $size);
+  }
+
+  @if $size >= 20 {
+    letter-spacing: -0.5px;
+  }
+}
