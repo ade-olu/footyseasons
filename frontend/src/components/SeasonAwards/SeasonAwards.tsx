@@ -15,7 +15,10 @@ const PLACEHOLDER_AWARDS = [
   {
     award: "Player of the Season",
     winner: "Bruno Fernandes",
-    club: { name: "Manchester United", crestUrl: "/crests/manchester-united.svg" },
+    club: {
+      name: "Manchester United",
+      crestUrl: "/crests/manchester-united.svg",
+    },
     stats: "9 Goals · 21 Assists",
   },
   {
