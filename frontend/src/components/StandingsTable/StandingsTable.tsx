@@ -90,9 +90,10 @@ export default function StandingsTable({
           <colgroup>
             <col className="standings-table__col-position" />
             <col />
-            {Array.from({ length: 6 }, (_, index) => (
+            {Array.from({ length: 5 }, (_, index) => (
               <col key={index} className="standings-table__col-stat" />
             ))}
+            <col className="standings-table__col-stat standings-table__col-points" />
             <col className="standings-table__col-form" />
           </colgroup>
           <thead>
@@ -118,7 +119,10 @@ export default function StandingsTable({
               <th scope="col" className="standings-table__stat">
                 <abbr title="Goal difference">GD</abbr>
               </th>
-              <th scope="col" className="standings-table__stat">
+              <th
+                scope="col"
+                className="standings-table__stat standings-table__points"
+              >
                 <abbr title="Points">PTS</abbr>
               </th>
               <th scope="col" className="standings-table__form">
@@ -163,7 +167,9 @@ export default function StandingsTable({
                   <td className="standings-table__stat">
                     {formatGoalDifference(club)}
                   </td>
-                  <td className="standings-table__stat">{club.points}</td>
+                  <td className="standings-table__stat standings-table__points">
+                    {club.points}
+                  </td>
                   <td className="standings-table__form">
                     <ol
                       className="standings-table__form-list"

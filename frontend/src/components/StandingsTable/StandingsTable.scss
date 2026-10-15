@@ -15,11 +15,14 @@ $standings-table-conference-league: #02b8d8;
 $standings-table-relegation-playoff: #e7982c;
 $standings-table-relegation: #d23333;
 
-// Fills its parent edge to edge (the section card has no side padding)
+// Fills its parent edge to edge (the section card has no side padding).
+// It's also the container for the query below, so the Form column hides
+// based on the table's own width, not the screen's
 .standings-table {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  container-type: inline-size;
 
   &__scroll {
     overflow-x: auto;
@@ -134,6 +137,34 @@ $standings-table-relegation: #d23333;
 
   td#{&}__form {
     padding: 0 rem(16);
+  }
+
+  // Too narrow for the form badges and a readable club name: drop the Form
+  // column, so the table only has to scroll sideways on much smaller widths
+  @container (max-width: #{rem(759)}) {
+    &__table {
+      min-width: rem(500);
+    }
+
+    &__col-form,
+    th#{&}__form,
+    td#{&}__form {
+      display: none;
+    }
+
+    &__col-stat {
+      width: rem(40);
+    }
+
+    // Points becomes the last column: pad it off the card's edge
+    &__col-points {
+      width: rem(56); // 40 + the 16 padding
+    }
+
+    th#{&}__points,
+    td#{&}__points {
+      padding-right: rem(16);
+    }
   }
 
   &__form-list {
