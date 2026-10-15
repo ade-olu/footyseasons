@@ -2,6 +2,7 @@ import HeroBanner from "../../components/HeroBanner/HeroBanner";
 import SeasonAwards from "../../components/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "../../components/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "../../components/Sidebar/Sidebar";
+import TopStandings from "../../components/TopStandings/TopStandings";
 import "./OverviewPage.scss";
 
 // Props for the OverviewPage: the selected league and season start year (2025 = 2025/26)
@@ -22,6 +23,8 @@ export default function OverviewPage({ league, season }: OverviewPageProps) {
         <SeasonHighlights league={league} season={season} />
         {/* Season award winners */}
         <SeasonAwards league={league} season={season} />
+        {/* Top 5 of the league table */}
+        <TopStandings league={league} season={season} />
       </section>
     </>
   );
