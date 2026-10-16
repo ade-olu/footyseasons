@@ -15,6 +15,10 @@ Munich" vs "FC Bayern München"), so each Understat team is matched to
 a club_id from that league-season's matches. Names that can't be
 matched automatically go in UNDERSTAT_CLUB_NAMES below.
 
+For mid-season transfers it also saves each club's last match date
+(from getPlayerData/<id>) to put the clubs in order. Saved dates are
+reused, so only new transfers are fetched.
+
 Safe to re-run anytime, including mid-season: each league-season's
 rows are deleted and re-inserted, so stats always reflect the latest
 fetch. Run 02_fetch_matches.py and 05_fetch_understat_history.py first,
@@ -97,6 +101,84 @@ def fetch_league_data(understat_league, start_year):
         f"{len(data['teams'])} teams."
     )
     return data
+
+
+def fetch_player_matches(understat_player_id):
+    # Every league match of the player's career
+    url = f"https://understat.com/getPlayerData/{understat_player_id}"
+    headers = {
+        **HEADERS,
+        "Referer": f"https://understat.com/player/{understat_player_id}",
+    }
+    response = requests.get(url, headers=headers, timeout=30)
+
+    if response.status_code != 200:
+        raise Exception(
+            f"Understat request failed for player {understat_player_id} "
+            f"with status {response.status_code}: {response.text[:200]}"
+        )
+
+    return response.json()["matches"]
+
+
+def find_last_match_dates(matches, start_year, team_names):
+    # Understat team name -> player's last match date for it this season
+    dates = {}
+    for match in matches:
+        if match["season"] != str(start_year):
+            continue
+
+        # Skips a match between two of his clubs (side unknown)
+        teams = {match["h_team"], match["a_team"]} & team_names
+        if len(teams) != 1:
+            continue
+
+        team = teams.pop()
+        dates[team] = max(dates.get(team, ""), match["date"][:10])
+
+    return dates
+
+
+def get_saved_match_dates(cursor, season_id):
+    # (understat_player_id, club_id) -> date saved by an earlier run
+    cursor.execute(
+        """SELECT ps.understat_player_id, pc.club_id, pc.last_match_date
+           FROM understat_player_clubs pc
+           JOIN understat_player_stats ps ON ps.id = pc.player_stats_id
+           WHERE ps.season_id = ? AND pc.last_match_date IS NOT NULL""",
+        (season_id,),
+    )
+    return {(row[0], row[1]): row[2] for row in cursor.fetchall()}
+
+
+def get_last_match_dates(cursor, players, club_lookup, season_id, start_year, match_cache):
+    # (understat_player_id, club_id) -> last match date, for multi-club players only
+    saved = get_saved_match_dates(cursor, season_id)
+    dates = {}
+
+    for player in players:
+        team_names = set(player["team_title"].split(","))
+        if len(team_names) < 2:
+            continue
+
+        player_id = int(player["id"])
+        keys = {team: (player_id, club_lookup[team]) for team in team_names}
+
+        if all(key in saved for key in keys.values()):
+            for key in keys.values():
+                dates[key] = saved[key]
+            continue
+
+        if player_id not in match_cache:
+            time.sleep(SECONDS_BETWEEN_REQUESTS)
+            match_cache[player_id] = fetch_player_matches(player_id)
+
+        team_dates = find_last_match_dates(match_cache[player_id], start_year, team_names)
+        for team, key in keys.items():
+            if team in team_dates:
+                dates[key] = team_dates[team]
+
+    return dates
 
 
 def get_season_id(cursor, league_id, start_year):
@@ -183,7 +265,7 @@ def build_club_lookup(data, clubs):
     return lookup
 
 
-def replace_players(cursor, players, club_lookup, season_id):
+def replace_players(cursor, players, club_lookup, match_dates, season_id):
     # Clears this season's rows first so players whose stats changed (or
     # who were dropped by Understat) don't leave stale rows behind.
     # understat_player_clubs rows have to go first because of the foreign key
@@ -230,10 +312,11 @@ def replace_players(cursor, players, club_lookup, season_id):
 
         # A mid-season transfer comes through as "Chelsea,Everton"
         for team_name in player["team_title"].split(","):
+            club_id = club_lookup[team_name]
             cursor.execute(
                 """INSERT OR IGNORE INTO understat_player_clubs
-                   (player_stats_id, club_id) VALUES (?, ?)""",
-                (player_stats_id, club_lookup[team_name]),
+                   (player_stats_id, club_id, last_match_date) VALUES (?, ?, ?)""",
+                (player_stats_id, club_id, match_dates.get((int(player["id"]), club_id))),
             )
 
     print(f"  Inserted {len(players)} player rows.")
@@ -244,6 +327,8 @@ def main():
     cursor = connection.cursor()
 
     jobs = [(year, league) for year in SEASONS for league in LEAGUES]
+    # Player id -> match log, so each player is fetched once per run
+    match_cache = {}
 
     for i, (year, league) in enumerate(jobs, start=1):
         print(f"\n[{i}/{len(jobs)}] {league['name']} ({league['code']}) {year}")
@@ -254,7 +339,10 @@ def main():
         # Match every team before touching the database, so a missing
         # mapping stops the run without wiping this season's rows
         club_lookup = build_club_lookup(data, get_season_clubs(cursor, season_id))
-        replace_players(cursor, data["players"], club_lookup, season_id)
+        match_dates = get_last_match_dates(
+            cursor, data["players"], club_lookup, season_id, year, match_cache
+        )
+        replace_players(cursor, data["players"], club_lookup, match_dates, season_id)
 
         connection.commit()
 

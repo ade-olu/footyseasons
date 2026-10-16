@@ -234,6 +234,7 @@ CREATE INDEX idx_understat_player_stats_season ON understat_player_stats(season_
 CREATE TABLE understat_player_clubs (
     player_stats_id  INTEGER NOT NULL,
     club_id          INTEGER NOT NULL,
+    last_match_date  TEXT,               -- Player's last match for this club; transfers only
 
     FOREIGN KEY (player_stats_id) REFERENCES understat_player_stats(id) ON DELETE CASCADE,
     FOREIGN KEY (club_id)         REFERENCES clubs(club_id),
