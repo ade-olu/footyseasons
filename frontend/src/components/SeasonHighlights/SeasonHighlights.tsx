@@ -184,7 +184,7 @@ export default function SeasonHighlights({
           title="Best Win Streak"
           value={streakClub.shortName}
           description={`${streak} consecutive ${streak === 1 ? "win" : "wins"}`}
-          club={{ name: streakClub.name, crestUrl: streakClub.crestUrl }}
+          club={{ name: streakClub.displayName, crestUrl: streakClub.crestUrl }}
         />
       ) : (
         <HighlightCard

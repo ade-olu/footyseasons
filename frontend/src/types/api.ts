@@ -17,7 +17,8 @@ export type League = {
 // One club's row in GET /api/leagues/:code/standings
 export type Standing = {
   clubId: number;
-  name: string;
+  name: string; // Official name, e.g. "Manchester City FC"
+  displayName: string; // Name shown in the app, e.g. "Manchester City"
   shortName: string;
   tla: string; // Three-letter abbreviation for the club
   crestUrl: string | null; // Null for a club without a crest (ClubCrest shows a shield)
@@ -51,8 +52,10 @@ export type Match = {
   homeGoals: number | null;
   awayGoals: number | null;
   homeClubName: string;
+  homeClubDisplayName: string;
   homeClubId: number;
   awayClubName: string;
+  awayClubDisplayName: string;
   awayClubId: number;
 };
 
@@ -60,6 +63,7 @@ export type Match = {
 export type PlayerClub = {
   clubId: number;
   name: string;
+  displayName: string;
   shortName: string;
   crestUrl: string;
 };
@@ -77,7 +81,7 @@ export type Player = {
   xA: number;
   shots: number;
   keyPasses: number;
-  clubs: PlayerClub[]; // Two or more for a mid-season transfer within the league
+  clubs: PlayerClub[]; // Oldest first; two or more for a mid-season transfer
 };
 
 // Full response from GET /api/leagues/:code/players

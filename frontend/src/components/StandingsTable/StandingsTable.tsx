@@ -151,12 +151,12 @@ export default function StandingsTable({
                       <span className="standings-table__crest-slot">
                         <ClubCrest
                           src={club.crestUrl}
-                          name={club.name}
+                          name={club.displayName}
                           className="standings-table__crest"
                         />
                       </span>
                       <span className="standings-table__club-name">
-                        {club.name}
+                        {club.displayName}
                       </span>
                     </span>
                   </th>

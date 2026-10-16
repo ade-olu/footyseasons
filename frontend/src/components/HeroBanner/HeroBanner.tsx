@@ -157,8 +157,8 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
   const headline = story?.headline ?? `${champion.shortName} are champions.`;
   const summary =
     story?.summary ??
-    `${champion.name} finished top with ${champion.points} points` +
-      (runnerUp ? `, ${pointsGap} clear of ${runnerUp.name}.` : ".");
+    `${champion.displayName} finished top with ${champion.points} points` +
+      (runnerUp ? `, ${pointsGap} clear of ${runnerUp.displayName}.` : ".");
 
   // Key stats shown under the summary
   const metrics = [
@@ -225,7 +225,7 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
             />
             <div className="hero-banner__champion-text">
               <p className="hero-banner__champion-label">Champions</p>
-              <p className="hero-banner__champion-name" title={champion.name}>
+              <p className="hero-banner__champion-name" title={champion.displayName}>
                 {champion.shortName}
               </p>
             </div>
