@@ -73,7 +73,8 @@ CREATE TABLE clubs (
     name        TEXT NOT NULL,         -- e.g. "Arsenal FC"
     short_name  TEXT,                  -- e.g. "Arsenal"
     tla         TEXT,                  -- three-letter code, e.g. "ARS"
-    crest_url   TEXT                   -- link to the club's badge image
+    crest_url   TEXT,                  -- link to the club's badge image
+    display_name TEXT                  -- name shown in the app, e.g. "Manchester City"; set by 07
 );
 
 

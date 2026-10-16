@@ -67,6 +67,56 @@ UNDERSTAT_CLUB_NAMES = {
     "Greuther Fuerth": "SpVgg Greuther Fürth",
 }
 
+# clubs.display_name is Understat's team name, except these.
+# Understat name -> display name
+DISPLAY_NAME_FIXES = {
+    # Accents
+    "Atletico Madrid": "Atlético Madrid",
+    "Malaga": "Málaga",
+    "Cadiz": "Cádiz",
+    "Leganes": "Leganés",
+    "Almeria": "Almería",
+    "Cordoba": "Córdoba",
+    "Sporting Gijon": "Sporting Gijón",
+    "Deportivo La Coruna": "Deportivo A Coruña",
+    "Saint-Etienne": "Saint-Étienne",
+    "Nimes": "Nîmes",
+    "Evian Thonon Gaillard": "Évian Thonon Gaillard",
+    "Nuernberg": "1. FC Nürnberg",
+    "Fortuna Duesseldorf": "Fortuna Düsseldorf",
+    "Greuther Fuerth": "Greuther Fürth",
+    "Borussia M.Gladbach": "Borussia Mönchengladbach",
+    # Odd names
+    "FC Cologne": "1. FC Köln",
+    "RasenBallsport Leipzig": "RB Leipzig",
+    "Paris Saint Germain": "Paris Saint-Germain",
+    "SPAL 2013": "SPAL",
+    "Parma Calcio 1913": "Parma",
+    # FotMob's names
+    "Bayern Munich": "Bayern München",
+    "Hertha Berlin": "Hertha BSC",
+    "Ajaccio": "AC Ajaccio",
+    "Alaves": "Deportivo Alavés",
+    "Bournemouth": "AFC Bournemouth",
+    "Chievo": "Chievo Verona",
+    "Verona": "Hellas Verona",
+    "AC Milan": "Milan",
+    # Full English names
+    "West Ham": "West Ham United",
+    "Tottenham": "Tottenham Hotspur",
+    "Leicester": "Leicester City",
+    "Leeds": "Leeds United",
+    "Brighton": "Brighton & Hove Albion",
+    "Cardiff": "Cardiff City",
+    "Hull": "Hull City",
+    "Stoke": "Stoke City",
+    "Swansea": "Swansea City",
+    "Norwich": "Norwich City",
+    "Ipswich": "Ipswich Town",
+    "Luton": "Luton Town",
+    "Huddersfield": "Huddersfield Town",
+}
+
 # Understat only answers this endpoint for requests that look like
 # they come from its own league page
 HEADERS = {
@@ -265,6 +315,15 @@ def build_club_lookup(data, clubs):
     return lookup
 
 
+def update_display_names(cursor, club_lookup):
+    # Later seasons run last, so a club keeps its latest Understat name
+    for team_name, club_id in club_lookup.items():
+        cursor.execute(
+            "UPDATE clubs SET display_name = ? WHERE club_id = ?",
+            (DISPLAY_NAME_FIXES.get(team_name, team_name), club_id),
+        )
+
+
 def replace_players(cursor, players, club_lookup, match_dates, season_id):
     # Clears this season's rows first so players whose stats changed (or
     # who were dropped by Understat) don't leave stale rows behind.
@@ -343,6 +402,7 @@ def main():
             cursor, data["players"], club_lookup, season_id, year, match_cache
         )
         replace_players(cursor, data["players"], club_lookup, match_dates, season_id)
+        update_display_names(cursor, club_lookup)
 
         connection.commit()
 
