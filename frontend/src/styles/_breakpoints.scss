@@ -1,0 +1,24 @@
+// Screen widths (viewport, for media queries)
+$tablet: 768px;
+$laptop: 1024px;
+
+// Below tablet width (phones)
+@mixin below-tablet {
+  @media (max-width: #{$tablet - 0.02px}) {
+    @content;
+  }
+}
+
+// Below laptop width
+@mixin below-laptop {
+  @media (max-width: #{$laptop - 0.02px}) {
+    @content;
+  }
+}
+
+// Laptop width and up
+@mixin laptop-up {
+  @media (min-width: $laptop) {
+    @content;
+  }
+}

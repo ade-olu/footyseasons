@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
-import type { ComponentType } from "react";
+import { useEffect, useRef, type ComponentType } from "react";
+import { X as CloseIcon } from "reicon-react";
 import "./Sidebar.scss";
 
 // Sidebar icons
@@ -68,75 +69,127 @@ export const LEAGUES: {
   },
 ];
 
-// Props for the Sidebar component, including the selected league and a callback for selecting a league
+// Props for the Sidebar component: the selected league, plus the drawer state below laptop width
 type SidebarProps = {
   selectedLeague: LeagueCode;
   onSelectLeague: (league: LeagueCode) => void;
+  isOpen: boolean;
+  onClose: () => void;
 };
 
 // Sidebar component that renders the sidebar navigation with pages and leagues
 export default function Sidebar({
   selectedLeague,
   onSelectLeague,
+  isOpen,
+  onClose,
 }: SidebarProps) {
-  return (
-    <aside className="sidebar">
-      <div className="sidebar__header">
-        <Link to="/" className="sidebar__logo-link" aria-label="PitchData home">
-          <img className="sidebar__logo" src={logoIcon} alt="" />
-        </Link>
-      </div>
-      {/* Navigation */}
-      <nav className="sidebar__nav">
-        {/* Main Navigation */}
-        <section className="sidebar__section">
-          <ul className="sidebar__nav-list">
-            {/* Render each page in the sidebar navigation */}
-            {PAGES.map((page) => (
-              <li key={page.path}>
-                <NavLink
-                  to={page.path}
-                  end={page.path === "/"}
-                  className={({ isActive }) =>
-                    `sidebar__nav-item${isActive ? " sidebar__nav-item--active" : ""}`
-                  }
-                >
-                  <page.icon className="sidebar__nav-icon" />
-                  <span>{page.name}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </section>
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-        {/* League Navigation */}
-        <section className="sidebar__section">
-          <h5 className="sidebar__section-title">Leagues</h5>
-          <ul className="sidebar__nav-list">
-            {/* Render each league in the sidebar navigation */}
-            {LEAGUES.map((league) => {
-              const isSelected = selectedLeague === league.code;
-              return (
-                <li key={league.code}>
-                  <button
-                    type="button"
-                    className={`sidebar__nav-item${isSelected ? " sidebar__nav-item--selected" : ""}`}
-                    aria-pressed={isSelected}
-                    onClick={() => onSelectLeague(league.code)}
+  // Focus the close button on open
+  useEffect(() => {
+    if (isOpen) closeButtonRef.current?.focus();
+  }, [isOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") onClose();
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  return (
+    <>
+      {/* Dims the page behind the drawer */}
+      <div
+        className={`sidebar-backdrop${isOpen ? " sidebar-backdrop--visible" : ""}`}
+        onClick={onClose}
+        aria-hidden
+      />
+      <aside
+        id="sidebar"
+        className={`sidebar${isOpen ? " sidebar--open" : ""}`}
+      >
+        <div className="sidebar__header">
+          <Link
+            to="/"
+            className="sidebar__logo-link"
+            aria-label="PitchData home"
+            onClick={onClose}
+          >
+            <img className="sidebar__logo" src={logoIcon} alt="" />
+          </Link>
+          <button
+            ref={closeButtonRef}
+            type="button"
+            className="sidebar__close"
+            aria-label="Close menu"
+            onClick={onClose}
+          >
+            <CloseIcon className="sidebar__close-icon" aria-hidden />
+          </button>
+        </div>
+        {/* Navigation */}
+        <nav className="sidebar__nav">
+          {/* Main Navigation */}
+          <section className="sidebar__section">
+            <ul className="sidebar__nav-list">
+              {/* Render each page in the sidebar navigation */}
+              {PAGES.map((page) => (
+                <li key={page.path}>
+                  <NavLink
+                    to={page.path}
+                    end={page.path === "/"}
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      `sidebar__nav-item${isActive ? " sidebar__nav-item--active" : ""}`
+                    }
                   >
-                    <img
-                      className="sidebar__nav-icon"
-                      src={league.logo}
-                      alt=""
-                    />
-                    <span>{league.name}</span>
-                  </button>
+                    <page.icon className="sidebar__nav-icon" />
+                    <span>{page.name}</span>
+                  </NavLink>
                 </li>
-              );
-            })}
-          </ul>
-        </section>
-      </nav>
-    </aside>
+              ))}
+            </ul>
+          </section>
+
+          {/* League Navigation */}
+          <section className="sidebar__section">
+            <h5 className="sidebar__section-title">Leagues</h5>
+            <ul className="sidebar__nav-list">
+              {/* Render each league in the sidebar navigation */}
+              {LEAGUES.map((league) => {
+                const isSelected = selectedLeague === league.code;
+                return (
+                  <li key={league.code}>
+                    <button
+                      type="button"
+                      className={`sidebar__nav-item${isSelected ? " sidebar__nav-item--selected" : ""}`}
+                      aria-pressed={isSelected}
+                      onClick={() => {
+                        onSelectLeague(league.code);
+                        onClose();
+                      }}
+                    >
+                      <img
+                        className="sidebar__nav-icon"
+                        src={league.logo}
+                        alt=""
+                      />
+                      <span>{league.name}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        </nav>
+      </aside>
+    </>
   );
 }

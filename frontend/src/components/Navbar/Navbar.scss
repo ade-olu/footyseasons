@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/breakpoints" as *;
 
 // Navbar color variables
 $navbar-bg: #eff4f3;
@@ -33,6 +34,43 @@ $navbar-dropdown-shadow:
     display: flex;
     align-items: center;
     gap: rem(8);
+  }
+
+  // Opens the sidebar drawer; hidden once the sidebar is always shown
+  &__menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(40);
+    height: rem(40);
+    flex-shrink: 0;
+    margin-right: rem(8);
+    padding: 0;
+    border: 1px solid $navbar-border;
+    border-radius: 12px;
+    background-color: $navbar-inner-bg;
+    box-shadow: $navbar-shadow;
+    color: $navbar-text;
+    cursor: pointer;
+    transition: border-color 0.15s;
+
+    &:hover {
+      border-color: $navbar-text-muted;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $navbar-accent;
+      outline-offset: 2px;
+    }
+
+    @include laptop-up {
+      display: none;
+    }
+  }
+
+  &__menu-icon {
+    width: rem(20);
+    height: rem(20);
   }
 
   &__league-logo {

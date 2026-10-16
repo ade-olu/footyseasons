@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/breakpoints" as *;
 
 // Sidebar styles using SCSS variables for colors
 $sidebar-bg: #0b0f0e;
@@ -8,6 +9,29 @@ $sidebar-item-active-bg: #16201f;
 $sidebar-text: #ffffff;
 $sidebar-text-muted: #9ba6a5;
 $sidebar-accent: #2fe6b8;
+$sidebar-backdrop: rgba(11, 15, 14, 0.5);
+$sidebar-drawer-duration: 0.25s;
+
+// Below laptop width the sidebar is a drawer, so it sits above the navbar (z-index 100)
+.sidebar-backdrop {
+  display: none;
+
+  @include below-laptop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: $sidebar-backdrop;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $sidebar-drawer-duration;
+
+    &--visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
 
 // Sidebar component styles
 .sidebar {
@@ -29,12 +53,75 @@ $sidebar-accent: #2fe6b8;
     display: none;
   }
 
+  // Drawer that slides in from the left
+  @include below-laptop {
+    position: fixed;
+    left: 0;
+    z-index: 201;
+    height: 100dvh;
+    transform: translateX(-100%);
+    visibility: hidden; // Keeps closed links out of the tab order
+    transition:
+      transform $sidebar-drawer-duration ease,
+      visibility 0s $sidebar-drawer-duration;
+
+    &--open {
+      transform: none;
+      visibility: visible;
+      transition: transform $sidebar-drawer-duration ease;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &--open {
+      transition: none;
+    }
+  }
+
   // Sidebar header styles
   &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-shrink: 0;
     height: rem(88);
-    padding: rem(32) rem(24);
+    padding: 0 rem(24);
     border-bottom: 1px solid $sidebar-border;
+  }
+
+  // Close button, only shown in the drawer
+  &__close {
+    display: none;
+
+    @include below-laptop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: rem(32);
+      height: rem(32);
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: $sidebar-text-muted;
+      cursor: pointer;
+      transition: color 0.15s;
+
+      &:hover {
+        color: $sidebar-text;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $sidebar-accent;
+      }
+    }
+  }
+
+  &__close-icon {
+    width: rem(20);
+    height: rem(20);
   }
 
   // Sidebar logo styles

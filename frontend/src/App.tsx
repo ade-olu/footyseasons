@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import "./styles/App.scss";
@@ -17,11 +17,24 @@ const LATEST_SEASON = 2025;
 function App() {
   const [league, setLeague] = useState<LeagueCode>("PL"); // Default league is the Premier League
   const [season, setSeason] = useState(LATEST_SEASON); // Default season is the latest season
+  // Sidebar drawer below laptop width
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  function closeMenu() {
+    setIsMenuOpen(false);
+    menuButtonRef.current?.focus();
+  }
 
   return (
     <div className="app">
       {/* Sidebar section */}
-      <Sidebar selectedLeague={league} onSelectLeague={setLeague} />
+      <Sidebar
+        selectedLeague={league}
+        onSelectLeague={setLeague}
+        isOpen={isMenuOpen}
+        onClose={closeMenu}
+      />
       {/* Main content section */}
       <main className="app__main">
         {/* Navbar section */}
@@ -29,6 +42,9 @@ function App() {
           selectedLeague={league}
           selectedSeason={season}
           onSelectSeason={setSeason}
+          menuButtonRef={menuButtonRef}
+          isMenuOpen={isMenuOpen}
+          onOpenMenu={() => setIsMenuOpen(true)}
         />
         {/* Page content */}
         <section className="app__content">

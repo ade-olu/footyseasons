@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, RefObject } from "react";
 import { ChevronDown as ArrowDownIcon } from "reicon-react"; // Downward arrow icon for the navbar
 import { Check as CheckIcon } from "reicon-react"; // Tick shown next to the selected season
+import { Menu as MenuIcon } from "reicon-react"; // Opens the sidebar below laptop width
 import type { LeagueCode } from "../Sidebar/Sidebar";
 import { LEAGUES } from "../Sidebar/Sidebar";
 import type { League, Season } from "../../types/api";
@@ -11,11 +12,15 @@ import "./Navbar.scss";
 // Base URL for the Express API
 const API_URL = "http://localhost:3001/api";
 
-// Props for the Navbar component: the selected league and season (start year, 2025 = 2025/26)
+// Props for the Navbar component: the selected league and season (start year, 2025 = 2025/26),
+// plus the menu button that opens the sidebar drawer
 type NavbarProps = {
   selectedLeague: LeagueCode;
   selectedSeason: number;
   onSelectSeason: (season: number) => void;
+  menuButtonRef: RefObject<HTMLButtonElement | null>;
+  isMenuOpen: boolean;
+  onOpenMenu: () => void;
 };
 
 // Shows a season as full years, e.g. 2025 -> "2025/2026"
@@ -27,6 +32,9 @@ export default function Navbar({
   selectedLeague,
   selectedSeason,
   onSelectSeason,
+  menuButtonRef,
+  isMenuOpen,
+  onOpenMenu,
 }: NavbarProps) {
   const [leagues, setLeagues] = useState<League[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -154,6 +162,17 @@ export default function Navbar({
     <nav className="navbar">
       {/* Selected league section */}
       <div className="navbar__league">
+        <button
+          ref={menuButtonRef}
+          type="button"
+          className="navbar__menu"
+          aria-label="Open menu"
+          aria-controls="sidebar"
+          aria-expanded={isMenuOpen}
+          onClick={onOpenMenu}
+        >
+          <MenuIcon className="navbar__menu-icon" aria-hidden />
+        </button>
         {league?.logoAlt && (
           <img src={league.logoAlt} alt="" className="navbar__league-logo" />
         )}
