@@ -2,6 +2,7 @@ import HeroBanner from "../../components/HeroBanner/HeroBanner";
 import SeasonAwards from "../../components/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "../../components/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "../../components/Sidebar/Sidebar";
+import TopPlayers from "../../components/TopPlayers/TopPlayers";
 import TopStandings from "../../components/TopStandings/TopStandings";
 import "./OverviewPage.scss";
 
@@ -25,6 +26,19 @@ export default function OverviewPage({ league, season }: OverviewPageProps) {
         <SeasonAwards league={league} season={season} />
         {/* Top 5 of the league table */}
         <TopStandings league={league} season={season} />
+        {/* Top 3 scorers and assist providers, side by side */}
+        <TopPlayers
+          league={league}
+          season={season}
+          stat="goals"
+          title="Top scorers"
+        />
+        <TopPlayers
+          league={league}
+          season={season}
+          stat="assists"
+          title="Top assists providers"
+        />
       </section>
     </>
   );
