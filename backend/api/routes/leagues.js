@@ -236,7 +236,7 @@ router.get("/:code/players", (req, res) => {
     )
     .all(season.seasonId, limit);
 
-  // Clubs for the players above (two or more for a mid-season transfer).
+  // Clubs for the players above, oldest first (last = current club).
   const clubs = db
     .prepare(
       `
@@ -248,6 +248,7 @@ router.get("/:code/players", (req, res) => {
     JOIN clubs c ON c.club_id = pc.club_id
     JOIN understat_player_stats ps ON ps.id = pc.player_stats_id
     WHERE ps.season_id = ?
+    ORDER BY pc.last_match_date
   `,
     )
     .all(season.seasonId);
