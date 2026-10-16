@@ -177,7 +177,10 @@ export default function Navbar({
           <img src={league.logoAlt} alt="" className="navbar__league-logo" />
         )}
         <h2 className="navbar__league-name">
-          {league?.name} {formatSeason(selectedSeason)}
+          {league?.name}{" "}
+          <span className="navbar__league-season">
+            {formatSeason(selectedSeason)}
+          </span>
         </h2>
       </div>
 

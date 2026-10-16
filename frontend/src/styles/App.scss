@@ -1,4 +1,5 @@
 @use "functions" as *;
+@use "breakpoints" as *;
 
 .app {
   display: flex;
@@ -14,6 +15,11 @@
     flex-direction: column;
     gap: rem(32);
     padding: rem(32);
+
+    @include below-tablet {
+      padding: rem(16);
+    }
+
     container-type: inline-size; // Lets page grids respond to the space left beside the sidebar, not the whole screen
   }
 }

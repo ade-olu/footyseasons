@@ -23,17 +23,23 @@ $navbar-dropdown-shadow:
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: rem(16);
   width: 100%;
   height: rem(88);
   background-color: $navbar-bg-blur;
   border-bottom: 1px solid $navbar-border;
   backdrop-filter: blur(24px);
-  padding: rem(32);
+  padding: 0 rem(32);
+
+  @include below-tablet {
+    padding: 0 rem(16);
+  }
 
   &__league {
     display: flex;
     align-items: center;
     gap: rem(8);
+    min-width: 0;
   }
 
   // Opens the sidebar drawer; hidden once the sidebar is always shown
@@ -74,6 +80,7 @@ $navbar-dropdown-shadow:
   }
 
   &__league-logo {
+    flex-shrink: 0;
     height: rem(28);
     width: auto;
     object-fit: contain;
@@ -84,17 +91,33 @@ $navbar-dropdown-shadow:
     margin: 0;
     font-weight: 600;
     color: $navbar-text;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include below-tablet {
+      @include text(16);
+    }
+  }
+
+  // The dropdown already shows the season on phones
+  &__league-season {
+    @include below-tablet {
+      display: none;
+    }
   }
 
   // Positions the option list under the button
   &__dropdown-wrapper {
     position: relative;
+    flex-shrink: 0;
   }
 
   &__dropdown {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: rem(16);
     width: rem(240);
     cursor: pointer;
     @include text(16);
@@ -105,6 +128,10 @@ $navbar-dropdown-shadow:
     box-shadow: $navbar-shadow;
     padding: rem(8) rem(16);
     transition: border-color 0.15s;
+
+    @include below-tablet {
+      width: auto;
+    }
 
     &:hover,
     &--open {
@@ -154,6 +181,7 @@ $navbar-dropdown-shadow:
     right: 0;
     z-index: 10;
     width: 100%;
+    min-width: rem(160);
     margin: 0;
     padding: rem(8);
     list-style: none;

@@ -83,6 +83,16 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
       );
       pointer-events: none;
     }
+
+    // One column on narrower screens: champion card goes below the content
+    @container (max-width: #{rem(900)}) {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: rem(32);
+    }
+
+    @container (max-width: #{rem(600)}) {
+      padding: rem(24);
+    }
   }
 
   // Content column styles
@@ -119,6 +129,11 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
     padding-right: rem(32);
     @include text(48);
     font-weight: 600;
+
+    @container (max-width: #{rem(600)}) {
+      padding-right: 0;
+      @include text(32);
+    }
   }
 
   // Summary styles
@@ -130,7 +145,8 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
   // Metrics list styles
   &__metrics {
     display: flex;
-    gap: rem(32);
+    flex-wrap: wrap;
+    gap: rem(24) rem(32);
     margin: 0;
     white-space: nowrap;
   }
@@ -160,6 +176,11 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
     align-self: end;
     justify-self: end;
     display: flex;
+    max-width: 100%;
+
+    @container (max-width: #{rem(900)}) {
+      justify-self: start;
+    }
     align-items: center;
     gap: rem(32);
     padding: rem(16) rem(24);
