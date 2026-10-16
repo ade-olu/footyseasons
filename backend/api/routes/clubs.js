@@ -34,6 +34,7 @@ router.get("/:id", (req, res) => {
       `
     SELECT
       club_id AS clubId, name, short_name AS shortName, tla,
+      COALESCE(display_name, name) AS displayName,
       crest_url AS crestUrl
     FROM clubs WHERE club_id = ?
   `,
@@ -102,7 +103,9 @@ router.get("/:id/matches", (req, res) => {
       m.match_id AS matchId, m.matchday, m.utc_date AS utcDate, m.status,
       m.home_goals AS homeGoals, m.away_goals AS awayGoals,
       hc.name AS homeClubName, hc.club_id AS homeClubId,
-      ac.name AS awayClubName, ac.club_id AS awayClubId
+      COALESCE(hc.display_name, hc.name) AS homeClubDisplayName,
+      ac.name AS awayClubName, ac.club_id AS awayClubId,
+      COALESCE(ac.display_name, ac.name) AS awayClubDisplayName
     FROM matches m
     JOIN seasons s ON s.season_id = m.season_id
     JOIN clubs hc ON hc.club_id = m.home_club_id

@@ -92,6 +92,7 @@ router.get("/:code/standings", (req, res) => {
       `
     SELECT
       c.club_id AS clubId, c.name, c.short_name AS shortName, c.tla,
+      COALESCE(c.display_name, c.name) AS displayName,
       c.crest_url AS crestUrl,
       cs.position,
       cs.games_played AS gamesPlayed, cs.wins, cs.draws, cs.losses, cs.points,
@@ -128,7 +129,9 @@ router.get("/:code/matches", (req, res) => {
       m.match_id AS matchId, m.matchday, m.utc_date AS utcDate, m.status,
       m.home_goals AS homeGoals, m.away_goals AS awayGoals,
       hc.name AS homeClubName, hc.club_id AS homeClubId,
-      ac.name AS awayClubName, ac.club_id AS awayClubId
+      COALESCE(hc.display_name, hc.name) AS homeClubDisplayName,
+      ac.name AS awayClubName, ac.club_id AS awayClubId,
+      COALESCE(ac.display_name, ac.name) AS awayClubDisplayName
     FROM matches m
     JOIN clubs hc ON hc.club_id = m.home_club_id
     JOIN clubs ac ON ac.club_id = m.away_club_id
@@ -243,6 +246,7 @@ router.get("/:code/players", (req, res) => {
     SELECT
       pc.player_stats_id AS playerStatsId,
       c.club_id AS clubId, c.name, c.short_name AS shortName,
+      COALESCE(c.display_name, c.name) AS displayName,
       c.crest_url AS crestUrl
     FROM understat_player_clubs pc
     JOIN clubs c ON c.club_id = pc.club_id
