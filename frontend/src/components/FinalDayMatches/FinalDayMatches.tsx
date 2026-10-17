@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../../api/config";
+import { fetchSeasonData } from "../../api/seasonData";
 import MatchResult from "../MatchResult/MatchResult";
 import SectionCard from "../SectionCard/SectionCard";
 import SectionHeader from "../SectionHeader/SectionHeader";
 import type { LeagueCode } from "../Sidebar/Sidebar";
-import type { Match, StandingsResponse } from "../../types/api"; // Types for API responses
+import type { Match } from "../../types/api"; // Types for API responses
 import "./FinalDayMatches.scss";
 
 // Statuses of matches that count as played
@@ -93,35 +93,19 @@ function groupByDay(matches: Match[]): MatchDay[] {
   return days;
 }
 
-// Fetches the matches and champion for a league's season
+// Gets the last matchweek and champion for a league's season
 async function fetchFinalDayData(
   league: LeagueCode,
   season: number,
-  signal: AbortSignal,
 ): Promise<FinalDayData> {
-  const [standingsRes, matchesRes] = await Promise.all([
-    fetch(`${API_URL}/leagues/${league}/standings?season=${season}`, {
-      signal,
-    }),
-    fetch(`${API_URL}/leagues/${league}/matches?season=${season}`, {
-      signal,
-    }),
-  ]);
-
-  if (!standingsRes.ok || !matchesRes.ok) {
-    throw new Error(`Could not load matches for ${league}`);
-  }
-
-  const standings = (await standingsRes.json()) as StandingsResponse;
-  const { matchweek, matches } = getLastMatchweek(
-    (await matchesRes.json()) as Match[],
-  );
+  const { standings, matches } = await fetchSeasonData(league, season);
+  const lastMatchweek = getLastMatchweek(matches);
 
   return {
     league,
     season,
-    matchweek,
-    days: groupByDay(matches),
+    matchweek: lastMatchweek.matchweek,
+    days: groupByDay(lastMatchweek.matches),
     isFinal: standings.championClubId !== null,
   };
 }
@@ -170,21 +154,25 @@ export default function FinalDayMatches({
 
   // Refetch whenever the selected league or season changes
   useEffect(() => {
-    // Cancels the request if the selection changes before it finishes
-    const controller = new AbortController();
+    // Ignores the result if the selection changes before it arrives
+    let ignore = false;
 
-    fetchFinalDayData(league, season, controller.signal)
+    fetchFinalDayData(league, season)
       .then((result) => {
-        setData(result);
-        setError(null);
+        if (!ignore) {
+          setData(result);
+          setError(null);
+        }
       })
-      .catch((err: Error) => {
-        if (err.name !== "AbortError") {
+      .catch(() => {
+        if (!ignore) {
           setError({ league, season });
         }
       });
 
-    return () => controller.abort();
+    return () => {
+      ignore = true;
+    };
   }, [league, season]);
 
   // Old data or errors from a previous selection don't count for the current one

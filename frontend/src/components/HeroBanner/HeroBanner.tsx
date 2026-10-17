@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../../api/config";
+import { fetchSeasonData } from "../../api/seasonData";
 import "./HeroBanner.scss";
 import ClubCrest from "../ClubCrest/ClubCrest";
 
 import type { LeagueCode } from "../Sidebar/Sidebar";
-import type { Match, Standing, StandingsResponse } from "../../types/api"; // Types for API responses
+import type { Standing } from "../../types/api"; // Types for API responses
 import { getHeroImage } from "../../data/heroImages"; // Get the hero image for a given club and season
 import { SEASON_STORIES } from "../../data/seasonStories"; // Hand-written stories for each season
 
@@ -34,30 +34,15 @@ type HeroBannerProps = {
   season: number;
 };
 
-// Fetches standings + matches for a league's season and turns them into HeroData
+// Gets standings + matches for a league's season and turns them into HeroData
 async function fetchHeroData(
   league: LeagueCode,
   season: number,
-  signal: AbortSignal,
 ): Promise<HeroData> {
-  // Run both requests at the same time instead of one after the other
-  const [standingsRes, matchesRes] = await Promise.all([
-    fetch(`${API_URL}/leagues/${league}/standings?season=${season}`, {
-      signal,
-    }),
-    fetch(`${API_URL}/leagues/${league}/matches?season=${season}`, {
-      signal,
-    }),
-  ]);
-
-  // Check if both responses were successful before proceeding
-  if (!standingsRes.ok || !matchesRes.ok) {
-    throw new Error(`Could not load season data for ${league}`);
-  }
-
-  const { standings, championClubId } =
-    (await standingsRes.json()) as StandingsResponse;
-  const matches = (await matchesRes.json()) as Match[];
+  const {
+    standings: { standings, championClubId },
+    matches,
+  } = await fetchSeasonData(league, season);
 
   // Champion comes from the API; fall back to the top of the table if it's missing
   const champion =
@@ -104,21 +89,25 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
 
   // Refetch whenever the selected league or season changes
   useEffect(() => {
-    // Cancels the request if the selection changes before it finishes
-    const controller = new AbortController();
+    // Ignores the result if the selection changes before it arrives
+    let ignore = false;
 
-    fetchHeroData(league, season, controller.signal)
+    fetchHeroData(league, season)
       .then((hero) => {
-        setData(hero);
-        setError(null);
+        if (!ignore) {
+          setData(hero);
+          setError(null);
+        }
       })
       .catch((err: Error) => {
-        if (err.name !== "AbortError") {
+        if (!ignore) {
           setError({ league, season, message: err.message });
         }
       });
 
-    return () => controller.abort();
+    return () => {
+      ignore = true;
+    };
   }, [league, season]);
 
   // Old data or errors from a previous selection don't count for the current one

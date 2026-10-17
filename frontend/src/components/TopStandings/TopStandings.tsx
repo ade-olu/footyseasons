@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../../api/config";
+import { fetchSeasonData } from "../../api/seasonData";
 import SectionCard from "../SectionCard/SectionCard";
 import SectionHeader from "../SectionHeader/SectionHeader";
 import StandingsTable, {
@@ -8,7 +8,7 @@ import StandingsTable, {
 import { LEAGUES, type LeagueCode } from "../Sidebar/Sidebar";
 import { TABLE_PLACES } from "../../data/tablePlaces";
 import { getClubForm } from "../../utils/form";
-import type { Match, StandingsResponse } from "../../types/api"; // Types for API responses
+import type { StandingsResponse } from "../../types/api"; // Types for API responses
 import "./TopStandings.scss";
 
 // Number of clubs shown on the overview
@@ -28,27 +28,12 @@ type TopStandingsProps = {
   season: number;
 };
 
-// Fetches the standings and matches (for form) for a league's season
+// Gets the standings and matches (for form) for a league's season
 async function fetchTopStandingsData(
   league: LeagueCode,
   season: number,
-  signal: AbortSignal,
 ): Promise<TopStandingsData> {
-  const [standingsRes, matchesRes] = await Promise.all([
-    fetch(`${API_URL}/leagues/${league}/standings?season=${season}`, {
-      signal,
-    }),
-    fetch(`${API_URL}/leagues/${league}/matches?season=${season}`, {
-      signal,
-    }),
-  ]);
-
-  if (!standingsRes.ok || !matchesRes.ok) {
-    throw new Error(`Could not load standings for ${league}`);
-  }
-
-  const standings = (await standingsRes.json()) as StandingsResponse;
-  const matches = (await matchesRes.json()) as Match[];
+  const { standings, matches } = await fetchSeasonData(league, season);
 
   return { league, season, standings, form: getClubForm(matches) };
 }
@@ -63,21 +48,25 @@ export default function TopStandings({ league, season }: TopStandingsProps) {
 
   // Refetch whenever the selected league or season changes
   useEffect(() => {
-    // Cancels the request if the selection changes before it finishes
-    const controller = new AbortController();
+    // Ignores the result if the selection changes before it arrives
+    let ignore = false;
 
-    fetchTopStandingsData(league, season, controller.signal)
+    fetchTopStandingsData(league, season)
       .then((result) => {
-        setData(result);
-        setError(null);
+        if (!ignore) {
+          setData(result);
+          setError(null);
+        }
       })
-      .catch((err: Error) => {
-        if (err.name !== "AbortError") {
+      .catch(() => {
+        if (!ignore) {
           setError({ league, season });
         }
       });
 
-    return () => controller.abort();
+    return () => {
+      ignore = true;
+    };
   }, [league, season]);
 
   // Old data or errors from a previous selection don't count for the current one
