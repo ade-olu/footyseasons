@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
+import { API_URL } from "../../api/config";
 import type { KeyboardEvent, RefObject } from "react";
 import { ChevronDown as ArrowDownIcon } from "reicon-react"; // Downward arrow icon for the navbar
 import { Check as CheckIcon } from "reicon-react"; // Tick shown next to the selected season
@@ -8,9 +9,6 @@ import { LEAGUES } from "../Sidebar/Sidebar";
 import type { League, Season } from "../../types/api";
 
 import "./Navbar.scss";
-
-// Base URL for the Express API
-const API_URL = "http://localhost:3001/api";
 
 // Props for the Navbar component: the selected league and season (start year, 2025 = 2025/26),
 // plus the menu button that opens the sidebar drawer

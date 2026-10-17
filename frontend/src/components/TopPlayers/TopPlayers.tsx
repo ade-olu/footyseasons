@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../../api/config";
 import ClubCrest from "../ClubCrest/ClubCrest";
 import PlayerPhoto from "../PlayerPhoto/PlayerPhoto";
 import SectionCard from "../SectionCard/SectionCard";
@@ -6,9 +7,6 @@ import SectionHeader from "../SectionHeader/SectionHeader";
 import type { LeagueCode } from "../Sidebar/Sidebar";
 import type { Player, PlayersResponse } from "../../types/api"; // Types for API responses
 import "./TopPlayers.scss";
-
-// Base URL for the Express API
-const API_URL = "http://localhost:3001/api";
 
 // Number of players shown on the overview
 const TOP_PLAYERS = 3;

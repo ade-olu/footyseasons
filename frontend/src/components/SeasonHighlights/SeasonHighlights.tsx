@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../../api/config";
 import HighlightCard from "../HighlightCard/HighlightCard";
 
 import type { LeagueCode } from "../Sidebar/Sidebar";
@@ -8,9 +9,6 @@ import type {
   Standing,
   StandingsResponse,
 } from "../../types/api"; // Types for API responses
-
-// Base URL for the Express API
-const API_URL = "http://localhost:3001/api";
 
 // Everything the highlight cards need, worked out from the standings, matches and players responses
 type HighlightsData = {

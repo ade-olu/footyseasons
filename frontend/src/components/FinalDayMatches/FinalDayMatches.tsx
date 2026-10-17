@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../../api/config";
 import MatchResult from "../MatchResult/MatchResult";
 import SectionCard from "../SectionCard/SectionCard";
 import SectionHeader from "../SectionHeader/SectionHeader";
 import type { LeagueCode } from "../Sidebar/Sidebar";
 import type { Match, StandingsResponse } from "../../types/api"; // Types for API responses
 import "./FinalDayMatches.scss";
-
-// Base URL for the Express API
-const API_URL = "http://localhost:3001/api";
 
 // Statuses of matches that count as played
 const PLAYED_STATUSES = ["FINISHED", "AWARDED"];

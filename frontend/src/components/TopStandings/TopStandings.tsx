@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../../api/config";
 import SectionCard from "../SectionCard/SectionCard";
 import SectionHeader from "../SectionHeader/SectionHeader";
 import StandingsTable, {
@@ -9,9 +10,6 @@ import { TABLE_PLACES } from "../../data/tablePlaces";
 import { getClubForm } from "../../utils/form";
 import type { Match, StandingsResponse } from "../../types/api"; // Types for API responses
 import "./TopStandings.scss";
-
-// Base URL for the Express API
-const API_URL = "http://localhost:3001/api";
 
 // Number of clubs shown on the overview
 const TOP_CLUBS = 5;

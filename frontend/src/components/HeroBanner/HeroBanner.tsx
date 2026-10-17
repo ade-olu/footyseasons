@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../../api/config";
 import "./HeroBanner.scss";
 import ClubCrest from "../ClubCrest/ClubCrest";
 
@@ -6,9 +7,6 @@ import type { LeagueCode } from "../Sidebar/Sidebar";
 import type { Match, Standing, StandingsResponse } from "../../types/api"; // Types for API responses
 import { getHeroImage } from "../../data/heroImages"; // Get the hero image for a given club and season
 import { SEASON_STORIES } from "../../data/seasonStories"; // Hand-written stories for each season
-
-// Base URL for the Express API
-const API_URL = "http://localhost:3001/api";
 
 // Formats a date like "16 Aug 2025"
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
