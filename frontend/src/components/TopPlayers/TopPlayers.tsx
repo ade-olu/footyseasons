@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { User as UserIcon } from "reicon-react"; // Placeholder until player photos exist
 import ClubCrest from "../ClubCrest/ClubCrest";
+import PlayerPhoto from "../PlayerPhoto/PlayerPhoto";
 import SectionCard from "../SectionCard/SectionCard";
 import SectionHeader from "../SectionHeader/SectionHeader";
 import type { LeagueCode } from "../Sidebar/Sidebar";
@@ -114,9 +114,10 @@ export default function TopPlayers({
               <li className="top-players__row" key={player.understatId}>
                 <span className="top-players__rank">{rank}</span>
                 <div className="top-players__player">
-                  <div className="top-players__photo">
-                    <UserIcon className="top-players__photo-icon" aria-hidden />
-                  </div>
+                  <PlayerPhoto
+                    className="top-players__photo"
+                    name={player.playerName}
+                  />
                   <div className="top-players__details">
                     <p className="top-players__name" title={player.playerName}>
                       {player.playerName}

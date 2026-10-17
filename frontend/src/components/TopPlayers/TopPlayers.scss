@@ -4,8 +4,6 @@
 // Top Players color variables
 $top-players-text: #0b0f0e;
 $top-players-text-muted: #7d8180;
-$top-players-photo-bg: rgba(11, 15, 14, 0.2);
-$top-players-photo-icon: #ffffff;
 
 // Full width when narrow, then one column each (2-column grid), then half (4-column grid)
 .top-players {
@@ -55,24 +53,10 @@ $top-players-photo-icon: #ffffff;
     }
   }
 
-  // Headshot circle (placeholder icon for now)
+  // Headshot circle (initials until player photos exist)
   &__photo {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    flex-shrink: 0;
     width: rem(44);
     height: rem(44);
-    background-color: $top-players-photo-bg;
-    border-radius: 50%;
-    overflow: hidden;
-  }
-
-  &__photo-icon {
-    width: rem(36);
-    height: rem(36);
-    margin-bottom: rem(-4);
-    color: $top-players-photo-icon;
   }
 
   // min-width: 0 allows the name ellipsis
