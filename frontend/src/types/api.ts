@@ -46,7 +46,7 @@ export type StandingsResponse = {
 // One match in GET /api/leagues/:code/matches
 export type Match = {
   matchId: number;
-  matchday: number;
+  matchday: number | null; // Null for 2014-2022 matches
   utcDate: string;
   status: string;
   homeGoals: number | null;
@@ -54,9 +54,13 @@ export type Match = {
   homeClubName: string;
   homeClubDisplayName: string;
   homeClubId: number;
+  homeClubShortName: string;
+  homeClubCrestUrl: string | null;
   awayClubName: string;
   awayClubDisplayName: string;
   awayClubId: number;
+  awayClubShortName: string;
+  awayClubCrestUrl: string | null;
 };
 
 // A club a player played for, inside Player.clubs

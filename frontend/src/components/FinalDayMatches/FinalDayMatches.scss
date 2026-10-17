@@ -1,0 +1,47 @@
+@use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
+
+// Final Day Matches color variables
+$final-day-matches-text-muted: #7d8180;
+
+.final-day-matches {
+  grid-column: 1 / -1; // Full width of the overview grid
+
+  &__days {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+  }
+
+  &__day {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+
+  &__date {
+    @include text(14);
+    font-weight: 500;
+    color: $final-day-matches-text-muted;
+  }
+
+  // 1 column on smaller screens, 2 once both club names fit.
+  // The container is .app__content (in App.scss)
+  &__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: rem(24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @container (min-width: #{rem(900)}) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__status {
+    @include text(14);
+    color: $final-day-matches-text-muted;
+  }
+}

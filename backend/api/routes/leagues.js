@@ -130,8 +130,12 @@ router.get("/:code/matches", (req, res) => {
       m.home_goals AS homeGoals, m.away_goals AS awayGoals,
       hc.name AS homeClubName, hc.club_id AS homeClubId,
       COALESCE(hc.display_name, hc.name) AS homeClubDisplayName,
+      COALESCE(hc.short_name, hc.name) AS homeClubShortName,
+      hc.crest_url AS homeClubCrestUrl,
       ac.name AS awayClubName, ac.club_id AS awayClubId,
-      COALESCE(ac.display_name, ac.name) AS awayClubDisplayName
+      COALESCE(ac.display_name, ac.name) AS awayClubDisplayName,
+      COALESCE(ac.short_name, ac.name) AS awayClubShortName,
+      ac.crest_url AS awayClubCrestUrl
     FROM matches m
     JOIN clubs hc ON hc.club_id = m.home_club_id
     JOIN clubs ac ON ac.club_id = m.away_club_id

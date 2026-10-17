@@ -1,3 +1,4 @@
+import FinalDayMatches from "../../components/FinalDayMatches/FinalDayMatches";
 import HeroBanner from "../../components/HeroBanner/HeroBanner";
 import SeasonAwards from "../../components/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "../../components/SeasonHighlights/SeasonHighlights";
@@ -39,6 +40,8 @@ export default function OverviewPage({ league, season }: OverviewPageProps) {
           stat="assists"
           title="Top assists providers"
         />
+        {/* Results from the last day of the season */}
+        <FinalDayMatches league={league} season={season} />
       </section>
     </>
   );

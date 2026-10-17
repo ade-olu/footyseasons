@@ -1,0 +1,92 @@
+@use "../../styles/breakpoints" as *;
+@use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
+
+// Match Result color variables
+$match-result-bg: #eff4f3;
+$match-result-border: #dadbdb;
+$match-result-score-bg: #ffffff;
+$match-result-text: #0b0f0e;
+$match-result-text-muted: #6d6f6e;
+
+// Home club, score and away club, with the score in the middle
+.match-result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: rem(16);
+  padding: rem(14) rem(32);
+
+  @include below-tablet {
+    padding: rem(14) rem(16);
+  }
+  background-color: $match-result-bg;
+  border: 1px solid $match-result-border;
+  border-radius: 12px;
+
+  &__club {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    min-width: 0;
+    @include text(14);
+    color: $match-result-text;
+
+    &--home {
+      justify-content: flex-end;
+    }
+
+    &--lost {
+      color: $match-result-text-muted;
+    }
+  }
+
+  // Own element with min-width: 0 so the ellipsis works inside the flex row
+  &__club-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Display name, swapped for the short name on phones
+  &__name-short {
+    display: none;
+  }
+
+  @include below-tablet {
+    &__name-full {
+      display: none;
+    }
+
+    &__name-short {
+      display: inline;
+    }
+  }
+
+  &__crest-slot {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: rem(32);
+  }
+
+  &__crest {
+    width: rem(24);
+    height: rem(24);
+  }
+
+  &__score {
+    min-width: rem(64);
+    padding: rem(8) rem(16);
+    @include text(14);
+    font-weight: 500;
+    color: $match-result-text;
+    text-align: center;
+    white-space: nowrap;
+    background-color: $match-result-score-bg;
+    border: 1px solid $match-result-border;
+    border-radius: 8px;
+  }
+}
