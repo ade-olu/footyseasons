@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Shield as ShieldIcon } from "reicon-react"; // Placeholder shown when a crest is missing or fails to load
+import { DARK_CRESTS } from "../../data/darkCrests";
 import "./ClubCrest.scss";
 
 // Props for the ClubCrest component: the crest URL from the API, the club name for alt text,
@@ -8,10 +9,17 @@ type ClubCrestProps = {
   src: string | null | undefined;
   name: string;
   className?: string;
+  onDark?: boolean; // Swaps in a light version from DARK_CRESTS where there is one
 };
 
 // Club crest image that falls back to a shield icon if there's no crest or it fails to load
-export default function ClubCrest({ src, name, className = "" }: ClubCrestProps) {
+export default function ClubCrest({
+  src: crestUrl,
+  name,
+  className = "",
+  onDark = false,
+}: ClubCrestProps) {
+  const src = (onDark && crestUrl && DARK_CRESTS[crestUrl]) || crestUrl;
   // Remembers which src failed, so a new src (e.g. after changing season) gets a fresh try
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
 

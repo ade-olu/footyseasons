@@ -209,6 +209,7 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
               className="hero-banner__champion-crest"
               src={champion.crestUrl}
               name={champion.shortName}
+              onDark
             />
             <div className="hero-banner__champion-text">
               <p className="hero-banner__champion-label">Champions</p>

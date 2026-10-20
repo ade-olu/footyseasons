@@ -43,6 +43,7 @@ export default function AwardCard({
                 className="award-card__crest"
                 src={club.crestUrl}
                 name={club.name}
+                onDark
               />
               <span className="award-card__club-name" title={club.name}>
                 {club.name}
