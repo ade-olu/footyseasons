@@ -272,4 +272,46 @@ router.get("/:code/players", (req, res) => {
   });
 });
 
+// Get the season awards for a league, with each winner's stats joined in.
+// Shared awards have one entry per winner; a season can be missing some or all awards.
+router.get("/:code/awards", (req, res) => {
+  const season = resolveSeason(req, res);
+  if (!season) return;
+
+  const awards = db
+    .prepare(
+      `
+    SELECT
+      a.award, a.winner_name AS winnerName,
+      a.understat_player_id AS understatId,
+      a.awarding_body AS awardingBody, a.source_url AS sourceUrl,
+      c.club_id AS clubId, c.short_name AS shortName,
+      COALESCE(c.display_name, c.name) AS displayName,
+      c.crest_url AS crestUrl,
+      ps.goals, ps.assists, a.starts, a.clean_sheets AS cleanSheets,
+      cs.wins, cs.points
+    FROM season_awards a
+    JOIN clubs c ON c.club_id = a.club_id
+    JOIN club_season_stats cs
+      ON cs.season_id = a.season_id AND cs.club_id = a.club_id
+    LEFT JOIN understat_player_stats ps
+      ON ps.season_id = a.season_id
+      AND ps.understat_player_id = a.understat_player_id
+    WHERE a.season_id = ?
+    ORDER BY
+      CASE a.award
+        WHEN 'player' THEN 1 WHEN 'manager' THEN 2
+        WHEN 'goalkeeper' THEN 3 ELSE 4
+      END,
+      a.winner_name
+  `,
+    )
+    .all(season.seasonId);
+
+  res.json({
+    season: { startYear: season.startYear, label: season.label },
+    awards,
+  });
+});
+
 module.exports = router;
