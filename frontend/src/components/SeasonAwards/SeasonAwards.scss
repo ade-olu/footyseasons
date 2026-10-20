@@ -1,4 +1,7 @@
 @use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
+
+$season-awards-text-muted: #7d8180;
 
 .season-awards {
   grid-column: 1 / -1; // Full width of the overview grid
@@ -13,5 +16,10 @@
     @container (min-width: #{rem(900)}) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
+
+  &__status {
+    @include text(14);
+    color: $season-awards-text-muted;
   }
 }

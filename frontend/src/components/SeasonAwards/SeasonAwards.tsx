@@ -1,8 +1,26 @@
+import { useEffect, useState } from "react";
+import { API_URL } from "../../api/config";
 import AwardCard from "../AwardCard/AwardCard";
 import SectionCard from "../SectionCard/SectionCard";
 import SectionHeader from "../SectionHeader/SectionHeader";
 import { LEAGUES, type LeagueCode } from "../Sidebar/Sidebar";
+import type { Award, AwardsResponse, AwardType } from "../../types/api"; // Types for API responses
 import "./SeasonAwards.scss";
+
+// Card titles for each award
+const AWARD_TITLES: Record<AwardType, string> = {
+  player: "Player of the Season",
+  manager: "Manager of the Season",
+  goalkeeper: "Goalkeeper of the Season",
+  young_player: "Young Player of the Season",
+};
+
+// The awards for one league and season
+type SeasonAwardsData = {
+  league: LeagueCode;
+  season: number;
+  awards: Award[];
+};
 
 // Props for the SeasonAwards component: the selected league and season start year
 type SeasonAwardsProps = {
@@ -10,40 +28,86 @@ type SeasonAwardsProps = {
   season: number;
 };
 
-// Placeholder winners (PL 2025/26, as in Figma) until the awards data is ready
-const PLACEHOLDER_AWARDS = [
-  {
-    award: "Player of the Season",
-    winner: "Bruno Fernandes",
-    club: {
-      name: "Manchester United",
-      crestUrl: "/crests/manchester-united.svg",
-    },
-    stats: "9 Goals · 21 Assists",
-  },
-  {
-    award: "Manager of the Season",
-    winner: "Mikel Arteta",
-    club: { name: "Arsenal", crestUrl: "/crests/arsenal.svg" },
-    stats: "26 Wins · 85 Points",
-  },
-  {
-    award: "Goalkeeper of the Season",
-    winner: "David Raya",
-    club: { name: "Arsenal", crestUrl: "/crests/arsenal.svg" },
-    stats: "19 Clean Sheets",
-  },
-  {
-    award: "Young Player of the Season",
-    winner: "Nico O'Reilly",
-    club: { name: "Manchester City", crestUrl: "/crests/manchester-city.svg" },
-    stats: "8 G/A · 29 Starts",
-  },
-];
+// Fetches a league's season awards
+async function fetchAwards(
+  league: LeagueCode,
+  season: number,
+  signal: AbortSignal,
+): Promise<SeasonAwardsData> {
+  const res = await fetch(
+    `${API_URL}/leagues/${league}/awards?season=${season}`,
+    { signal },
+  );
 
-// "The class of <season>" section: one card per season award
+  if (!res.ok) {
+    throw new Error(`Could not load awards for ${league}`);
+  }
+
+  const { awards } = (await res.json()) as AwardsResponse;
+
+  return { league, season, awards };
+}
+
+// "9 Goals", "1 Goal"
+function countLabel(value: number, singular: string, plural: string) {
+  return `${value} ${value === 1 ? singular : plural}`;
+}
+
+// Stats line in the card's green pill
+function getStats(award: Award) {
+  switch (award.award) {
+    case "player":
+      return `${countLabel(award.goals ?? 0, "Goal", "Goals")} · ${countLabel(award.assists ?? 0, "Assist", "Assists")}`;
+    case "manager":
+      return `${countLabel(award.wins, "Win", "Wins")} · ${countLabel(award.points, "Point", "Points")}`;
+    case "goalkeeper":
+      return countLabel(award.cleanSheets ?? 0, "Clean Sheet", "Clean Sheets");
+    case "young_player":
+      return `${(award.goals ?? 0) + (award.assists ?? 0)} G/A · ${countLabel(award.starts ?? 0, "Start", "Starts")}`;
+  }
+}
+
+// "The class of <season>" section: one card per award winner
 export default function SeasonAwards({ league, season }: SeasonAwardsProps) {
   const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const [data, setData] = useState<SeasonAwardsData | null>(null);
+  const [error, setError] = useState<{
+    league: LeagueCode;
+    season: number;
+  } | null>(null);
+
+  // Refetch whenever the selected league or season changes
+  useEffect(() => {
+    // Cancels the request if the selection changes before it finishes
+    const controller = new AbortController();
+
+    fetchAwards(league, season, controller.signal)
+      .then((result) => {
+        setData(result);
+        setError(null);
+      })
+      .catch((err: Error) => {
+        if (err.name !== "AbortError") {
+          setError({ league, season });
+        }
+      });
+
+    return () => controller.abort();
+  }, [league, season]);
+
+  // Old data or errors from a previous selection don't count for the current one
+  const hasError = error?.league === league && error.season === season;
+  const isReady =
+    !hasError && data?.league === league && data.season === season;
+
+  let status = null;
+  if (hasError) {
+    status = "Couldn't load the awards.";
+  } else if (!isReady) {
+    status = "Loading…";
+  } else if (data.awards.length === 0) {
+    status = "No season awards were given this season.";
+  }
 
   return (
     <SectionCard className="season-awards">
@@ -51,11 +115,21 @@ export default function SeasonAwards({ league, season }: SeasonAwardsProps) {
         title={`The class of ${season}/${season + 1}`}
         description={`The standout individuals behind this ${leagueName} season.`}
       />
-      <div className="season-awards__grid">
-        {PLACEHOLDER_AWARDS.map((item) => (
-          <AwardCard key={item.award} {...item} />
-        ))}
-      </div>
+      {isReady && !status ? (
+        <div className="season-awards__grid">
+          {data.awards.map((item) => (
+            <AwardCard
+              key={`${item.award}-${item.winnerName}`}
+              award={AWARD_TITLES[item.award]}
+              winner={item.winnerName}
+              club={{ name: item.displayName, crestUrl: item.crestUrl }}
+              stats={getStats(item)}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="season-awards__status">{status}</p>
+      )}
     </SectionCard>
   );
 }

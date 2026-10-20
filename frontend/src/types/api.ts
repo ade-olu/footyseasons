@@ -99,3 +99,31 @@ export type PlayersResponse = {
   }; // Covers every player in the league, whatever ?limit= is
   players: Player[];
 };
+
+// Award ids in GET /api/leagues/:code/awards
+export type AwardType = "player" | "manager" | "goalkeeper" | "young_player";
+
+// One award winner in GET /api/leagues/:code/awards
+export type Award = {
+  award: AwardType;
+  winnerName: string;
+  understatId: number | null; // Null for managers
+  awardingBody: string; // e.g. "Premier League", "PFA", "Marca"
+  sourceUrl: string | null;
+  clubId: number;
+  shortName: string;
+  displayName: string;
+  crestUrl: string | null;
+  goals: number | null; // Null for managers
+  assists: number | null;
+  starts: number | null; // Goalkeepers and young players only
+  cleanSheets: number | null; // Goalkeepers and young players only
+  wins: number; // The club's
+  points: number;
+};
+
+// Full response from GET /api/leagues/:code/awards
+export type AwardsResponse = {
+  season: Season;
+  awards: Award[]; // Player, manager, goalkeeper, young player; one entry per winner of a shared award
+};
