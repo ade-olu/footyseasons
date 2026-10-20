@@ -7,9 +7,9 @@
 -- this file just builds empty tables, ready to be filled in
 -- by the Python scripts.
 --
--- 8 tables total: leagues, seasons, clubs, matches,
+-- 9 tables total: leagues, seasons, clubs, matches,
 -- player_season_stats, club_season_stats,
--- understat_player_stats, understat_player_clubs
+-- understat_player_stats, understat_player_clubs, season_awards
 -- ============================================================
 
 -- PRAGMA = a SQLite-specific settings command (not standard SQL).
@@ -244,3 +244,29 @@ CREATE TABLE understat_player_clubs (
 );
 
 CREATE INDEX idx_understat_player_clubs_club ON understat_player_clubs(club_id);
+
+
+-- ------------------------------------------------------------
+-- TABLE: season_awards
+-- One row per winner of a season award (player, manager,
+-- goalkeeper, young_player). A shared award gets one row per
+-- winner. Loaded from the hand-written awards.csv by
+-- 09_load_awards.py.
+-- ------------------------------------------------------------
+CREATE TABLE season_awards (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    season_id            INTEGER NOT NULL,
+    award                TEXT NOT NULL,      -- "player", "manager", "goalkeeper" or "young_player"
+    winner_name          TEXT NOT NULL,      -- e.g. "Bruno Fernandes"
+    understat_player_id  INTEGER,            -- NULL for managers
+    club_id              INTEGER NOT NULL,   -- club the winner played for (or managed)
+    awarding_body        TEXT NOT NULL,      -- e.g. "Premier League", "PFA", "Marca"
+    source_url           TEXT,
+    starts               INTEGER,            -- league starts, from Understat's match log; goalkeepers and young players only
+    clean_sheets         INTEGER,            -- league starts without conceding; goalkeepers and young players only
+
+    FOREIGN KEY (season_id) REFERENCES seasons(season_id),
+    FOREIGN KEY (club_id)   REFERENCES clubs(club_id),
+
+    UNIQUE (season_id, award, winner_name)
+);

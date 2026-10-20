@@ -1,0 +1,230 @@
+season,league,award,winner,understat_player_id,club,awarding_body,source
+2025/26,PL,player,Bruno Fernandes,1228,Manchester United,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2025/26,PL,manager,Mikel Arteta,,Arsenal,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2025/26,PL,goalkeeper,David Raya,9676,Arsenal,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2025/26,PL,young_player,Nico O'Reilly,11592,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Young_Player_of_the_Season
+2024/25,PL,player,Mohamed Salah,1250,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2024/25,PL,manager,Arne Slot,,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2024/25,PL,goalkeeper,David Raya,9676,Arsenal,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2024/25,PL,goalkeeper,Matz Sels,6903,Nottingham Forest,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2024/25,PL,young_player,Ryan Gravenberch,10697,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Young_Player_of_the_Season
+2023/24,PL,player,Phil Foden,6055,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2023/24,PL,manager,Pep Guardiola,,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2023/24,PL,goalkeeper,David Raya,9676,Arsenal,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2023/24,PL,young_player,Cole Palmer,8497,Chelsea,Premier League,https://en.wikipedia.org/wiki/Premier_League_Young_Player_of_the_Season
+2022/23,PL,player,Erling Haaland,8260,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2022/23,PL,manager,Pep Guardiola,,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2022/23,PL,goalkeeper,David de Gea,546,Manchester United,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2022/23,PL,young_player,Erling Haaland,8260,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Young_Player_of_the_Season
+2021/22,PL,player,Kevin De Bruyne,447,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2021/22,PL,manager,Jürgen Klopp,,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2021/22,PL,goalkeeper,Alisson,1257,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2021/22,PL,goalkeeper,Ederson,6054,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2021/22,PL,young_player,Phil Foden,6055,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Young_Player_of_the_Season
+2020/21,PL,player,Rúben Dias,8961,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2020/21,PL,manager,Pep Guardiola,,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2020/21,PL,goalkeeper,Ederson,6054,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2020/21,PL,young_player,Phil Foden,6055,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Young_Player_of_the_Season
+2019/20,PL,player,Kevin De Bruyne,447,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2019/20,PL,manager,Jürgen Klopp,,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2019/20,PL,goalkeeper,Ederson,6054,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2019/20,PL,young_player,Trent Alexander-Arnold,1791,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Young_Player_of_the_Season
+2018/19,PL,player,Virgil van Dijk,833,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2018/19,PL,manager,Pep Guardiola,,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2018/19,PL,goalkeeper,Alisson,1257,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2018/19,PL,young_player,Raheem Sterling,618,Manchester City,PFA,https://en.wikipedia.org/wiki/PFA_Young_Player_of_the_Year
+2017/18,PL,player,Mohamed Salah,1250,Liverpool,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2017/18,PL,manager,Pep Guardiola,,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2017/18,PL,goalkeeper,David de Gea,546,Manchester United,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2017/18,PL,young_player,Leroy Sané,337,Manchester City,PFA,https://en.wikipedia.org/wiki/PFA_Young_Player_of_the_Year
+2016/17,PL,player,N'Golo Kanté,751,Chelsea,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2016/17,PL,manager,Antonio Conte,,Chelsea,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2016/17,PL,goalkeeper,Thibaut Courtois,680,Chelsea,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2016/17,PL,young_player,Dele Alli,645,Tottenham Hotspur,PFA,https://en.wikipedia.org/wiki/PFA_Young_Player_of_the_Year
+2015/16,PL,player,Jamie Vardy,755,Leicester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2015/16,PL,manager,Claudio Ranieri,,Leicester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2015/16,PL,goalkeeper,Petr Čech,491,Arsenal,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2015/16,PL,young_player,Dele Alli,645,Tottenham Hotspur,PFA,https://en.wikipedia.org/wiki/PFA_Young_Player_of_the_Year
+2014/15,PL,player,Eden Hazard,701,Chelsea,Premier League,https://en.wikipedia.org/wiki/Premier_League_Player_of_the_Season
+2014/15,PL,manager,José Mourinho,,Chelsea,Premier League,https://en.wikipedia.org/wiki/Premier_League_Manager_of_the_Season
+2014/15,PL,goalkeeper,Joe Hart,609,Manchester City,Premier League,https://en.wikipedia.org/wiki/Premier_League_Golden_Glove
+2014/15,PL,young_player,Harry Kane,647,Tottenham Hotspur,PFA,https://en.wikipedia.org/wiki/PFA_Young_Player_of_the_Year
+2025/26,PD,player,Lamine Yamal,11527,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2025/26,PD,manager,Hansi Flick,,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2025/26,PD,goalkeeper,Joan García,9773,Barcelona,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2025/26,PD,young_player,Carlos Espí,13769,Levante,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2024/25,PD,player,Raphinha,8026,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2024/25,PD,manager,Hansi Flick,,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2024/25,PD,goalkeeper,Jan Oblak,2261,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2024/25,PD,young_player,Lamine Yamal,11527,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2023/24,PD,player,Jude Bellingham,8824,Real Madrid,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2023/24,PD,manager,Míchel,,Girona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2023/24,PD,goalkeeper,Unai Simón,5185,Athletic Club,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2023/24,PD,young_player,Lamine Yamal,11527,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2022/23,PD,player,Marc-André ter Stegen,2090,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2022/23,PD,manager,Imanol Alguacil,,Real Sociedad,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2022/23,PD,goalkeeper,Marc-André ter Stegen,2090,Barcelona,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2021/22,PD,player,Karim Benzema,2370,Real Madrid,Marca,https://en.wikipedia.org/wiki/Trofeo_Alfredo_Di_St%C3%A9fano
+2021/22,PD,manager,Carlo Ancelotti,,Real Madrid,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2021/22,PD,manager,Manuel Pellegrini,,Real Betis,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2021/22,PD,goalkeeper,Yassine Bounou,6120,Sevilla,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2020/21,PD,player,Luis Suárez,2098,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Trofeo_Alfredo_Di_St%C3%A9fano
+2020/21,PD,manager,Diego Simeone,,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2020/21,PD,goalkeeper,Jan Oblak,2261,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2019/20,PD,player,Karim Benzema,2370,Real Madrid,Marca,https://en.wikipedia.org/wiki/Trofeo_Alfredo_Di_St%C3%A9fano
+2019/20,PD,manager,Zinedine Zidane,,Real Madrid,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2019/20,PD,manager,Julen Lopetegui,,Sevilla,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2019/20,PD,goalkeeper,Thibaut Courtois,680,Real Madrid,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2018/19,PD,player,Lionel Messi,2097,Barcelona,Marca,https://en.wikipedia.org/wiki/Trofeo_Alfredo_Di_St%C3%A9fano
+2018/19,PD,manager,José Bordalás,,Getafe,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2018/19,PD,goalkeeper,Jan Oblak,2261,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2017/18,PD,player,Lionel Messi,2097,Barcelona,Marca,https://en.wikipedia.org/wiki/Trofeo_Alfredo_Di_St%C3%A9fano
+2017/18,PD,manager,Marcelino,,Valencia,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2017/18,PD,goalkeeper,Jan Oblak,2261,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2016/17,PD,player,Lionel Messi,2097,Barcelona,Marca,https://en.wikipedia.org/wiki/Trofeo_Alfredo_Di_St%C3%A9fano
+2016/17,PD,manager,José Luis Mendilibar,,Eibar,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2016/17,PD,manager,Asier Garitano,,Leganés,Marca,https://en.wikipedia.org/wiki/Miguel_Mu%C3%B1oz_Trophy
+2016/17,PD,goalkeeper,Jan Oblak,2261,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2015/16,PD,player,Antoine Griezmann,2270,Atlético Madrid,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2015/16,PD,manager,Diego Simeone,,Atlético Madrid,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2015/16,PD,goalkeeper,Jan Oblak,2261,Atlético Madrid,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2015/16,PD,young_player,Marco Asensio,2117,Espanyol,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2014/15,PD,player,Lionel Messi,2097,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2014/15,PD,manager,Luis Enrique,,Barcelona,LaLiga,https://en.wikipedia.org/wiki/La_Liga_Awards
+2014/15,PD,goalkeeper,Claudio Bravo,1731,Barcelona,Marca,https://en.wikipedia.org/wiki/Ricardo_Zamora_Trophy
+2025/26,SA,player,Federico Dimarco,1324,Inter,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2025/26,SA,manager,Cristian Chivu,,Inter,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2025/26,SA,goalkeeper,Mile Svilar,10967,Roma,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2025/26,SA,young_player,Kenan Yıldız,11942,Juventus,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2024/25,SA,player,Scott McTominay,5560,Napoli,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2024/25,SA,manager,Antonio Conte,,Napoli,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2024/25,SA,goalkeeper,Mile Svilar,10967,Roma,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2024/25,SA,young_player,Nico Paz,11541,Como,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2023/24,SA,player,Lautaro Martínez,7006,Inter,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2023/24,SA,manager,Simone Inzaghi,,Inter,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2023/24,SA,goalkeeper,Michele Di Gregorio,10890,Monza,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2023/24,SA,young_player,Joshua Zirkzee,8044,Bologna,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2022/23,SA,player,Khvicha Kvaratskhelia,7453,Napoli,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2022/23,SA,manager,Luciano Spalletti,,Napoli,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2022/23,SA,goalkeeper,Ivan Provedel,6982,Lazio,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2022/23,SA,young_player,Nicolò Fagioli,7379,Juventus,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2021/22,SA,player,Rafael Leão,7193,Milan,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2021/22,SA,manager,Stefano Pioli,,Milan,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2021/22,SA,goalkeeper,Mike Maignan,3737,Milan,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2021/22,SA,young_player,Victor Osimhen,5322,Napoli,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2020/21,SA,player,Romelu Lukaku,594,Inter,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2020/21,SA,manager,Antonio Conte,,Inter,Panchina d'Oro,https://en.wikipedia.org/wiki/Panchina_d%27Oro
+2020/21,SA,goalkeeper,Gianluigi Donnarumma,1116,Milan,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2020/21,SA,young_player,Dušan Vlahović,7084,Fiorentina,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2019/20,SA,player,Paulo Dybala,1294,Juventus,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2019/20,SA,manager,Gian Piero Gasperini,,Atalanta,Panchina d'Oro,https://en.wikipedia.org/wiki/Panchina_d%27Oro
+2019/20,SA,goalkeeper,Wojciech Szczęsny,1244,Juventus,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2019/20,SA,young_player,Dejan Kulusevski,6691,Parma,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2018/19,SA,player,Cristiano Ronaldo,2371,Juventus,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2018/19,SA,manager,Gian Piero Gasperini,,Atalanta,Panchina d'Oro,https://en.wikipedia.org/wiki/Panchina_d%27Oro
+2018/19,SA,goalkeeper,Samir Handanović,1505,Inter,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2018/19,SA,young_player,Nicolò Zaniolo,6686,Roma,Lega Serie A,https://en.wikipedia.org/wiki/Serie_A_Awards
+2017/18,SA,player,Mauro Icardi,1513,Inter,AIC,https://en.wikipedia.org/wiki/Serie_A_Footballer_of_the_Year
+2017/18,SA,manager,Massimiliano Allegri,,Juventus,Panchina d'Oro,https://en.wikipedia.org/wiki/Panchina_d%27Oro
+2017/18,SA,goalkeeper,Alisson,1257,Roma,AIC,https://en.wikipedia.org/wiki/Serie_A_Goalkeeper_of_the_Year
+2016/17,SA,player,Gianluigi Buffon,1285,Juventus,AIC,https://en.wikipedia.org/wiki/Serie_A_Footballer_of_the_Year
+2016/17,SA,manager,Massimiliano Allegri,,Juventus,Panchina d'Oro,https://en.wikipedia.org/wiki/Panchina_d%27Oro
+2016/17,SA,goalkeeper,Gianluigi Buffon,1285,Juventus,AIC,https://en.wikipedia.org/wiki/Serie_A_Goalkeeper_of_the_Year
+2015/16,SA,player,Leonardo Bonucci,1287,Juventus,AIC,https://en.wikipedia.org/wiki/Serie_A_Footballer_of_the_Year
+2015/16,SA,manager,Maurizio Sarri,,Napoli,Panchina d'Oro,https://en.wikipedia.org/wiki/Panchina_d%27Oro
+2015/16,SA,goalkeeper,Gianluigi Buffon,1285,Juventus,AIC,https://en.wikipedia.org/wiki/Serie_A_Goalkeeper_of_the_Year
+2014/15,SA,player,Carlos Tevez,3848,Juventus,AIC,https://en.wikipedia.org/wiki/Serie_A_Footballer_of_the_Year
+2014/15,SA,manager,Massimiliano Allegri,,Juventus,Panchina d'Oro,https://en.wikipedia.org/wiki/Panchina_d%27Oro
+2014/15,SA,goalkeeper,Gianluigi Buffon,1285,Juventus,AIC,https://en.wikipedia.org/wiki/Serie_A_Goalkeeper_of_the_Year
+2025/26,BL1,player,Michael Olise,9948,Bayern München,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2025/26,BL1,manager,Vincent Kompany,,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2025/26,BL1,goalkeeper,Manuel Neuer,217,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2025/26,BL1,young_player,Yan Diomande,13561,RB Leipzig,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2024/25,BL1,player,Harry Kane,647,Bayern München,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2024/25,BL1,manager,Bo Henriksen,,Mainz 05,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2024/25,BL1,goalkeeper,Finn Dahmen,6596,Augsburg,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2024/25,BL1,young_player,Michael Olise,9948,Bayern München,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2023/24,BL1,player,Florian Wirtz,8397,Bayer Leverkusen,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2023/24,BL1,manager,Xabi Alonso,,Bayer Leverkusen,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2023/24,BL1,goalkeeper,Gregor Kobel,5288,Borussia Dortmund,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2023/24,BL1,young_player,Victor Boniface,11867,Bayer Leverkusen,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2022/23,BL1,player,Jude Bellingham,8824,Borussia Dortmund,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2022/23,BL1,manager,Urs Fischer,,Union Berlin,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2022/23,BL1,goalkeeper,Gregor Kobel,5288,Borussia Dortmund,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2022/23,BL1,young_player,Karim Adeyemi,10772,Borussia Dortmund,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2021/22,BL1,player,Christopher Nkunku,3300,RB Leipzig,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2021/22,BL1,manager,Christian Streich,,Freiburg,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2021/22,BL1,goalkeeper,Mark Flekken,7047,Freiburg,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2021/22,BL1,young_player,Jesper Lindstrøm,9752,Eintracht Frankfurt,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2020/21,BL1,player,Erling Haaland,8260,Borussia Dortmund,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2020/21,BL1,manager,Adi Hütter,,Eintracht Frankfurt,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2020/21,BL1,goalkeeper,Manuel Neuer,217,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2020/21,BL1,young_player,Silas,8807,VfB Stuttgart,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2019/20,BL1,player,Robert Lewandowski,227,Bayern München,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2019/20,BL1,manager,Hansi Flick,,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2019/20,BL1,goalkeeper,Manuel Neuer,217,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2019/20,BL1,young_player,Alphonso Davies,7345,Bayern München,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2018/19,BL1,player,Marco Reus,319,Borussia Dortmund,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2018/19,BL1,manager,Adi Hütter,,Eintracht Frankfurt,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2018/19,BL1,goalkeeper,Péter Gulácsi,5241,RB Leipzig,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2018/19,BL1,young_player,Ozan Kabak,7376,VfB Stuttgart,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2017/18,BL1,player,Robert Lewandowski,227,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2017/18,BL1,manager,Jupp Heynckes,,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2017/18,BL1,goalkeeper,Sven Ulreich,231,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2017/18,BL1,young_player,Amine Harit,5717,Schalke 04,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2016/17,BL1,player,Robert Lewandowski,227,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2016/17,BL1,manager,Julian Nagelsmann,,Hoffenheim,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2016/17,BL1,goalkeeper,Manuel Neuer,217,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2016/17,BL1,young_player,Ousmane Dembélé,3226,Borussia Dortmund,DFL,https://en.wikipedia.org/wiki/Bundesliga_Awards
+2015/16,BL1,player,Pierre-Emerick Aubameyang,318,Borussia Dortmund,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2015/16,BL1,manager,Thomas Tuchel,,Borussia Dortmund,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2015/16,BL1,goalkeeper,Manuel Neuer,217,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2015/16,BL1,young_player,Julian Weigl,372,Borussia Dortmund,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2014/15,BL1,player,Kevin De Bruyne,447,Wolfsburg,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2014/15,BL1,manager,Lucien Favre,,Borussia Mönchengladbach,VDV,https://www.spielergewerkschaft.de/de/vdv11/archiv/120/VDV%2011%2020142015%20De%20Bruyne%20San%20und%20Favre%20auf%20dem%20Thron.htm
+2014/15,BL1,goalkeeper,Manuel Neuer,217,Bayern München,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2014/15,BL1,young_player,Leroy Sané,337,Schalke 04,VDV,https://en.wikipedia.org/wiki/Vereinigung_der_Vertragsfu%C3%9Fballspieler
+2025/26,FL1,player,Ousmane Dembélé,3226,Paris Saint-Germain,UNFP,https://www.unfp.org/2026/05/dembele-voit-double-au-coeur-dun-palmares-bigarre/
+2025/26,FL1,manager,Pierre Sage,,Lens,UNFP,https://www.unfp.org/2026/05/dembele-voit-double-au-coeur-dun-palmares-bigarre/
+2025/26,FL1,goalkeeper,Robin Risser,10769,Lens,UNFP,https://www.unfp.org/2026/05/dembele-voit-double-au-coeur-dun-palmares-bigarre/
+2025/26,FL1,young_player,Désiré Doué,10431,Paris Saint-Germain,UNFP,https://www.unfp.org/2026/05/dembele-voit-double-au-coeur-dun-palmares-bigarre/
+2024/25,FL1,player,Ousmane Dembélé,3226,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2024/25,FL1,manager,Luis Enrique,,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2024/25,FL1,goalkeeper,Lucas Chevalier,8638,Lille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2024/25,FL1,young_player,Désiré Doué,10431,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2023/24,FL1,player,Kylian Mbappé,3423,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2023/24,FL1,manager,Éric Roy,,Brest,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2023/24,FL1,goalkeeper,Gianluigi Donnarumma,1116,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2023/24,FL1,young_player,Warren Zaïre-Emery,10786,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2022/23,FL1,player,Kylian Mbappé,3423,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2022/23,FL1,manager,Franck Haise,,Lens,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2022/23,FL1,goalkeeper,Brice Samba,4748,Lens,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2022/23,FL1,young_player,Nuno Mendes,9961,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2021/22,FL1,player,Kylian Mbappé,3423,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2021/22,FL1,manager,Bruno Génésio,,Rennes,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2021/22,FL1,goalkeeper,Gianluigi Donnarumma,1116,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2021/22,FL1,young_player,William Saliba,6888,Marseille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2020/21,FL1,player,Kylian Mbappé,3423,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2020/21,FL1,manager,Christophe Galtier,,Lille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2020/21,FL1,goalkeeper,Keylor Navas,2243,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2020/21,FL1,young_player,Aurélien Tchouaméni,6560,Monaco,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2018/19,FL1,player,Kylian Mbappé,3423,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2018/19,FL1,manager,Christophe Galtier,,Lille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2018/19,FL1,goalkeeper,Mike Maignan,3737,Lille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2018/19,FL1,young_player,Kylian Mbappé,3423,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2017/18,FL1,player,Neymar,2099,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2017/18,FL1,manager,Unai Emery,,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2017/18,FL1,goalkeeper,Steve Mandanda,1670,Marseille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2017/18,FL1,young_player,Kylian Mbappé,3423,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2016/17,FL1,player,Edinson Cavani,3294,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2016/17,FL1,manager,Leonardo Jardim,,Monaco,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2016/17,FL1,goalkeeper,Danijel Subašić,3416,Monaco,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2016/17,FL1,young_player,Kylian Mbappé,3423,Monaco,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2015/16,FL1,player,Zlatan Ibrahimović,1741,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2015/16,FL1,manager,Laurent Blanc,,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2015/16,FL1,goalkeeper,Steve Mandanda,1670,Marseille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2015/16,FL1,young_player,Ousmane Dembélé,3226,Rennes,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2014/15,FL1,player,Alexandre Lacazette,3277,Lyon,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2014/15,FL1,manager,Laurent Blanc,,Paris Saint-Germain,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2014/15,FL1,goalkeeper,Steve Mandanda,1670,Marseille,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
+2014/15,FL1,young_player,Nabil Fekir,3667,Lyon,UNFP,https://en.wikipedia.org/wiki/Troph%C3%A9es_UNFP_du_football
