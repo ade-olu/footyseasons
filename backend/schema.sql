@@ -262,8 +262,8 @@ CREATE TABLE season_awards (
     club_id              INTEGER NOT NULL,   -- club the winner played for (or managed)
     awarding_body        TEXT NOT NULL,      -- e.g. "Premier League", "PFA", "Marca"
     source_url           TEXT,
-    starts               INTEGER,            -- league starts, from Understat's match log; goalkeepers and young players only
-    clean_sheets         INTEGER,            -- league starts without conceding; goalkeepers and young players only
+    starts               INTEGER,            -- league starts, from Understat's match log; goalkeeper and young player awards, and goalkeepers who win another award
+    clean_sheets         INTEGER,            -- league starts without conceding; same rows as starts
 
     FOREIGN KEY (season_id) REFERENCES seasons(season_id),
     FOREIGN KEY (club_id)   REFERENCES clubs(club_id),

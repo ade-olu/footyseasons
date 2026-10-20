@@ -116,8 +116,8 @@ export type Award = {
   crestUrl: string | null;
   goals: number | null; // Null for managers
   assists: number | null;
-  starts: number | null; // Goalkeepers and young players only
-  cleanSheets: number | null; // Goalkeepers and young players only
+  starts: number | null; // Goalkeeper and young player awards, and goalkeepers who win another award
+  cleanSheets: number | null; // Same as starts
   wins: number; // The club's
   points: number;
 };

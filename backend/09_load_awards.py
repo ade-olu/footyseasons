@@ -22,6 +22,7 @@ AWARDS_FILE = "awards.csv"
 AWARDS = ["player", "manager", "goalkeeper", "young_player"]
 
 # Awards whose cards show starts or clean sheets from the match log
+# (also fetched for any goalkeeper who wins another award)
 MATCH_LOG_AWARDS = {"goalkeeper", "young_player"}
 
 # Understat only answers this endpoint for requests that look like
@@ -85,20 +86,23 @@ def find_club(cursor, season_id, club_name):
 
 
 def check_player(cursor, season_id, understat_player_id, club_id, winner):
-    # Makes sure the winner played for that club that season
+    # Makes sure the winner played for that club that season; returns his Understat position
     cursor.execute(
-        """SELECT 1 FROM understat_player_stats ps
+        """SELECT ps.position FROM understat_player_stats ps
            JOIN understat_player_clubs pc ON pc.player_stats_id = ps.id
            WHERE ps.season_id = ? AND ps.understat_player_id = ?
              AND pc.club_id = ?""",
         (season_id, understat_player_id, club_id),
     )
 
-    if cursor.fetchone() is None:
+    row = cursor.fetchone()
+    if row is None:
         raise Exception(
             f"{winner} (Understat id {understat_player_id}) didn't play for "
             f"club_id {club_id} in season_id {season_id}."
         )
+
+    return row[0]
 
 
 def get_player_club_ids(cursor, season_id, understat_player_id):
@@ -192,6 +196,7 @@ def read_awards(cursor):
         season_id, start_year = get_season(cursor, row["league"], row["season"])
         club_id = find_club(cursor, season_id, row["club"])
         player_id = int(row["understat_player_id"]) if row["understat_player_id"] else None
+        position = None
 
         if row["award"] == "manager":
             if player_id is not None:
@@ -199,7 +204,7 @@ def read_awards(cursor):
         elif player_id is None:
             raise Exception(f"{row['winner']} has no Understat id.")
         else:
-            check_player(cursor, season_id, player_id, club_id, row["winner"])
+            position = check_player(cursor, season_id, player_id, club_id, row["winner"])
 
         awards.append({
             **row,
@@ -207,6 +212,7 @@ def read_awards(cursor):
             "start_year": start_year,
             "club_id": club_id,
             "understat_player_id": player_id,
+            "is_goalkeeper": position is not None and position.startswith("GK"),
         })
 
     return awards
@@ -226,7 +232,7 @@ def main():
     for award in awards:
         award["starts"] = None
         award["clean_sheets"] = None
-        if award["award"] not in MATCH_LOG_AWARDS :
+        if award["award"] not in MATCH_LOG_AWARDS and not award["is_goalkeeper"]:
             continue
 
         key = (award["season_id"], award["award"], award["understat_player_id"])

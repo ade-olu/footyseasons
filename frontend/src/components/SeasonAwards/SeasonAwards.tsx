@@ -57,6 +57,10 @@ function countLabel(value: number, singular: string, plural: string) {
 function getStats(award: Award) {
   switch (award.award) {
     case "player":
+      // Only set for a goalkeeper
+      if (award.cleanSheets !== null) {
+        return countLabel(award.cleanSheets, "Clean Sheet", "Clean Sheets");
+      }
       return `${countLabel(award.goals ?? 0, "Goal", "Goals")} · ${countLabel(award.assists ?? 0, "Assist", "Assists")}`;
     case "manager":
       return `${countLabel(award.wins, "Win", "Wins")} · ${countLabel(award.points, "Point", "Points")}`;
