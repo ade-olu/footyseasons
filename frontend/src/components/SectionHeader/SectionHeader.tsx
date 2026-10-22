@@ -22,17 +22,23 @@ export default function SectionHeader({
   action,
 }: SectionHeaderProps) {
   return (
-    <header className="section-header">
-      <div className="section-header__text">
-        <h2 className="section-header__title">{title}</h2>
-        {description && (
-          <p className="section-header__description">{description}</p>
-        )}
-      </div>
+    <header
+      className={`section-header${action ? " section-header--with-action" : ""}`}
+    >
+      <h2 className="section-header__title">{title}</h2>
+      {description && (
+        <p className="section-header__description">{description}</p>
+      )}
       {/* Router link, so the selected league and season survive navigation */}
       {action && (
-        <Link className="section-header__action" to={action.to}>
-          {action.label}
+        <Link
+          className="section-header__action"
+          to={action.to}
+          aria-label={action.label}
+        >
+          <span className="section-header__action-label">{action.label}</span>
+          {/* Shorter label on phones */}
+          <span className="section-header__action-label-short">See all</span>
           <ArrowRightIcon className="section-header__action-icon" aria-hidden />
         </Link>
       )}
