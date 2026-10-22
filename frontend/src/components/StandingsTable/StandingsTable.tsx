@@ -90,9 +90,14 @@ export default function StandingsTable({
           <colgroup>
             <col className="standings-table__col-position" />
             <col />
-            {Array.from({ length: 5 }, (_, index) => (
-              <col key={index} className="standings-table__col-stat" />
+            <col className="standings-table__col-stat" />
+            {Array.from({ length: 3 }, (_, index) => (
+              <col
+                key={index}
+                className="standings-table__col-stat standings-table__col-result"
+              />
             ))}
+            <col className="standings-table__col-stat" />
             <col className="standings-table__col-stat standings-table__col-points" />
             <col className="standings-table__col-form" />
           </colgroup>
@@ -107,13 +112,22 @@ export default function StandingsTable({
               <th scope="col" className="standings-table__stat">
                 <abbr title="Played">PL</abbr>
               </th>
-              <th scope="col" className="standings-table__stat">
+              <th
+                scope="col"
+                className="standings-table__stat standings-table__result"
+              >
                 <abbr title="Won">W</abbr>
               </th>
-              <th scope="col" className="standings-table__stat">
+              <th
+                scope="col"
+                className="standings-table__stat standings-table__result"
+              >
                 <abbr title="Drawn">D</abbr>
               </th>
-              <th scope="col" className="standings-table__stat">
+              <th
+                scope="col"
+                className="standings-table__stat standings-table__result"
+              >
                 <abbr title="Lost">L</abbr>
               </th>
               <th scope="col" className="standings-table__stat">
@@ -161,9 +175,15 @@ export default function StandingsTable({
                     </span>
                   </th>
                   <td className="standings-table__stat">{club.gamesPlayed}</td>
-                  <td className="standings-table__stat">{club.wins}</td>
-                  <td className="standings-table__stat">{club.draws}</td>
-                  <td className="standings-table__stat">{club.losses}</td>
+                  <td className="standings-table__stat standings-table__result">
+                    {club.wins}
+                  </td>
+                  <td className="standings-table__stat standings-table__result">
+                    {club.draws}
+                  </td>
+                  <td className="standings-table__stat standings-table__result">
+                    {club.losses}
+                  </td>
                   <td className="standings-table__stat">
                     {formatGoalDifference(club)}
                   </td>

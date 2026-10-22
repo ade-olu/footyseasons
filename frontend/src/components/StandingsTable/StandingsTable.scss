@@ -167,6 +167,32 @@ $standings-table-relegation: #d23333;
     }
   }
 
+  // Phones (as in Figma's mobile frame): drop W/D/L too, so the club name
+  // keeps its room without scrolling sideways
+  @container (max-width: #{rem(499)}) {
+    &__table {
+      min-width: rem(300);
+    }
+
+    &__col-result,
+    th#{&}__result,
+    td#{&}__result {
+      display: none;
+    }
+
+    &__col-position {
+      width: rem(40);
+    }
+
+    &__col-stat {
+      width: rem(48);
+    }
+
+    &__col-points {
+      width: rem(56); // 40 + the 16 padding
+    }
+  }
+
   &__form-list {
     display: flex;
     gap: rem(8);
