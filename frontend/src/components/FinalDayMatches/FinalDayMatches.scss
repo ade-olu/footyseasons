@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/breakpoints" as *;
 
 // Final Day Matches color variables
 $final-day-matches-text-muted: #7d8180;
@@ -34,6 +35,10 @@ $final-day-matches-text-muted: #7d8180;
     margin: 0;
     padding: 0;
     list-style: none;
+
+    @include below-tablet {
+      gap: rem(16);
+    }
 
     @container (min-width: #{rem(900)}) {
       grid-template-columns: repeat(2, minmax(0, 1fr));

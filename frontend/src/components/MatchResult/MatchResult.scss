@@ -88,5 +88,10 @@ $match-result-text-muted: #6d6f6e;
     background-color: $match-result-score-bg;
     border: 1px solid $match-result-border;
     border-radius: 8px;
+
+    @include below-tablet {
+      min-width: rem(48);
+      padding: rem(8);
+    }
   }
 }

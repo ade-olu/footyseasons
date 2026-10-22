@@ -22,6 +22,10 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
   border-radius: 16px;
   color: $award-card-text;
 
+  @include below-tablet {
+    gap: rem(24);
+  }
+
   transition:
     transform 0.2s,
     box-shadow 0.2s;
@@ -66,7 +70,7 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
     @include below-tablet {
       flex-direction: column-reverse;
       align-items: flex-start;
-      gap: rem(24);
+      gap: rem(16);
     }
   }
 
@@ -95,6 +99,10 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
     -webkit-line-clamp: 2;
     line-clamp: 2;
     overflow: hidden;
+
+    @include below-phone-small {
+      @include text(24);
+    }
   }
 
   &__club {
