@@ -1,6 +1,23 @@
 // Screen widths (viewport, for media queries)
+$phone: 440px;
 $tablet: 768px;
 $laptop: 1024px;
+
+$phone-small: 402px;
+
+// Below the Figma phone width (small phones): smaller headings that would wrap
+@mixin below-phone {
+  @media (max-width: #{$phone - 0.02px}) {
+    @content;
+  }
+}
+
+// Below 402px: smaller section titles, hero title and award names
+@mixin below-phone-small {
+  @media (max-width: #{$phone-small - 0.02px}) {
+    @content;
+  }
+}
 
 // Below tablet width (phones)
 @mixin below-tablet {
