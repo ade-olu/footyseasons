@@ -55,7 +55,10 @@ function App() {
               element={<OverviewPage league={league} season={season} />}
             />
             {/* Standings page route */}
-            <Route path="/standings" element={<StandingsPage />} />
+            <Route
+              path="/standings"
+              element={<StandingsPage league={league} season={season} />}
+            />
             {/* Matches page route */}
             <Route path="/matches" element={<MatchesPage />} />
             {/* Player Stats page route */}
