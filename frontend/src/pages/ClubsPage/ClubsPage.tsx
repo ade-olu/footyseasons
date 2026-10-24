@@ -1,4 +1,4 @@
-import type { LeagueCode } from "../../components/Sidebar/Sidebar";
+import type { LeagueCode } from "../../components/layout/Sidebar/Sidebar";
 import { pageTitle } from "../../utils/pageTitle";
 
 // Props for the ClubsPage: the selected league and season start year (2025 = 2025/26)

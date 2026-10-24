@@ -1,0 +1,30 @@
+@use "../../../styles/typography" as *;
+
+// Player Photo color variables
+$player-photo-bg: #eff4f3;
+$player-photo-border: #dadbdb;
+$player-photo-text: rgb(
+  11,
+  15,
+  14,
+  0.6
+); // RGB(11, 15, 14) - same as MatchResult text color
+
+// Sized by the parent's className, like ClubCrest
+.player-photo {
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+
+  &--initials {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    @include text(14);
+    font-weight: 600;
+    color: $player-photo-text;
+    background-color: $player-photo-bg;
+    border: 1px solid $player-photo-border;
+    user-select: none;
+  }
+}

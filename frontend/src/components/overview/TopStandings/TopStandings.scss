@@ -1,0 +1,22 @@
+@use "../../../styles/functions" as *;
+@use "../../../styles/typography" as *;
+
+// Top Standings color variables
+$top-standings-text-muted: #7d8180;
+
+// The table runs edge to edge, so only the header gets side padding
+.top-standings {
+  grid-column: 1 / -1; // Full width of the overview grid
+  gap: rem(16);
+  padding: rem(24) 0 0;
+
+  &__header {
+    padding: 0 rem(24);
+  }
+
+  &__status {
+    padding: rem(24);
+    @include text(14);
+    color: $top-standings-text-muted;
+  }
+}

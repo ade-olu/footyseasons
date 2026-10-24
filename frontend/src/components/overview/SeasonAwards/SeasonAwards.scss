@@ -1,0 +1,25 @@
+@use "../../../styles/functions" as *;
+@use "../../../styles/typography" as *;
+
+$season-awards-text-muted: #7d8180;
+
+.season-awards {
+  grid-column: 1 / -1; // Full width of the overview grid
+
+  // 1 column on smaller screens, 2 once the cards have room for name + photo.
+  // The container is .app__content (in App.scss)
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: rem(24);
+
+    @container (min-width: #{rem(900)}) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__status {
+    @include text(14);
+    color: $season-awards-text-muted;
+  }
+}

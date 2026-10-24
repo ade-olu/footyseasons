@@ -1,4 +1,4 @@
-import type { FormResult } from "../components/StandingsTable/StandingsTable";
+import type { FormResult } from "../components/cards/StandingsTable/StandingsTable";
 import type { Match } from "../types/api";
 
 // Statuses that count as a result in the table (an AWARDED score is given without the game being played)

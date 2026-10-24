@@ -1,4 +1,4 @@
-import { LEAGUES, type LeagueCode } from "../components/Sidebar/Sidebar";
+import { LEAGUES, type LeagueCode } from "../components/layout/Sidebar/Sidebar";
 
 // Browser tab title, e.g. "Standings - Premier League 2016/17 | PitchData"
 export function pageTitle(page: string, league?: LeagueCode, season?: number) {

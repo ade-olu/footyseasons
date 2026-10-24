@@ -1,11 +1,11 @@
-import FinalDayMatches from "../../components/FinalDayMatches/FinalDayMatches";
-import HeroBanner from "../../components/HeroBanner/HeroBanner";
-import SeasonAwards from "../../components/SeasonAwards/SeasonAwards";
-import SeasonHighlights from "../../components/SeasonHighlights/SeasonHighlights";
-import type { LeagueCode } from "../../components/Sidebar/Sidebar";
+import FinalDayMatches from "../../components/overview/FinalDayMatches/FinalDayMatches";
+import HeroBanner from "../../components/overview/HeroBanner/HeroBanner";
+import SeasonAwards from "../../components/overview/SeasonAwards/SeasonAwards";
+import SeasonHighlights from "../../components/overview/SeasonHighlights/SeasonHighlights";
+import type { LeagueCode } from "../../components/layout/Sidebar/Sidebar";
 import { pageTitle } from "../../utils/pageTitle";
-import TopPlayers from "../../components/TopPlayers/TopPlayers";
-import TopStandings from "../../components/TopStandings/TopStandings";
+import TopPlayers from "../../components/overview/TopPlayers/TopPlayers";
+import TopStandings from "../../components/overview/TopStandings/TopStandings";
 import "./OverviewPage.scss";
 
 // Props for the OverviewPage: the selected league and season start year (2025 = 2025/26)

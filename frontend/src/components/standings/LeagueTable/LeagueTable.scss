@@ -1,0 +1,58 @@
+@use "../../../styles/functions" as *;
+@use "../../../styles/typography" as *;
+@use "../../../styles/breakpoints" as *;
+
+// League Table color variables
+$league-table-text-muted: #7d8180;
+
+// The table runs edge to edge, so only the header gets side padding
+.league-table {
+  gap: rem(16);
+  padding: rem(24) 0 0;
+
+  // Title on the left, toggle on the right; the toggle wraps below when narrow
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(16) rem(24);
+    padding: 0 rem(24);
+
+    > :first-child {
+      flex: 1 1 rem(240);
+    }
+  }
+
+  // Phones swap the toggle for the controls row below
+  &__match-toggle {
+    @include below-tablet {
+      display: none;
+    }
+  }
+
+  // Column view on the left, matches dropdown on the right (phones only)
+  &__phone-controls {
+    display: none;
+
+    @include below-tablet {
+      display: flex;
+      flex-wrap: wrap; // Dropdown goes below on very narrow phones
+      align-items: center;
+      justify-content: space-between;
+      gap: rem(12);
+      padding: 0 rem(24);
+    }
+
+    // Tighter buttons so both controls fit on one row
+    .segmented-control__option {
+      padding: rem(8) rem(12);
+    }
+  }
+
+  &__status {
+    padding: rem(24);
+    @include text(14);
+    color: $league-table-text-muted;
+  }
+}

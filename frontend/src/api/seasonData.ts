@@ -1,5 +1,5 @@
 import { API_URL } from "./config";
-import type { LeagueCode } from "../components/Sidebar/Sidebar";
+import type { LeagueCode } from "../components/layout/Sidebar/Sidebar";
 import type { Match, StandingsResponse } from "../types/api"; // Types for API responses
 
 // A league season's standings and matches

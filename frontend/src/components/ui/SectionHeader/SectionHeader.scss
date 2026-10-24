@@ -1,0 +1,91 @@
+@use "../../../styles/functions" as *;
+@use "../../../styles/typography" as *;
+@use "../../../styles/motion" as *;
+@use "../../../styles/breakpoints" as *;
+
+// Section Header color variables
+$section-header-text: #0b0f0e;
+$section-header-text-muted: #7d8180;
+
+// Title and description on the left, link on the right
+.section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: rem(8) rem(24);
+
+  &--with-action {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  &__title {
+    grid-column: 1;
+    @include text(24);
+    font-weight: 600;
+    color: $section-header-text;
+
+    @include below-phone {
+      @include text(22);
+    }
+
+    @include below-phone-small {
+      @include text(20);
+    }
+  }
+
+  &__description {
+    grid-column: 1;
+    @include text(14);
+    color: $section-header-text-muted;
+
+    // Phones: full width under the title and link
+    @include below-tablet {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__action {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    @include text(14);
+    color: $section-header-text-muted;
+    text-decoration: none;
+    @include press(0.96, color 0.15s);
+
+    &:hover,
+    &:focus-visible {
+      color: $section-header-text;
+    }
+  }
+
+  // Centred beside both title and description, except on phones (title row only)
+  &__description + &__action {
+    grid-row: 1 / span 2;
+
+    @include below-tablet {
+      grid-row: 1;
+    }
+  }
+
+  &__action-label-short {
+    display: none;
+  }
+
+  @include below-tablet {
+    &__action-label {
+      display: none;
+    }
+
+    &__action-label-short {
+      display: inline;
+    }
+  }
+
+  &__action-icon {
+    width: rem(16);
+    height: rem(16);
+  }
+}

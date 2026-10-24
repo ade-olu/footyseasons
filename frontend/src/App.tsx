@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/layout/Navbar/Navbar";
 import "./styles/App.scss";
-import Sidebar from "./components/Sidebar/Sidebar";
+import Sidebar from "./components/layout/Sidebar/Sidebar";
 import { useSelection } from "./hooks/useSelection";
 import OverviewPage from "./pages/OverviewPage/OverviewPage";
 import StandingsPage from "./pages/StandingsPage/StandingsPage";
