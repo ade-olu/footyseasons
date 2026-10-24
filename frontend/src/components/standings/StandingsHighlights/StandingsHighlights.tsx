@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchSeasonData } from "../../../api/seasonData";
 import HighlightCard from "../../cards/HighlightCard/HighlightCard";
 import { TABLE_PLACES } from "../../../data/tablePlaces";
-import type { LeagueCode } from "../../layout/Sidebar/Sidebar";
+import type { LeagueCode } from "../../../data/leagues";
 import type { Standing } from "../../../types/api"; // Types for API responses
 
 // Everything the cards need, worked out from the standings

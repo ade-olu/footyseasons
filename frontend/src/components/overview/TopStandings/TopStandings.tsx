@@ -5,7 +5,7 @@ import SectionHeader from "../../ui/SectionHeader/SectionHeader";
 import StandingsTable, {
   type FormResult,
 } from "../../cards/StandingsTable/StandingsTable";
-import { LEAGUES, type LeagueCode } from "../../layout/Sidebar/Sidebar";
+import { LEAGUES, type LeagueCode } from "../../../data/leagues";
 import { TABLE_PLACES } from "../../../data/tablePlaces";
 import { getClubForm } from "../../../utils/form";
 import type { StandingsResponse } from "../../../types/api"; // Types for API responses

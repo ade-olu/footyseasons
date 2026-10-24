@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { useEffect, useRef, type ComponentType } from "react";
 import { X as CloseIcon } from "reicon-react";
+import { LEAGUES, type LeagueCode } from "../../../data/leagues";
 import "./Sidebar.scss";
 
 // Sidebar icons
@@ -11,18 +12,6 @@ import { CalendarDays as MatchesIcon } from "reicon-react";
 import { UserCircle as PlayerStatsIcon } from "reicon-react";
 import { Shield2 as ClubsIcon } from "reicon-react";
 import { InfoCircle as AboutIcon } from "reicon-react";
-
-// League logos
-import premierLeagueLogo from "../../../assets/sidebar/premier-league-logo.svg";
-import premierLeaguelogoAlt from "../../../assets/sidebar/premier-league-logo-alt.svg";
-import laLigaLogo from "../../../assets/sidebar/la-liga-logo.svg";
-import serieALogo from "../../../assets/sidebar/serie-a-logo.svg";
-import bundesligaLogo from "../../../assets/sidebar/bundesliga-logo.svg";
-import ligue1Logo from "../../../assets/sidebar/ligue-1-logo.svg";
-import ligue1logoAlt from "../../../assets/sidebar/ligue-1-logo-alt.svg";
-
-// League codes (same as the ones used in the API) for the leagues in the sidebar
-export type LeagueCode = "PL" | "PD" | "SA" | "BL1" | "FL1";
 
 // Props for the icon components, allowing for optional className to be passed in
 type IconProps = {
@@ -52,51 +41,6 @@ const PAGES: {
   },
   { path: "/clubs", name: "Clubs", icon: ClubsIcon, isLeaguePage: true },
   { path: "/about", name: "About", icon: AboutIcon, isLeaguePage: false },
-];
-
-// Sidebar leagues and their corresponding logos
-export const LEAGUES: {
-  code: LeagueCode;
-  slug: string; // First part of the URL, e.g. /premier-league/standings
-  name: string;
-  logo: string;
-  logoAlt?: string;
-}[] = [
-  {
-    code: "PL",
-    slug: "premier-league",
-    name: "Premier League",
-    logo: premierLeagueLogo,
-    logoAlt: premierLeaguelogoAlt,
-  },
-  {
-    code: "PD",
-    slug: "la-liga",
-    name: "La Liga",
-    logo: laLigaLogo,
-    logoAlt: laLigaLogo,
-  },
-  {
-    code: "SA",
-    slug: "serie-a",
-    name: "Serie A",
-    logo: serieALogo,
-    logoAlt: serieALogo,
-  },
-  {
-    code: "BL1",
-    slug: "bundesliga",
-    name: "Bundesliga",
-    logo: bundesligaLogo,
-    logoAlt: bundesligaLogo,
-  },
-  {
-    code: "FL1",
-    slug: "ligue-1",
-    name: "Ligue 1",
-    logo: ligue1Logo,
-    logoAlt: ligue1logoAlt,
-  },
 ];
 
 // Props for the Sidebar component: the selected league and season, a link builder for

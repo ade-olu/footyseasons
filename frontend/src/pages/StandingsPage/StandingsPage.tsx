@@ -1,7 +1,7 @@
 import LeagueTable from "../../components/standings/LeagueTable/LeagueTable";
 import StandingsBanner from "../../components/standings/StandingsBanner/StandingsBanner";
 import StandingsHighlights from "../../components/standings/StandingsHighlights/StandingsHighlights";
-import type { LeagueCode } from "../../components/layout/Sidebar/Sidebar";
+import type { LeagueCode } from "../../data/leagues";
 import { pageTitle } from "../../utils/pageTitle";
 import "./StandingsPage.scss";
 

@@ -3,7 +3,7 @@ import { API_URL } from "../../../api/config";
 import AwardCard from "../../cards/AwardCard/AwardCard";
 import SectionCard from "../../ui/SectionCard/SectionCard";
 import SectionHeader from "../../ui/SectionHeader/SectionHeader";
-import { LEAGUES, type LeagueCode } from "../../layout/Sidebar/Sidebar";
+import { LEAGUES, type LeagueCode } from "../../../data/leagues";
 import type { Award, AwardsResponse, AwardType } from "../../../types/api"; // Types for API responses
 import "./SeasonAwards.scss";
 

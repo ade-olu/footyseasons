@@ -3,7 +3,7 @@ import { fetchSeasonData } from "../../../api/seasonData";
 import MatchResult from "../../cards/MatchResult/MatchResult";
 import SectionCard from "../../ui/SectionCard/SectionCard";
 import SectionHeader from "../../ui/SectionHeader/SectionHeader";
-import type { LeagueCode } from "../../layout/Sidebar/Sidebar";
+import type { LeagueCode } from "../../../data/leagues";
 import type { Match } from "../../../types/api"; // Types for API responses
 import "./FinalDayMatches.scss";
 

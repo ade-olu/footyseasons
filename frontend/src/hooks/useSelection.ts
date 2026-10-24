@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { LEAGUES, type LeagueCode } from "../components/layout/Sidebar/Sidebar";
+import { LEAGUES, type LeagueCode } from "../data/leagues";
 
 // Season range as start years (2025 = 2025/26)
 export const EARLIEST_SEASON = 2014;

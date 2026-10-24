@@ -8,7 +8,7 @@ import StandingsTable, {
   type FormResult,
   type TableView,
 } from "../../cards/StandingsTable/StandingsTable";
-import { LEAGUES, type LeagueCode } from "../../layout/Sidebar/Sidebar";
+import { LEAGUES, type LeagueCode } from "../../../data/leagues";
 import { TABLE_PLACES } from "../../../data/tablePlaces";
 import { getClubForm } from "../../../utils/form";
 import type { Standing, StandingsResponse } from "../../../types/api"; // Types for API responses

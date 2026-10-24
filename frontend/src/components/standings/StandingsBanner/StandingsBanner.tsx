@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchSeasonData } from "../../../api/seasonData";
 import ClubCrest from "../../ui/ClubCrest/ClubCrest";
-import type { LeagueCode } from "../../layout/Sidebar/Sidebar";
+import type { LeagueCode } from "../../../data/leagues";
 import type { Standing } from "../../../types/api"; // Types for API responses
 import "./StandingsBanner.scss";
 

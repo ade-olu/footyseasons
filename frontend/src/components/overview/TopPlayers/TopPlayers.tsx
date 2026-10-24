@@ -4,7 +4,7 @@ import ClubCrest from "../../ui/ClubCrest/ClubCrest";
 import PlayerPhoto from "../../ui/PlayerPhoto/PlayerPhoto";
 import SectionCard from "../../ui/SectionCard/SectionCard";
 import SectionHeader from "../../ui/SectionHeader/SectionHeader";
-import type { LeagueCode } from "../../layout/Sidebar/Sidebar";
+import type { LeagueCode } from "../../../data/leagues";
 import type { Player, PlayersResponse } from "../../../types/api"; // Types for API responses
 import "./TopPlayers.scss";
 

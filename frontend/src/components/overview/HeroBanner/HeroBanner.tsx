@@ -3,7 +3,7 @@ import { fetchSeasonData } from "../../../api/seasonData";
 import "./HeroBanner.scss";
 import ClubCrest from "../../ui/ClubCrest/ClubCrest";
 
-import type { LeagueCode } from "../../layout/Sidebar/Sidebar";
+import type { LeagueCode } from "../../../data/leagues";
 import type { Standing } from "../../../types/api"; // Types for API responses
 import { getHeroImage } from "../../../data/heroImages"; // Get the hero image for a given club and season
 import { SEASON_STORIES } from "../../../data/seasonStories"; // Hand-written stories for each season
