@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react";
 import ClubCrest from "../ClubCrest/ClubCrest";
 import {
   getTableZone,
@@ -22,6 +23,7 @@ type StandingsTableProps = {
   limit?: number; // Overview shows the top 5; leave out for the full table
   showGoals?: boolean; // Adds goals for and against (the Standings page)
   view?: TableView; // Phone columns; leave out to fit columns to the width
+  animateOrder?: boolean; // Slides rows to their new place when the same clubs are re-ordered
 };
 
 // Legend labels, in the order they're shown under the table
@@ -72,8 +74,42 @@ export default function StandingsTable({
   limit,
   showGoals = false,
   view,
+  animateOrder = false,
 }: StandingsTableProps) {
   const rows = limit === undefined ? standings : standings.slice(0, limit);
+
+  // Each row's element and where it was last time, keyed by clubId
+  const rowRefs = useRef(new Map<number, HTMLTableRowElement>());
+  const previousTops = useRef(new Map<number, number>());
+
+  // When the order changes (e.g. Overall -> Home), slide each row from its old
+  // place to its new one (FLIP: measure, move, then animate back to zero)
+  useLayoutEffect(() => {
+    const tops = new Map<number, number>();
+    rowRefs.current.forEach((row, clubId) => tops.set(clubId, row.offsetTop));
+    const previous = previousTops.current;
+    previousTops.current = tops;
+
+    // Only when the same clubs are re-ordered, not on a new league or season
+    const sameClubs =
+      previous.size === tops.size &&
+      [...tops.keys()].every((clubId) => previous.has(clubId));
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (!animateOrder || !sameClubs || reduceMotion) return;
+
+    tops.forEach((top, clubId) => {
+      const shift = (previous.get(clubId) ?? top) - top;
+      if (shift === 0) return;
+      rowRefs.current
+        .get(clubId)
+        ?.animate(
+          [{ transform: `translateY(${shift}px)` }, { transform: "none" }],
+          { duration: 400, easing: "ease-in-out" },
+        );
+    });
+  });
 
   // Position is null if the table hasn't been ranked; fall back to the row order
   const zoneOf = (club: Standing, index: number) => {
@@ -188,6 +224,13 @@ export default function StandingsTable({
               return (
                 <tr
                   key={club.clubId}
+                  ref={(row) => {
+                    if (!row) return;
+                    rowRefs.current.set(club.clubId, row);
+                    return () => {
+                      rowRefs.current.delete(club.clubId);
+                    };
+                  }}
                   className={
                     zone?.key === "relegation"
                       ? "standings-table__row--relegation"
