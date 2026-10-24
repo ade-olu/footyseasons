@@ -10,6 +10,7 @@ type ClubCrestProps = {
   name: string;
   className?: string;
   onDark?: boolean; // Swaps in a light version from DARK_CRESTS where there is one
+  showName?: boolean; // Shows the club name on hover
 };
 
 // Club crest image that falls back to a shield icon if there's no crest or it fails to load
@@ -18,6 +19,7 @@ export default function ClubCrest({
   name,
   className = "",
   onDark = false,
+  showName = false,
 }: ClubCrestProps) {
   const src = (onDark && crestUrl && DARK_CRESTS[crestUrl]) || crestUrl;
   // Remembers which src failed, so a new src (e.g. after changing season) gets a fresh try
@@ -29,6 +31,7 @@ export default function ClubCrest({
         className={`club-crest club-crest--fallback ${className}`}
         role="img"
         aria-label={`${name} crest`}
+        title={showName ? name : undefined}
       >
         <ShieldIcon className="club-crest__icon" />
       </span>
@@ -40,6 +43,7 @@ export default function ClubCrest({
       className={`club-crest ${className}`}
       src={src}
       alt={`${name} crest`}
+      title={showName ? name : undefined}
       onError={() => setFailedSrc(src)}
     />
   );
