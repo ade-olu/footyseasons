@@ -77,6 +77,21 @@ $highlight-card-shadow-hover: 0 8px 24px 0 rgba(11, 15, 14, 0.08);
     object-fit: contain;
   }
 
+  // Crests before a number
+  &__crests {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: rem(8);
+  }
+
+  &__crests-item {
+    width: auto;
+    height: rem(32);
+    max-width: rem(40);
+    object-fit: contain;
+  }
+
   &__description {
     @include text(12);
     color: $highlight-card-text-muted;

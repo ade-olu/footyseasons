@@ -13,6 +13,7 @@ type HighlightCardProps = {
   value: string;
   description: string;
   club?: HighlightClub; // When set, the card shows the club's crest and uses `value` as the club name
+  crests?: HighlightClub[]; // Crests shown before the value (e.g. the relegated clubs)
 };
 
 // Small stat card for the season highlights row
@@ -21,6 +22,7 @@ export default function HighlightCard({
   value,
   description,
   club,
+  crests,
 }: HighlightCardProps) {
   return (
     <article className="highlight-card">
@@ -30,6 +32,19 @@ export default function HighlightCard({
         <p
           className={`highlight-card__value${club ? " highlight-card__value--club" : ""}`}
         >
+          {crests && crests.length > 0 && (
+            <span className="highlight-card__crests">
+              {crests.map((crest) => (
+                <ClubCrest
+                  key={crest.name}
+                  className="highlight-card__crests-item"
+                  src={crest.crestUrl}
+                  name={crest.name}
+                  showName
+                />
+              ))}
+            </span>
+          )}
           {club && (
             <ClubCrest
               className="highlight-card__crest"
