@@ -4,11 +4,12 @@ import type { Match } from "../types/api";
 // Statuses that count as a result in the table (an AWARDED score is given without the game being played)
 const PLAYED_STATUSES = new Set(["FINISHED", "AWARDED"]);
 
-// Each club's last `count` results, oldest first, keyed by clubId.
+// Each club's last `count` results, oldest first, keyed by clubId; `side` keeps only home or away games.
 // Matches can come in any order; they're sorted by date here.
 export function getClubForm(
   matches: Match[],
   count = 5,
+  side?: "home" | "away",
 ): Record<number, FormResult[]> {
   const played = matches
     .filter(
@@ -34,8 +35,8 @@ export function getClubForm(
   for (const match of played) {
     const homeGoals = match.homeGoals ?? 0;
     const awayGoals = match.awayGoals ?? 0;
-    addResult(match.homeClubId, homeGoals, awayGoals);
-    addResult(match.awayClubId, awayGoals, homeGoals);
+    if (side !== "away") addResult(match.homeClubId, homeGoals, awayGoals);
+    if (side !== "home") addResult(match.awayClubId, awayGoals, homeGoals);
   }
 
   return form;
