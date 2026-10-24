@@ -242,8 +242,11 @@ router.get("/:code/players", (req, res) => {
       ps.id, ps.understat_player_id AS understatId,
       ps.player_name AS playerName, ps.position,
       ps.games, ps.minutes, ps.goals, ps.assists,
-      ps.xg AS xG, ps.xa AS xA, ps.shots, ps.key_passes AS keyPasses
+      ps.xg AS xG, ps.xa AS xA, ps.shots, ps.key_passes AS keyPasses,
+      pp.photo_url AS photoUrl
     FROM understat_player_stats ps
+    LEFT JOIN player_profiles pp
+      ON pp.understat_player_id = ps.understat_player_id
     WHERE ps.season_id = ?
     ORDER BY ${PLAYER_SORTS[sort]}, ps.player_name
     LIMIT ?
@@ -297,7 +300,7 @@ router.get("/:code/awards", (req, res) => {
       COALESCE(c.display_name, c.name) AS displayName,
       c.crest_url AS crestUrl,
       ps.goals, ps.assists, a.starts, a.clean_sheets AS cleanSheets,
-      cs.wins, cs.points
+      cs.wins, cs.points, pp.photo_url AS photoUrl
     FROM season_awards a
     JOIN clubs c ON c.club_id = a.club_id
     JOIN club_season_stats cs
@@ -305,6 +308,8 @@ router.get("/:code/awards", (req, res) => {
     LEFT JOIN understat_player_stats ps
       ON ps.season_id = a.season_id
       AND ps.understat_player_id = a.understat_player_id
+    LEFT JOIN player_profiles pp
+      ON pp.understat_player_id = a.understat_player_id
     WHERE a.season_id = ?
     ORDER BY
       CASE a.award
