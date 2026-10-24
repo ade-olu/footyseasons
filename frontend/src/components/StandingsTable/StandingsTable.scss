@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/breakpoints" as *;
 
 // Standings Table color variables
 $standings-table-text: #0b0f0e;
@@ -154,6 +155,10 @@ $standings-table-relegation-row: color.mix(
     padding: 0 rem(16);
   }
 
+  &__form-label-long {
+    display: none;
+  }
+
   // Goal difference covers GF/GA, so they're the first to go
   @container (max-width: #{rem(939)}) {
     &__col-goals,
@@ -291,6 +296,97 @@ $standings-table-relegation-row: color.mix(
 
     &--relegation {
       background-color: $standings-table-relegation;
+    }
+  }
+
+  // Phone views chosen with the toggle (the `view` prop); wider screens ignore them
+  @include below-tablet {
+    // Short: #, club, PL, GD, PTS
+    &--short {
+      .standings-table__col-result,
+      .standings-table__col-goals,
+      .standings-table__col-form,
+      th.standings-table__result,
+      td.standings-table__result,
+      th.standings-table__goals,
+      td.standings-table__goals,
+      th.standings-table__form,
+      td.standings-table__form {
+        display: none;
+      }
+    }
+
+    // Full: every stat, scrolling sideways with # and club kept in place
+    &--full {
+      .standings-table__table {
+        min-width: rem(600);
+      }
+
+      .standings-table__col-result,
+      .standings-table__col-goals {
+        display: table-column;
+      }
+
+      th.standings-table__result,
+      td.standings-table__result,
+      th.standings-table__goals,
+      td.standings-table__goals {
+        display: table-cell;
+      }
+
+      .standings-table__col-form,
+      th.standings-table__form,
+      td.standings-table__form {
+        display: none;
+      }
+
+      .standings-table__col-position {
+        width: rem(40);
+      }
+
+      th.standings-table__position,
+      td.standings-table__position,
+      th.standings-table__club {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background-color: $standings-table-bg;
+      }
+
+      th.standings-table__club {
+        left: rem(40);
+      }
+
+      .standings-table__row--relegation > * {
+        background-color: $standings-table-relegation-row;
+      }
+    }
+
+    // Form: #, club and the last 5 results
+    &--form {
+      .standings-table__col-stat,
+      th.standings-table__stat,
+      td.standings-table__stat {
+        display: none;
+      }
+
+      .standings-table__col-form {
+        display: table-column;
+        width: rem(184);
+      }
+
+      th.standings-table__form,
+      td.standings-table__form {
+        display: table-cell;
+      }
+
+      .standings-table__form-label {
+        display: none;
+      }
+
+      .standings-table__form-label-long {
+        display: inline;
+      }
     }
   }
 }

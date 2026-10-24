@@ -10,6 +10,9 @@ import "./StandingsTable.scss";
 // One letter of a club's form: win, draw or loss
 export type FormResult = "W" | "D" | "L";
 
+// Columns shown on phones: short (PL, GD, PTS), full (every stat) or form
+export type TableView = "short" | "full" | "form";
+
 // Props for the StandingsTable component: the league table (in table order), each club's
 // last results (oldest first, keyed by clubId), the season's European and relegation places, and an optional row limit
 type StandingsTableProps = {
@@ -18,6 +21,7 @@ type StandingsTableProps = {
   places?: TablePlaces;
   limit?: number; // Overview shows the top 5; leave out for the full table
   showGoals?: boolean; // Adds goals for and against (the Standings page)
+  view?: TableView; // Phone columns; leave out to fit columns to the width
 };
 
 // Legend labels, in the order they're shown under the table
@@ -67,6 +71,7 @@ export default function StandingsTable({
   places,
   limit,
   showGoals = false,
+  view,
 }: StandingsTableProps) {
   const rows = limit === undefined ? standings : standings.slice(0, limit);
 
@@ -85,7 +90,9 @@ export default function StandingsTable({
   );
 
   return (
-    <div className="standings-table">
+    <div
+      className={`standings-table${view ? ` standings-table--${view}` : ""}`}
+    >
       {/* Scrolls sideways instead of squashing the columns on narrow screens */}
       <div className="standings-table__scroll">
         <table className="standings-table__table">
@@ -164,7 +171,11 @@ export default function StandingsTable({
                 <abbr title="Points">PTS</abbr>
               </th>
               <th scope="col" className="standings-table__form">
-                Form
+                {/* The Form view on phones has room for the longer label */}
+                <span className="standings-table__form-label">Form</span>
+                <span className="standings-table__form-label-long">
+                  Last 5 matches
+                </span>
               </th>
             </tr>
           </thead>
