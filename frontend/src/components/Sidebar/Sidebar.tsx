@@ -29,50 +29,84 @@ type IconProps = {
   className?: string;
 };
 
-// Sidebar pages and their corresponding icons
-const PAGES: { path: string; name: string; icon: ComponentType<IconProps> }[] =
-  [
-    { path: "/", name: "Overview", icon: OverviewIcon },
-    { path: "/standings", name: "Standings", icon: StandingsIcon },
-    { path: "/matches", name: "Matches", icon: MatchesIcon },
-    { path: "/player-stats", name: "Player Stats", icon: PlayerStatsIcon },
-    { path: "/clubs", name: "Clubs", icon: ClubsIcon },
-    { path: "/about", name: "About", icon: AboutIcon },
-  ];
+// Sidebar pages and their icons; league pages' paths go after the league slug
+const PAGES: {
+  path: string;
+  name: string;
+  icon: ComponentType<IconProps>;
+  isLeaguePage: boolean;
+}[] = [
+  { path: "", name: "Overview", icon: OverviewIcon, isLeaguePage: true },
+  {
+    path: "/standings",
+    name: "Standings",
+    icon: StandingsIcon,
+    isLeaguePage: true,
+  },
+  { path: "/matches", name: "Matches", icon: MatchesIcon, isLeaguePage: true },
+  {
+    path: "/player-stats",
+    name: "Player Stats",
+    icon: PlayerStatsIcon,
+    isLeaguePage: true,
+  },
+  { path: "/clubs", name: "Clubs", icon: ClubsIcon, isLeaguePage: true },
+  { path: "/about", name: "About", icon: AboutIcon, isLeaguePage: false },
+];
 
 // Sidebar leagues and their corresponding logos
 export const LEAGUES: {
   code: LeagueCode;
+  slug: string; // First part of the URL, e.g. /premier-league/standings
   name: string;
   logo: string;
   logoAlt?: string;
 }[] = [
   {
     code: "PL",
+    slug: "premier-league",
     name: "Premier League",
     logo: premierLeagueLogo,
     logoAlt: premierLeaguelogoAlt,
   },
-  { code: "PD", name: "La Liga", logo: laLigaLogo, logoAlt: laLigaLogo },
-  { code: "SA", name: "Serie A", logo: serieALogo, logoAlt: serieALogo },
+  {
+    code: "PD",
+    slug: "la-liga",
+    name: "La Liga",
+    logo: laLigaLogo,
+    logoAlt: laLigaLogo,
+  },
+  {
+    code: "SA",
+    slug: "serie-a",
+    name: "Serie A",
+    logo: serieALogo,
+    logoAlt: serieALogo,
+  },
   {
     code: "BL1",
+    slug: "bundesliga",
     name: "Bundesliga",
     logo: bundesligaLogo,
     logoAlt: bundesligaLogo,
   },
   {
     code: "FL1",
+    slug: "ligue-1",
     name: "Ligue 1",
     logo: ligue1Logo,
     logoAlt: ligue1logoAlt,
   },
 ];
 
-// Props for the Sidebar component: the selected league, plus the drawer state below laptop width
+// Props for the Sidebar component: the selected league and season, a link builder for
+// league pages (pathTo("/standings")), plus the drawer state below laptop width
 type SidebarProps = {
   selectedLeague: LeagueCode;
+  isLeaguePage: boolean; // Highlights the league only on its own pages
+  selectedSeason: number;
   onSelectLeague: (league: LeagueCode) => void;
+  pathTo: (page: string) => string;
   isOpen: boolean;
   onClose: () => void;
 };
@@ -80,7 +114,10 @@ type SidebarProps = {
 // Sidebar component that renders the sidebar navigation with pages and leagues
 export default function Sidebar({
   selectedLeague,
+  selectedSeason,
+  isLeaguePage,
   onSelectLeague,
+  pathTo,
   isOpen,
   onClose,
 }: SidebarProps) {
@@ -117,7 +154,7 @@ export default function Sidebar({
       >
         <div className="sidebar__header">
           <Link
-            to="/"
+            to={pathTo("")}
             className="sidebar__logo-link"
             aria-label="PitchData home"
             onClick={onClose}
@@ -141,10 +178,16 @@ export default function Sidebar({
             <ul className="sidebar__nav-list">
               {/* Render each page in the sidebar navigation */}
               {PAGES.map((page) => (
-                <li key={page.path}>
+                <li key={page.name}>
+                  {/* Pages without a league keep the selection in history state */}
                   <NavLink
-                    to={page.path}
-                    end={page.path === "/"}
+                    to={page.isLeaguePage ? pathTo(page.path) : page.path}
+                    state={
+                      page.isLeaguePage
+                        ? undefined
+                        : { league: selectedLeague, season: selectedSeason }
+                    }
+                    end={page.path === ""}
                     onClick={onClose}
                     className={({ isActive }) =>
                       `sidebar__nav-item${isActive ? " sidebar__nav-item--active" : ""}`
@@ -164,7 +207,8 @@ export default function Sidebar({
             <ul className="sidebar__nav-list">
               {/* Render each league in the sidebar navigation */}
               {LEAGUES.map((league) => {
-                const isSelected = selectedLeague === league.code;
+                const isSelected =
+                  isLeaguePage && selectedLeague === league.code;
                 return (
                   <li key={league.code}>
                     <button

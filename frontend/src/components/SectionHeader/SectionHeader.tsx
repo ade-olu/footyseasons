@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useSelection } from "../../hooks/useSelection";
 import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import "./SectionHeader.scss";
 
@@ -21,6 +22,8 @@ export default function SectionHeader({
   description,
   action,
 }: SectionHeaderProps) {
+  const { pathTo } = useSelection(); // Keeps the league and season
+
   return (
     <header
       className={`section-header${action ? " section-header--with-action" : ""}`}
@@ -33,7 +36,7 @@ export default function SectionHeader({
       {action && (
         <Link
           className="section-header__action"
-          to={action.to}
+          to={pathTo(action.to)}
           aria-label={action.label}
         >
           <span className="section-header__action-label">{action.label}</span>

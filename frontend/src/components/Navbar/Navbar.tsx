@@ -13,6 +13,7 @@ import "./Navbar.scss";
 // Props for the Navbar component: the selected league and season (start year, 2025 = 2025/26),
 // plus the menu button that opens the sidebar drawer
 type NavbarProps = {
+  showSelection: boolean; // False on pages without a league (About, 404)
   selectedLeague: LeagueCode;
   selectedSeason: number;
   onSelectSeason: (season: number) => void;
@@ -27,6 +28,7 @@ function formatSeason(startYear: number) {
 }
 
 export default function Navbar({
+  showSelection,
   selectedLeague,
   selectedSeason,
   onSelectSeason,
@@ -157,7 +159,7 @@ export default function Navbar({
 
   return (
     // Navbar component for displaying the selected league and a dropdown for selecting the season
-    <nav className="navbar">
+    <nav className={`navbar${showSelection ? "" : " navbar--menu-only"}`}>
       {/* Selected league section */}
       <div className="navbar__league">
         <button
@@ -171,74 +173,78 @@ export default function Navbar({
         >
           <MenuIcon className="navbar__menu-icon" aria-hidden />
         </button>
-        {league?.logoAlt && (
+        {showSelection && league?.logoAlt && (
           <img src={league.logoAlt} alt="" className="navbar__league-logo" />
         )}
-        <h2 className="navbar__league-name">
-          {league?.name}{" "}
-          <span className="navbar__league-season">
-            {formatSeason(selectedSeason)}
-          </span>
-        </h2>
+        {showSelection && (
+          <h2 className="navbar__league-name">
+            {league?.name}{" "}
+            <span className="navbar__league-season">
+              {formatSeason(selectedSeason)}
+            </span>
+          </h2>
+        )}
       </div>
 
       {/* Dropdown for selecting the season */}
-      <div className="navbar__dropdown-wrapper" ref={dropdownRef}>
-        <button
-          ref={buttonRef}
-          type="button"
-          className={`navbar__dropdown${isOpen ? " navbar__dropdown--open" : ""}`}
-          aria-haspopup="listbox"
-          aria-expanded={isOpen}
-          aria-controls={listId}
-          onClick={() => (isOpen ? setIsOpen(false) : openList())}
-          onKeyDown={handleButtonKeyDown}
-        >
-          <span className="navbar__dropdown-season">
-            <span className="navbar__dropdown-label">Season</span>
-            <span className="navbar__dropdown-value">
-              {formatSeason(selectedSeason)}
-            </span>
-          </span>
-          <ArrowDownIcon className="navbar__dropdown-icon" />
-        </button>
-
-        {/* Season options list, newest first */}
-        {isOpen && (
-          <ul
-            ref={listRef}
-            id={listId}
-            className="navbar__dropdown-list"
-            role="listbox"
-            aria-label="Season"
-            aria-activedescendant={`${listId}-${activeIndex}`}
-            tabIndex={-1}
-            onKeyDown={handleListKeyDown}
+      {showSelection && (
+        <div className="navbar__dropdown-wrapper" ref={dropdownRef}>
+          <button
+            ref={buttonRef}
+            type="button"
+            className={`navbar__dropdown${isOpen ? " navbar__dropdown--open" : ""}`}
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            aria-controls={listId}
+            onClick={() => (isOpen ? setIsOpen(false) : openList())}
+            onKeyDown={handleButtonKeyDown}
           >
-            {seasons.map((season, index) => {
-              const isSelected = season.startYear === selectedSeason;
-              const isActive = index === activeIndex;
+            <span className="navbar__dropdown-season">
+              <span className="navbar__dropdown-label">Season</span>
+              <span className="navbar__dropdown-value">
+                {formatSeason(selectedSeason)}
+              </span>
+            </span>
+            <ArrowDownIcon className="navbar__dropdown-icon" />
+          </button>
 
-              return (
-                <li
-                  key={season.startYear}
-                  id={`${listId}-${index}`}
-                  role="option"
-                  aria-selected={isSelected}
-                  className={`navbar__dropdown-option${isActive ? " navbar__dropdown-option--active" : ""}${isSelected ? " navbar__dropdown-option--selected" : ""}`}
-                  onPointerEnter={() => setActiveIndex(index)}
-                  onClick={() => selectSeason(season.startYear)}
-                >
-                  {formatSeason(season.startYear)}
-                  {isSelected && (
-                    <CheckIcon className="navbar__dropdown-check" />
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+          {/* Season options list, newest first */}
+          {isOpen && (
+            <ul
+              ref={listRef}
+              id={listId}
+              className="navbar__dropdown-list"
+              role="listbox"
+              aria-label="Season"
+              aria-activedescendant={`${listId}-${activeIndex}`}
+              tabIndex={-1}
+              onKeyDown={handleListKeyDown}
+            >
+              {seasons.map((season, index) => {
+                const isSelected = season.startYear === selectedSeason;
+                const isActive = index === activeIndex;
+
+                return (
+                  <li
+                    key={season.startYear}
+                    id={`${listId}-${index}`}
+                    role="option"
+                    aria-selected={isSelected}
+                    className={`navbar__dropdown-option${isActive ? " navbar__dropdown-option--active" : ""}${isSelected ? " navbar__dropdown-option--selected" : ""}`}
+                    onPointerEnter={() => setActiveIndex(index)}
+                    onClick={() => selectSeason(season.startYear)}
+                  >
+                    {formatSeason(season.startYear)}
+                    {isSelected && (
+                      <CheckIcon className="navbar__dropdown-check" />
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

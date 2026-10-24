@@ -35,6 +35,13 @@ $navbar-dropdown-shadow:
     padding: 0 rem(16);
   }
 
+  // Pages without a league only need the menu button, which laptops don't show
+  &--menu-only {
+    @include laptop-up {
+      display: none;
+    }
+  }
+
   &__league {
     display: flex;
     align-items: center;
