@@ -17,6 +17,7 @@ type StandingsTableProps = {
   form: Record<number, FormResult[]>;
   places?: TablePlaces;
   limit?: number; // Overview shows the top 5; leave out for the full table
+  showGoals?: boolean; // Adds goals for and against (the Standings page)
 };
 
 // Legend labels, in the order they're shown under the table
@@ -59,12 +60,13 @@ function formatGoalDifference(club: Standing) {
   return difference > 0 ? `+${difference}` : String(difference);
 }
 
-// League table: position, club, played, W/D/L, goal difference, points and form
+// League table: position, club, played, W/D/L, optional GF/GA, goal difference, points and form
 export default function StandingsTable({
   standings,
   form,
   places,
   limit,
+  showGoals = false,
 }: StandingsTableProps) {
   const rows = limit === undefined ? standings : standings.slice(0, limit);
 
@@ -97,6 +99,12 @@ export default function StandingsTable({
                 className="standings-table__col-stat standings-table__col-result"
               />
             ))}
+            {showGoals && (
+              <>
+                <col className="standings-table__col-stat standings-table__col-goals" />
+                <col className="standings-table__col-stat standings-table__col-goals" />
+              </>
+            )}
             <col className="standings-table__col-stat" />
             <col className="standings-table__col-stat standings-table__col-points" />
             <col className="standings-table__col-form" />
@@ -130,6 +138,22 @@ export default function StandingsTable({
               >
                 <abbr title="Lost">L</abbr>
               </th>
+              {showGoals && (
+                <>
+                  <th
+                    scope="col"
+                    className="standings-table__stat standings-table__goals"
+                  >
+                    <abbr title="Goals for">GF</abbr>
+                  </th>
+                  <th
+                    scope="col"
+                    className="standings-table__stat standings-table__goals"
+                  >
+                    <abbr title="Goals against">GA</abbr>
+                  </th>
+                </>
+              )}
               <th scope="col" className="standings-table__stat">
                 <abbr title="Goal difference">GD</abbr>
               </th>
@@ -151,7 +175,14 @@ export default function StandingsTable({
               const results = form[club.clubId] ?? [];
 
               return (
-                <tr key={club.clubId}>
+                <tr
+                  key={club.clubId}
+                  className={
+                    zone?.key === "relegation"
+                      ? "standings-table__row--relegation"
+                      : undefined
+                  }
+                >
                   <td
                     className={`standings-table__position${
                       zone ? ` standings-table__position--${zone.modifier}`
@@ -184,6 +215,16 @@ export default function StandingsTable({
                   <td className="standings-table__stat standings-table__result">
                     {club.losses}
                   </td>
+                  {showGoals && (
+                    <>
+                      <td className="standings-table__stat standings-table__goals">
+                        {club.goalsFor}
+                      </td>
+                      <td className="standings-table__stat standings-table__goals">
+                        {club.goalsAgainst}
+                      </td>
+                    </>
+                  )}
                   <td className="standings-table__stat">
                     {formatGoalDifference(club)}
                   </td>
