@@ -8,8 +8,8 @@ player_profiles. Photos are loaded from FotMob's image server.
 FotMob has no official API: this uses the JSON its own site loads, which
 could change without warning.
 
-Safe to re-run: the table is rebuilt each time. Downloads are cached in
-cache/ (delete it to refresh). Run 07_fetch_understat.py first.
+Safe to re-run: the table is rebuilt each time. I cache downloads in
+cache/; delete it to refetch everything. Run 07_fetch_understat.py first.
 """
 
 import csv
@@ -343,6 +343,8 @@ def main():
         )
 
     connection.commit()
+    # Last script in the pipeline: reclaim the space left by the re-inserts
+    connection.execute("VACUUM")
     connection.close()
 
     print(

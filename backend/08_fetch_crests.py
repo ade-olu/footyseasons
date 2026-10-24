@@ -1,18 +1,14 @@
 """
 08_fetch_crests.py
 
-Downloads an SVG crest for every club in CLUB_CRESTS from footylogos.com
-into frontend/public/crests/, and points clubs.crest_url at it
-(e.g. "/crests/arsenal.svg"). The frontend serves that folder as-is,
-so the API's crestUrl works straight in an <img src>.
+Downloads each club's SVG crest from footylogos.com into
+frontend/public/crests/ and sets clubs.crest_url to it
+(e.g. "/crests/arsenal.svg"). Clubs missing from CLUB_CRESTS keep their
+crest_url and are listed at the end.
 
-Clubs missing from CLUB_CRESTS keep their football-data.org crest_url and 
-are listed at the end of the run.
-
-Safe to re-run anytime: crests already in frontend/public/crests/ are
-not downloaded again, so the site is only hit for new clubs. To swap a
-crest by hand, replace its file in that folder. Run it again after
-01_create_database.py, since the rebuild resets crest_url.
+Safe to re-run: only crests not already in the folder are downloaded, so
+I swap a crest by hand by replacing its file. Re-run after
+01_create_database.py.
 """
 
 import os
@@ -24,15 +20,12 @@ import requests
 
 DB_FILE = "football.db"
 
-# The frontend serves files in public/ at the site root, so
-# frontend/public/crests/arsenal.svg is available at /crests/arsenal.svg
+# Served at the site root, e.g. /crests/arsenal.svg
 CRESTS_DIR = os.path.join("..", "frontend", "public", "crests")
 CRESTS_URL_PATH = "/crests"
 
-# football-data.org club_id -> footylogos.com logo name, the last part of
-# the club's page URL (footylogos.com/logos/<name>). The names aren't
-# predictable ("bayern-munich", "paris-saint-germain-psg"), so look a new
-# club up on the site and add it here
+# club_id -> footylogos name (footylogos.com/logos/<name>); not predictable,
+# so look new clubs up on the site
 CLUB_CRESTS = {
     # Premier League
     1044: "afc-bournemouth",             # AFC Bournemouth
@@ -159,8 +152,7 @@ CLUB_CRESTS = {
     547: "stade-de-reims",               # Stade de Reims
     511: "toulouse-fc",                  # Toulouse FC
 
-    # Clubs that only played before 2023, added by
-    # 05_fetch_understat_history.py with negative ids
+    # Pre-2023 clubs (negative ids, added by 05)
     # Premier League
     -227: "cardiff-city",                # Cardiff City FC
     -219: "huddersfield-town",           # Huddersfield Town AFC
@@ -212,16 +204,13 @@ CLUB_CRESTS = {
     -182: "nancy-lorraine",              # AS Nancy-Lorraine
     -235: "nimes-olympique",             # Nîmes Olympique
     -162: "sc-bastia",                   # SC Bastia
-    # Not on footylogos, so this file was added by hand: the current crest of
-    # Thonon Évian Grand Genève FC (the club refounded after Évian's 2016
-    # bankruptcy) from football-logos.cc. The script never downloads it
-    # because it's already in frontend/public/crests/
+    # Not on footylogos: added by hand from football-logos.cc
     -209: "evian-thonon-gaillard",       # Évian Thonon Gaillard FC
+    # Swapped by hand for Wikipedia's 12 KB SVG (footylogos' is 2 MB)
     -172: "troyes",                      # ES Troyes AC
 }
 
-# Pause between downloads so we don't hammer the site (it starts
-# dropping connections if hit too quickly)
+# The site drops connections if hit too quickly
 SECONDS_BETWEEN_REQUESTS = 1
 
 HEADERS = {"User-Agent": "Mozilla/5.0"}
@@ -232,10 +221,7 @@ def crest_file(slug):
 
 
 def ensure_viewbox(svg):
-    # Some footylogos SVGs only have width/height, and without a viewBox
-    # the browser crops the crest instead of scaling it to the CSS size.
-    # Builds one from the width/height, e.g. width="152" height="200" ->
-    # viewBox="0 0 152 200"
+    # Without a viewBox the browser crops the crest instead of scaling it
     tag_end = svg.index(">", svg.index("<svg"))
     tag = svg[svg.index("<svg"):tag_end]
 
@@ -252,9 +238,7 @@ def ensure_viewbox(svg):
 
 
 def download_crest(slug):
-    # footylogos keeps a club's main crest in one of two places, depending
-    # on the club: logos/<slug>/<slug>-logo-footylogos.svg or
-    # logos/<slug>-logo-footylogos.svg. Returns the SVG text
+    # The crest is at one of two paths, depending on the club
     urls = [
         f"https://assets.footylogos.com/logos/{slug}/{slug}-logo-footylogos.svg",
         f"https://assets.footylogos.com/logos/{slug}-logo-footylogos.svg",
@@ -264,8 +248,7 @@ def download_crest(slug):
         response = requests.get(url, headers=HEADERS, timeout=30)
         time.sleep(SECONDS_BETWEEN_REQUESTS)
 
-        # A missing file comes back as an HTML error page, so check it's
-        # actually an SVG before saving it
+        # A missing file comes back as an HTML page
         if response.status_code == 200 and "<svg" in response.text[:1000]:
             return ensure_viewbox(response.text)
 
