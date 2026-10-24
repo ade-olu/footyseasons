@@ -3,7 +3,6 @@
 @use "../../styles/breakpoints" as *;
 
 // Navbar color variables
-$navbar-bg: #eff4f3;
 $navbar-bg-blur: rgba(239, 244, 243, 0.8);
 $navbar-inner-bg: #ffffff;
 $navbar-border: #dadbdb;
@@ -11,10 +10,6 @@ $navbar-text: #0b0f0e;
 $navbar-text-muted: #7d8180;
 $navbar-accent: #2fe6b8; // Same accent as the sidebar
 $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
-$navbar-dropdown-shadow:
-  0 1px 2px 0 rgba(11, 15, 14, 0.06),
-  0 4px 8px -2px rgba(11, 15, 14, 0.06),
-  0 12px 24px -4px rgba(11, 15, 14, 0.1);
 
 .navbar {
   position: sticky;
@@ -114,120 +109,12 @@ $navbar-dropdown-shadow:
     }
   }
 
-  // Positions the option list under the button
-  &__dropdown-wrapper {
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  &__dropdown {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: rem(16);
+  // Season dropdown; fits its text on phones
+  &__season {
     width: rem(240);
-    cursor: pointer;
-    @include text(16);
-    color: $navbar-text;
-    border-radius: 12px;
-    border: 1px solid $navbar-border;
-    background-color: $navbar-inner-bg;
-    box-shadow: $navbar-shadow;
-    padding: rem(8) rem(16);
-    transition: border-color 0.15s;
 
     @include below-tablet {
       width: auto;
     }
-
-    &:hover,
-    &--open {
-      border-color: $navbar-text-muted;
-    }
-
-    &:focus-visible {
-      outline: 2px solid $navbar-accent;
-      outline-offset: 2px;
-    }
-
-    // Flip the chevron while the list is open
-    &--open .navbar__dropdown-icon {
-      transform: rotate(180deg);
-    }
-  }
-
-  &__dropdown-season {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
-  &__dropdown-label {
-    @include text(12);
-    color: $navbar-text-muted;
-  }
-
-  &__dropdown-value {
-    @include text(14);
-    color: $navbar-text;
-    font-weight: 500;
-  }
-
-  &__dropdown-icon {
-    width: auto;
-    height: rem(18);
-    flex-shrink: 0;
-    transition: transform 0.15s;
-  }
-
-  // Option list that opens under the button
-  &__dropdown-list {
-    position: absolute;
-    top: calc(100% + rem(8));
-    right: 0;
-    z-index: 10;
-    width: 100%;
-    min-width: rem(160);
-    margin: 0;
-    padding: rem(8);
-    list-style: none;
-    border-radius: 12px;
-    border: 1px solid $navbar-border;
-    background-color: $navbar-inner-bg;
-    box-shadow: $navbar-dropdown-shadow;
-
-    // Focus sits on the list itself; the highlighted option shows where you are
-    &:focus-visible {
-      outline: none;
-    }
-  }
-
-  &__dropdown-option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: rem(8) rem(12);
-    border-radius: 8px;
-    @include text(14);
-    font-weight: 500;
-    color: $navbar-text-muted;
-    cursor: pointer;
-
-    // Highlighted by hover or arrow keys
-    &--active {
-      background-color: $navbar-bg;
-      color: $navbar-text;
-    }
-
-    &--selected {
-      color: $navbar-text;
-    }
-  }
-
-  &__dropdown-check {
-    width: auto;
-    height: rem(16);
-    flex-shrink: 0;
   }
 }
