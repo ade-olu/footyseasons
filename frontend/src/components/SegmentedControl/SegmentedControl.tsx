@@ -1,3 +1,4 @@
+import { useState, type CSSProperties } from "react";
 import "./SegmentedControl.scss";
 
 // One option in the control
@@ -16,7 +17,7 @@ type SegmentedControlProps<Value extends string> = {
   className?: string;
 };
 
-// Row of toggle buttons where one is selected (e.g. Overall / Home / Away)
+// Row of equal-width toggle buttons where one is selected (e.g. Overall / Home / Away)
 export default function SegmentedControl<Value extends string>({
   options,
   value,
@@ -24,12 +25,33 @@ export default function SegmentedControl<Value extends string>({
   label,
   className,
 }: SegmentedControlProps<Value>) {
+  const selectedIndex = Math.max(
+    options.findIndex((option) => option.value === value),
+    0,
+  );
+
+  // Which way the pill last moved, so its leading edge can go first
+  const [previousIndex, setPreviousIndex] = useState(selectedIndex);
+  const [direction, setDirection] = useState<"left" | "right" | null>(null);
+  if (selectedIndex !== previousIndex) {
+    setPreviousIndex(selectedIndex);
+    setDirection(selectedIndex > previousIndex ? "right" : "left");
+  }
+
   return (
     <div
-      className={`segmented-control${className ? ` ${className}` : ""}`}
+      className={`segmented-control${direction ? ` segmented-control--${direction}` : ""}${className ? ` ${className}` : ""}`}
       role="group"
       aria-label={label}
+      style={
+        {
+          "--segmented-count": options.length,
+          "--segmented-index": selectedIndex,
+        } as CSSProperties
+      }
     >
+      {/* White pill behind the selected option; stretches and bounces to the new one */}
+      <span className="segmented-control__indicator" aria-hidden />
       {options.map((option) => (
         <button
           key={option.value}
