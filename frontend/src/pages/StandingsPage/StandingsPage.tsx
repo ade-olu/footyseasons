@@ -1,3 +1,4 @@
+import LeagueTable from "../../components/LeagueTable/LeagueTable";
 import StandingsBanner from "../../components/StandingsBanner/StandingsBanner";
 import StandingsHighlights from "../../components/StandingsHighlights/StandingsHighlights";
 import type { LeagueCode } from "../../components/Sidebar/Sidebar";
@@ -10,7 +11,7 @@ type StandingsPageProps = {
   season: number;
 };
 
-// Standings page ("/<league>/standings"): banner with the podium, highlight cards, more sections to come
+// Standings page ("/<league>/standings"): banner with the podium, highlight cards and the full table
 export default function StandingsPage({ league, season }: StandingsPageProps) {
   return (
     <>
@@ -21,6 +22,8 @@ export default function StandingsPage({ league, season }: StandingsPageProps) {
       <section className="standings-page__highlights">
         <StandingsHighlights league={league} season={season} />
       </section>
+      {/* Full table */}
+      <LeagueTable league={league} season={season} />
     </>
   );
 }
