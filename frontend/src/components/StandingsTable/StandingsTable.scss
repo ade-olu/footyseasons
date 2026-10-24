@@ -76,6 +76,10 @@ $standings-table-relegation: #d23333;
     color: $standings-table-text-muted;
   }
 
+  td#{&}__points {
+    font-weight: 500;
+  }
+
   // Table zone indicator (European place or relegation): a 2px stripe down the left of the position cell
   &__position {
     &--champions-league {
