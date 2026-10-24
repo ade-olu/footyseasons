@@ -11,21 +11,16 @@ import StandingsTable, {
 import { LEAGUES, type LeagueCode } from "../Sidebar/Sidebar";
 import { TABLE_PLACES } from "../../data/tablePlaces";
 import { getClubForm } from "../../utils/form";
-import type { StandingsResponse } from "../../types/api"; // Types for API responses
+import type { Standing, StandingsResponse } from "../../types/api"; // Types for API responses
 import "./LeagueTable.scss";
 
 // Which matches the table counts
 type MatchFilter = "overall" | "home" | "away";
 
-// Home and Away aren't built yet
-const MATCH_FILTERS: {
-  value: MatchFilter;
-  label: string;
-  disabled?: boolean;
-}[] = [
+const MATCH_FILTERS: { value: MatchFilter; label: string }[] = [
   { value: "overall", label: "Overall" },
-  { value: "home", label: "Home", disabled: true },
-  { value: "away", label: "Away", disabled: true },
+  { value: "home", label: "Home" },
+  { value: "away", label: "Away" },
 ];
 
 // Phone column views
@@ -40,7 +35,7 @@ type LeagueTableData = {
   league: LeagueCode;
   season: number;
   standings: StandingsResponse;
-  form: Record<number, FormResult[]>;
+  form: Record<MatchFilter, Record<number, FormResult[]>>;
 };
 
 // Props for the LeagueTable component: the selected league and season start year (2025 = 2025/26)
@@ -56,7 +51,44 @@ async function fetchLeagueTableData(
 ): Promise<LeagueTableData> {
   const { standings, matches } = await fetchSeasonData(league, season);
 
-  return { league, season, standings, form: getClubForm(matches) };
+  const form = {
+    overall: getClubForm(matches),
+    home: getClubForm(matches, 5, "home"),
+    away: getClubForm(matches, 5, "away"),
+  };
+  return { league, season, standings, form };
+}
+
+// Home or away table: each club's figures from those games only, ranked on
+// points, then goal difference, then goals scored
+function sideTable(standings: Standing[], side: "home" | "away") {
+  const isHome = side === "home";
+
+  return standings
+    .map((club) => {
+      const wins = isHome ? club.homeWins : club.awayWins;
+      const draws = isHome ? club.homeDraws : club.awayDraws;
+      const losses = isHome ? club.homeLosses : club.awayLosses;
+
+      return {
+        ...club,
+        gamesPlayed: wins + draws + losses,
+        wins,
+        draws,
+        losses,
+        points: isHome ? club.homePoints : club.awayPoints,
+        goalsFor: isHome ? club.homeGoalsFor : club.awayGoalsFor,
+        goalsAgainst: isHome ? club.homeGoalsAgainst : club.awayGoalsAgainst,
+      };
+    })
+    .sort(
+      (a, b) =>
+        b.points - a.points ||
+        b.goalsFor - b.goalsAgainst - (a.goalsFor - a.goalsAgainst) ||
+        b.goalsFor - a.goalsFor ||
+        a.displayName.localeCompare(b.displayName),
+    )
+    .map((club, index) => ({ ...club, position: index + 1 }));
 }
 
 // Standings page "League table" section: the full table with GF/GA, places and form
@@ -99,16 +131,23 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
 
   const leagueName = LEAGUES.find((item) => item.code === league)?.name;
 
-  // "Final Premier League standings after 38 matchweeks."
+  // Overall, home or away rows; zones follow each table's own positions (as on FotMob)
+  const rows = !isReady
+    ? []
+    : matchFilter === "overall"
+      ? data.standings.standings
+      : sideTable(data.standings.standings, matchFilter);
+
+  // "Final Premier League standings after 38 matchweeks." or "… home table after 19 home games."
   let description = `${leagueName} standings.`;
   if (isReady) {
-    const { standings, championClubId } = data.standings;
-    const matchweeks = Math.max(
-      0,
-      ...standings.map((club) => club.gamesPlayed),
-    );
-    const prefix = championClubId !== null ? "Final" : "Current";
-    description = `${prefix} ${leagueName} standings after ${matchweeks} ${matchweeks === 1 ? "matchweek" : "matchweeks"}.`;
+    const prefix =
+      data.standings.championClubId !== null ? "Final" : "Current";
+    const games = Math.max(0, ...rows.map((club) => club.gamesPlayed));
+    description =
+      matchFilter === "overall"
+        ? `${prefix} ${leagueName} standings after ${games} ${games === 1 ? "matchweek" : "matchweeks"}.`
+        : `${prefix} ${leagueName} ${matchFilter} table after ${games} ${matchFilter} ${games === 1 ? "game" : "games"}.`;
   }
 
   return (
@@ -140,11 +179,12 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
       </div>
       {isReady ? (
         <StandingsTable
-          standings={data.standings.standings}
-          form={data.form}
+          standings={rows}
+          form={data.form[matchFilter]}
           places={TABLE_PLACES[`${league}-${season}`]}
           showGoals
           view={view}
+          animateOrder
         />
       ) : (
         <p className="league-table__status">
