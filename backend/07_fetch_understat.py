@@ -25,6 +25,7 @@ fetch. Run 02_fetch_matches.py and 05_fetch_understat_history.py first,
 since clubs are matched against the matches table.
 """
 
+import html
 import re
 import time
 import sqlite3
@@ -349,7 +350,7 @@ def replace_players(cursor, players, club_lookup, match_dates, season_id):
             (
                 season_id,
                 int(player["id"]),
-                player["player_name"],
+                html.unescape(player["player_name"]),
                 player["position"],
                 int(player["games"]),
                 int(player["time"]),
