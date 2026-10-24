@@ -2,6 +2,7 @@
 
 // Player Photo color variables
 $player-photo-bg: #eff4f3;
+$player-photo-image-bg: #cecfcf;
 $player-photo-border: #dadbdb;
 $player-photo-text: rgb(
   11,
@@ -15,6 +16,7 @@ $player-photo-text: rgb(
   flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
+  background-color: $player-photo-image-bg;
 
   &--initials {
     display: inline-flex;

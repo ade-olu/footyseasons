@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CupStar as TrophyIcon } from "reicon-react";
 import { User as UserIcon } from "reicon-react"; // Placeholder shown when there's no photo
 import ClubCrest from "../../ui/ClubCrest/ClubCrest";
@@ -15,7 +16,7 @@ type AwardCardProps = {
   winner: string;
   club: AwardClub;
   stats: string;
-  photoUrl?: string; // Falls back to a person icon when missing
+  photoUrl?: string | null; // Person icon when missing or broken
 };
 
 // Dark card showing one season award winner
@@ -26,6 +27,9 @@ export default function AwardCard({
   stats,
   photoUrl,
 }: AwardCardProps) {
+  // Photo that failed to load
+  const [failedUrl, setFailedUrl] = useState<string | null>(null);
+
   return (
     <article className="award-card">
       <h3 className="award-card__award">
@@ -53,8 +57,13 @@ export default function AwardCard({
           <p className="award-card__stats">{stats}</p>
         </div>
         <div className="award-card__photo">
-          {photoUrl ? (
-            <img className="award-card__photo-img" src={photoUrl} alt={winner} />
+          {photoUrl && failedUrl !== photoUrl ? (
+            <img
+              className="award-card__photo-img"
+              src={photoUrl}
+              alt={winner}
+              onError={() => setFailedUrl(photoUrl)}
+            />
           ) : (
             <UserIcon className="award-card__photo-icon" aria-hidden />
           )}

@@ -98,6 +98,7 @@ export type Player = {
   xA: number;
   shots: number;
   keyPasses: number;
+  photoUrl: string | null; // Null when there's no photo
   clubs: PlayerClub[]; // Oldest first; two or more for a mid-season transfer
 };
 
@@ -133,6 +134,7 @@ export type Award = {
   cleanSheets: number | null; // Same as starts
   wins: number; // The club's
   points: number;
+  photoUrl: string | null; // Null for managers and players without a photo
 };
 
 // Full response from GET /api/leagues/:code/awards

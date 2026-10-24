@@ -53,10 +53,17 @@ $top-players-text-muted: #7d8180;
     }
   }
 
-  // Headshot circle (initials until player photos exist)
+  // Headshot circle (initials when there's no photo)
   &__photo {
     width: rem(44);
     height: rem(44);
+
+    // Shrinks the cut-out so the whole head fits, shoulders on the bottom edge
+    &:is(img) {
+      padding: 0 rem(4);
+      object-fit: contain;
+      object-position: bottom;
+    }
   }
 
   // min-width: 0 allows the name ellipsis

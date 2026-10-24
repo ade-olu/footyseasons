@@ -114,6 +114,7 @@ export default function TopPlayers({
                 <div className="top-players__player">
                   <PlayerPhoto
                     className="top-players__photo"
+                    src={player.photoUrl}
                     name={player.playerName}
                   />
                   <div className="top-players__details">

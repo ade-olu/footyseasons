@@ -128,6 +128,7 @@ export default function SeasonAwards({ league, season }: SeasonAwardsProps) {
               winner={item.winnerName}
               club={{ name: item.displayName, crestUrl: item.crestUrl }}
               stats={getStats(item)}
+              photoUrl={item.photoUrl}
             />
           ))}
         </div>
