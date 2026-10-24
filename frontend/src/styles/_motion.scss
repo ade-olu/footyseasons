@@ -1,0 +1,21 @@
+@use "sass:list";
+
+// Ease-out-back: overshoots a little, then settles
+$ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// Shrinks while pressed and springs back on release (not for disabled or reduced motion).
+// Pass the element's own transitions after the scale, e.g. press(0.96, border-color 0.15s),
+// since this sets `transition`
+@mixin press($scale, $transitions...) {
+  transition: $transitions;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: list.append($transitions, scale 0.3s $ease-out-back, comma);
+
+    // Shrinks instantly, so even a quick tap gets the full spring back
+    &:active:not(:disabled) {
+      scale: $scale;
+      transition: list.append($transitions, scale 0s, comma);
+    }
+  }
+}

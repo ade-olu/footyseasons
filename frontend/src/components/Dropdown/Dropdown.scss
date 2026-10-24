@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/motion" as *;
 
 // Dropdown color variables
 $dropdown-bg: #ffffff;
@@ -33,7 +34,7 @@ $dropdown-list-shadow:
     @include text(16);
     color: $dropdown-text;
     cursor: pointer;
-    transition: border-color 0.15s;
+    @include press(0.96, border-color 0.15s);
 
     &:hover,
     &--open {

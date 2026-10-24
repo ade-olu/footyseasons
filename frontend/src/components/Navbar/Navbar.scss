@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/motion" as *;
 @use "../../styles/breakpoints" as *;
 
 // Navbar color variables
@@ -60,7 +61,7 @@ $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     box-shadow: $navbar-shadow;
     color: $navbar-text;
     cursor: pointer;
-    transition: border-color 0.15s;
+    @include press(0.92, border-color 0.15s);
 
     &:hover {
       border-color: $navbar-text-muted;

@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/motion" as *;
 @use "../../styles/breakpoints" as *;
 
 // Sidebar styles using SCSS variables for colors
@@ -107,7 +108,7 @@ $sidebar-drawer-duration: 0.25s;
       background: transparent;
       color: $sidebar-text-muted;
       cursor: pointer;
-      transition: color 0.15s;
+      @include press(0.92, color 0.15s);
 
       &:hover {
         color: $sidebar-text;
@@ -173,9 +174,7 @@ $sidebar-drawer-duration: 0.25s;
     white-space: nowrap;
     text-align: left;
     cursor: pointer;
-    transition:
-      background-color 0.15s,
-      color 0.15s;
+    @include press(0.98, background-color 0.15s, color 0.15s); // Wide, so a smaller shrink
 
     &:hover {
       color: $sidebar-text;

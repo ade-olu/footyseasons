@@ -4,6 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/index.scss";
 import App from "./App.tsx";
 
+// iOS Safari only applies :active (the press effect) once the page listens for touches
+document.addEventListener("touchstart", () => {}, { passive: true });
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>

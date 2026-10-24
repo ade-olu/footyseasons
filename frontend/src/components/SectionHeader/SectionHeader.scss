@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/motion" as *;
 @use "../../styles/breakpoints" as *;
 
 // Section Header color variables
@@ -52,7 +53,7 @@ $section-header-text-muted: #7d8180;
     @include text(14);
     color: $section-header-text-muted;
     text-decoration: none;
-    transition: color 0.15s;
+    @include press(0.96, color 0.15s);
 
     &:hover,
     &:focus-visible {

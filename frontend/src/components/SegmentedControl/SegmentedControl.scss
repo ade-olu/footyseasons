@@ -1,5 +1,6 @@
 @use "../../styles/functions" as *;
 @use "../../styles/typography" as *;
+@use "../../styles/motion" as *;
 
 // Segmented Control color variables
 $segmented-control-bg: #eff4f3;
@@ -8,7 +9,6 @@ $segmented-control-border: #dadbdb;
 $segmented-control-text: #0b0f0e;
 $segmented-control-text-muted: #7d8180;
 $segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
-$segmented-control-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); // Ease-out-back: overshoots, then settles
 
 // Equal-width options, so the pill moves in equal steps.
 // --segmented-count and --segmented-index are set inline by the component
@@ -56,14 +56,14 @@ $segmented-control-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); // Ease-out-back: 
   @media (prefers-reduced-motion: no-preference) {
     &--right &__indicator {
       transition:
-        right 0.3s $segmented-control-bounce,
-        left 0.3s $segmented-control-bounce 0.1s;
+        right 0.3s $ease-out-back,
+        left 0.3s $ease-out-back 0.1s;
     }
 
     &--left &__indicator {
       transition:
-        left 0.3s $segmented-control-bounce,
-        right 0.3s $segmented-control-bounce 0.1s;
+        left 0.3s $ease-out-back,
+        right 0.3s $ease-out-back 0.1s;
     }
   }
 
@@ -78,7 +78,7 @@ $segmented-control-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); // Ease-out-back: 
     color: $segmented-control-text-muted;
     white-space: nowrap;
     cursor: pointer;
-    transition: color 0.2s;
+    @include press(0.96, color 0.2s);
 
     &:hover:not(:disabled),
     &[aria-pressed="true"] {
