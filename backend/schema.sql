@@ -270,3 +270,17 @@ CREATE TABLE season_awards (
 
     UNIQUE (season_id, award, winner_name)
 );
+
+
+-- ------------------------------------------------------------
+-- TABLE: player_profiles
+-- Photo (FotMob) and date of birth (Transfermarkt) per Understat
+-- player. Filled in by 10_fetch_player_profiles.py.
+-- ------------------------------------------------------------
+CREATE TABLE player_profiles (
+    understat_player_id  INTEGER PRIMARY KEY,
+    fotmob_id            INTEGER,
+    photo_url            TEXT,
+    transfermarkt_id     INTEGER,
+    date_of_birth        TEXT                -- "YYYY-MM-DD"
+);
