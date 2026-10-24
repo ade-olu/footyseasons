@@ -60,11 +60,20 @@ function App() {
               element={<StandingsPage league={league} season={season} />}
             />
             {/* Matches page route */}
-            <Route path="/matches" element={<MatchesPage />} />
+            <Route
+              path="/matches"
+              element={<MatchesPage league={league} season={season} />}
+            />
             {/* Player Stats page route */}
-            <Route path="/player-stats" element={<PlayerStatsPage />} />
+            <Route
+              path="/player-stats"
+              element={<PlayerStatsPage league={league} season={season} />}
+            />
             {/* Clubs page route */}
-            <Route path="/clubs" element={<ClubsPage />} />
+            <Route
+              path="/clubs"
+              element={<ClubsPage league={league} season={season} />}
+            />
             {/* About page route */}
             <Route path="/about" element={<AboutPage />} />
             {/* 404 page route */}

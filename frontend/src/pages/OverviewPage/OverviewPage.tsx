@@ -3,6 +3,7 @@ import HeroBanner from "../../components/HeroBanner/HeroBanner";
 import SeasonAwards from "../../components/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "../../components/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "../../components/Sidebar/Sidebar";
+import { pageTitle } from "../../utils/pageTitle";
 import TopPlayers from "../../components/TopPlayers/TopPlayers";
 import TopStandings from "../../components/TopStandings/TopStandings";
 import "./OverviewPage.scss";
@@ -17,6 +18,7 @@ type OverviewPageProps = {
 export default function OverviewPage({ league, season }: OverviewPageProps) {
   return (
     <>
+      <title>{pageTitle("Overview", league, season)}</title>
       {/* Hero banner section */}
       <HeroBanner league={league} season={season} />
       {/* Grid section for page content */}
