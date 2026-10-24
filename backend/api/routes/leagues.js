@@ -99,7 +99,15 @@ router.get("/:code/standings", (req, res) => {
       cs.goals_for AS goalsFor, cs.goals_against AS goalsAgainst,
       cs.clean_sheets AS cleanSheets,
       cs.longest_win_streak AS longestWinStreak,
-      cs.longest_winless_streak AS longestWinlessStreak
+      cs.longest_winless_streak AS longestWinlessStreak,
+      cs.home_wins AS homeWins, cs.home_draws AS homeDraws,
+      cs.home_losses AS homeLosses, cs.home_points AS homePoints,
+      cs.home_goals_for AS homeGoalsFor,
+      cs.home_goals_against AS homeGoalsAgainst,
+      cs.away_wins AS awayWins, cs.away_draws AS awayDraws,
+      cs.away_losses AS awayLosses, cs.away_points AS awayPoints,
+      cs.away_goals_for AS awayGoalsFor,
+      cs.away_goals_against AS awayGoalsAgainst
     FROM club_season_stats cs
     JOIN clubs c ON c.club_id = cs.club_id
     WHERE cs.season_id = ?

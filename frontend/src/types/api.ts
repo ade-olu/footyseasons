@@ -33,6 +33,19 @@ export type Standing = {
   cleanSheets: number | null;
   longestWinStreak: number | null;
   longestWinlessStreak: number | null;
+  // Home and away splits (raw results, so ten corrected club-seasons don't add up to the totals)
+  homeWins: number;
+  homeDraws: number;
+  homeLosses: number;
+  homePoints: number;
+  homeGoalsFor: number;
+  homeGoalsAgainst: number;
+  awayWins: number;
+  awayDraws: number;
+  awayLosses: number;
+  awayPoints: number;
+  awayGoalsFor: number;
+  awayGoalsAgainst: number;
 };
 
 // Full response from GET /api/leagues/:code/standings
