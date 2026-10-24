@@ -1,0 +1,47 @@
+@use "../../styles/functions" as *;
+@use "../../styles/typography" as *;
+
+// Segmented Control color variables
+$segmented-control-bg: #eff4f3;
+$segmented-control-selected-bg: #ffffff;
+$segmented-control-border: #dadbdb;
+$segmented-control-text: #0b0f0e;
+$segmented-control-text-muted: #7d8180;
+$segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
+
+.segmented-control {
+  display: flex;
+  gap: rem(4);
+  padding: rem(4);
+  border-radius: 12px;
+  background-color: $segmented-control-bg;
+
+  &__option {
+    padding: rem(8) rem(16);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: none;
+    @include text(14);
+    font-weight: 500;
+    color: $segmented-control-text-muted;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover:not(:disabled) {
+      color: $segmented-control-text;
+    }
+
+    &[aria-pressed="true"] {
+      border-color: $segmented-control-border;
+      background-color: $segmented-control-selected-bg;
+      box-shadow: $segmented-control-shadow;
+      color: $segmented-control-text;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+}
