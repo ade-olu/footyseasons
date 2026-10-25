@@ -1,5 +1,12 @@
-import { useRef, useState } from "react";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import {
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigationType,
+} from "react-router-dom";
 import Navbar from "./components/layout/Navbar/Navbar";
 import "./styles/App.scss";
 import Sidebar from "./components/layout/Sidebar/Sidebar";
@@ -19,6 +26,14 @@ function App() {
   // Sidebar drawer below laptop width
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  const { pathname } = useLocation();
+  const navigationType = useNavigationType();
+
+  // Start each new page at the top; Back and Forward keep the browser's scroll
+  useEffect(() => {
+    if (navigationType !== "POP") window.scrollTo(0, 0);
+  }, [pathname, navigationType]);
 
   function closeMenu() {
     setIsMenuOpen(false);
