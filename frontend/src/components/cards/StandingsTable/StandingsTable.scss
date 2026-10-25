@@ -21,6 +21,12 @@ $standings-table-relegation-row: color.mix(
   $standings-table-bg,
   4%
 ); // Opaque, so sticky cells hide what scrolls under them
+$standings-table-row-hover: #f5f8f7; // A lighter page background (#eff4f3)
+$standings-table-relegation-row-hover: color.mix(
+  $standings-table-relegation,
+  $standings-table-bg,
+  8%
+);
 
 // Fills its parent edge to edge (the section card has no side padding).
 // It's also the container for the query below, so the Form column hides
@@ -90,6 +96,23 @@ $standings-table-relegation-row: color.mix(
   // Relegated clubs' rows get a light red tint
   &__row--relegation > * {
     background-color: $standings-table-relegation-row;
+  }
+
+  // Rows shade on hover; set on the cells so sticky ones shade too
+  @media (hover: hover) {
+    &__table tbody tr:hover > * {
+      background-color: $standings-table-row-hover;
+    }
+
+    &__table tbody &__row--relegation:hover > * {
+      background-color: $standings-table-relegation-row-hover;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &__table tbody tr > * {
+      transition: background-color 0.2s;
+    }
   }
 
   // Table zone indicator (European place or relegation): a 2px stripe down the left of the position cell
