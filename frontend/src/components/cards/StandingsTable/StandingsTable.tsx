@@ -111,6 +111,20 @@ export default function StandingsTable({
     });
   });
 
+  const tableRef = useRef<HTMLTableElement>(null);
+  const previousView = useRef(view);
+
+  // Fades the table in when the phone columns change (Short / Full / Form)
+  useLayoutEffect(() => {
+    if (previousView.current === view) return;
+    previousView.current = view;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    tableRef.current?.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: 200,
+      easing: "ease-out",
+    });
+  }, [view]);
+
   // Position is null if the table hasn't been ranked; fall back to the row order
   const zoneOf = (club: Standing, index: number) => {
     const zone = getTableZone(places, club.position ?? index + 1);
@@ -131,7 +145,7 @@ export default function StandingsTable({
     >
       {/* Scrolls sideways instead of squashing the columns on narrow screens */}
       <div className="standings-table__scroll">
-        <table className="standings-table__table">
+        <table ref={tableRef} className="standings-table__table">
           <colgroup>
             <col className="standings-table__col-position" />
             <col />
@@ -239,8 +253,7 @@ export default function StandingsTable({
                 >
                   <td
                     className={`standings-table__position${
-                      zone ? ` standings-table__position--${zone.modifier}`
-                        : ""
+                      zone ? ` standings-table__position--${zone.modifier}` : ""
                     }`}
                   >
                     {position}
