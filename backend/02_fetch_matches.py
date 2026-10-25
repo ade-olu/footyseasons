@@ -25,6 +25,11 @@ LEAGUES = [
     {"id": 2015, "name": "Ligue 1",         "code": "FL1"},
 ]
 
+# Three-letter codes the API gets wrong. club_id -> code
+TLA_FIXES = {
+    576: "STR",  # Strasbourg, "RC " in the API
+}
+
 # Pause between requests to stay under the free tier's 10 calls/minute
 SECONDS_BETWEEN_REQUESTS = 7
 
@@ -111,7 +116,7 @@ def ensure_clubs(cursor, matches):
                 club_id,
                 club.get("name"),
                 club.get("shortName"),
-                club.get("tla"),
+                TLA_FIXES.get(club_id, club.get("tla")),
                 club.get("crest"),
             ),
         )
