@@ -322,6 +322,25 @@ $standings-table-relegation-row-hover: color.mix(
     }
   }
 
+  &__club-name--short {
+    display: none;
+  }
+
+  // Phones: short club names in a slimmer crest slot
+  @include below-tablet {
+    &__crest-slot {
+      width: rem(24);
+    }
+
+    &__club-name {
+      display: none;
+    }
+
+    &__club-name--short {
+      display: block;
+    }
+  }
+
   // Phone views chosen with the toggle (the `view` prop); wider screens ignore them
   @include below-tablet {
     // Short: #, club, PL, GD, PTS
@@ -395,12 +414,17 @@ $standings-table-relegation-row-hover: color.mix(
 
       .standings-table__col-form {
         display: table-column;
-        width: rem(184);
+        width: rem(152); // 5 badges 4px apart + 16 right padding
       }
 
       th.standings-table__form,
       td.standings-table__form {
         display: table-cell;
+        padding: 0 rem(16) 0 0;
+      }
+
+      .standings-table__form-list {
+        gap: rem(4);
       }
 
       .standings-table__form-label {

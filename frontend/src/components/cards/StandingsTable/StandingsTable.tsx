@@ -5,6 +5,7 @@ import {
   type TablePlaces,
   type TableZone,
 } from "../../../data/tablePlaces";
+import { getTableName } from "../../../data/tableNames";
 import type { Standing } from "../../../types/api";
 import "./StandingsTable.scss";
 
@@ -269,6 +270,10 @@ export default function StandingsTable({
                       </span>
                       <span className="standings-table__club-name">
                         {club.displayName}
+                      </span>
+                      {/* Shorter name on phones, e.g. "Man United" */}
+                      <span className="standings-table__club-name standings-table__club-name--short">
+                        {getTableName(club.clubId, club.displayName)}
                       </span>
                     </span>
                   </th>
