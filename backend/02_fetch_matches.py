@@ -6,8 +6,8 @@ across 5 leagues (Premier League, La Liga, Serie A, Bundesliga,
 Ligue 1) from football-data.org and loads them into the database,
 along with their leagues, seasons, and clubs.
 
-Safe to re-run: every insert uses INSERT OR IGNORE, so existing rows
-are left alone instead of erroring or duplicating.
+Safe to re-run: leagues and clubs use INSERT OR IGNORE, and existing
+matches get their date, status and score updated, so new results show up.
 """
 
 import time
@@ -130,11 +130,18 @@ def insert_matches(cursor, matches, season_id):
     for match in matches:
         score = match["score"]["fullTime"]
 
+        # Update existing matches too, since fixtures get played and rescheduled
         cursor.execute(
-            """INSERT OR IGNORE INTO matches
+            """INSERT INTO matches
                (match_id, season_id, matchday, utc_date, status,
                 home_club_id, away_club_id, home_goals, away_goals, attendance)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT (match_id) DO UPDATE SET
+                 matchday = excluded.matchday,
+                 utc_date = excluded.utc_date,
+                 status = excluded.status,
+                 home_goals = excluded.home_goals,
+                 away_goals = excluded.away_goals""",
             (
                 match["id"],
                 season_id,
@@ -150,7 +157,7 @@ def insert_matches(cursor, matches, season_id):
         )
         inserted += 1
 
-    print(f"  Inserted/verified {inserted} matches.")
+    print(f"  Inserted/updated {inserted} matches.")
 
 
 def main():
