@@ -12,7 +12,8 @@ type DropdownOption<Value extends string | number> = {
 };
 
 // Props for the Dropdown component: its options, the selected value, a name for screen readers,
-// an optional small label above the value (e.g. "Season") and a class for sizing
+// an optional small label above the value (e.g. "Season"), a class for sizing and which edge
+// of the button the list lines up with (right by default, auto picks the side it sits on)
 type DropdownProps<Value extends string | number> = {
   options: DropdownOption<Value>[];
   value: Value;
@@ -20,7 +21,15 @@ type DropdownProps<Value extends string | number> = {
   ariaLabel: string;
   label?: string;
   className?: string;
+  align?: "left" | "right" | "auto";
 };
+
+// The button's edge nearer its side of the screen, so the list opens towards the middle
+function nearerEdge(element: HTMLElement | null): "left" | "right" {
+  if (!element) return "right";
+  const { left, right } = element.getBoundingClientRect();
+  return left < window.innerWidth - right ? "left" : "right";
+}
 
 // Custom select with a floating option list (ARIA listbox pattern)
 export default function Dropdown<Value extends string | number>({
@@ -30,10 +39,13 @@ export default function Dropdown<Value extends string | number>({
   ariaLabel,
   label,
   className,
+  align = "right",
 }: DropdownProps<Value>) {
   const [isOpen, setIsOpen] = useState(false);
   // Index of the option highlighted with the keyboard while the list is open
   const [activeIndex, setActiveIndex] = useState(0);
+  // Edge the open list lines up with, worked out on open for align="auto"
+  const [listAlign, setListAlign] = useState<"left" | "right">("right");
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -64,6 +76,7 @@ export default function Dropdown<Value extends string | number>({
   function openList() {
     const selectedIndex = options.findIndex((option) => option.value === value);
     setActiveIndex(Math.max(selectedIndex, 0));
+    setListAlign(align === "auto" ? nearerEdge(buttonRef.current) : align);
     setIsOpen(true);
   }
 
@@ -156,7 +169,7 @@ export default function Dropdown<Value extends string | number>({
         <ul
           ref={listRef}
           id={listId}
-          className="dropdown__list"
+          className={`dropdown__list dropdown__list--${listAlign}`}
           role="listbox"
           aria-label={ariaLabel}
           aria-activedescendant={`${listId}-${activeIndex}`}

@@ -175,6 +175,7 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
           value={matchFilter}
           onChange={setMatchFilter}
           ariaLabel="Matches counted"
+          align="auto"
         />
       </div>
       {isReady ? (

@@ -37,11 +37,16 @@ $league-table-text-muted: #7d8180;
 
     @include below-tablet {
       display: flex;
-      flex-wrap: wrap; // Dropdown goes below on very narrow phones
       align-items: center;
       justify-content: space-between;
       gap: rem(12);
       padding: 0 rem(24);
+    }
+
+    // Dropdown goes below the toggle on narrow phones
+    @include up-to-phone-medium {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     // Tighter buttons so both controls fit on one row

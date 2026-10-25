@@ -82,7 +82,6 @@ $dropdown-list-shadow:
   &__list {
     position: absolute;
     top: calc(100% + rem(8));
-    right: 0;
     z-index: 10;
     width: 100%;
     min-width: rem(160);
@@ -93,6 +92,14 @@ $dropdown-list-shadow:
     background-color: $dropdown-bg;
     box-shadow: $dropdown-list-shadow;
     list-style: none;
+
+    &--right {
+      right: 0;
+    }
+
+    &--left {
+      left: 0;
+    }
 
     // Focus sits on the list itself; the highlighted option shows where you are
     &:focus-visible {

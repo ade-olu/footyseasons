@@ -4,6 +4,7 @@ $tablet: 768px;
 $laptop: 1024px;
 
 $phone-small: 402px;
+$phone-medium: 412px;
 
 // Below the Figma phone width (small phones): smaller headings that would wrap
 @mixin below-phone {
@@ -15,6 +16,13 @@ $phone-small: 402px;
 // Below 402px: smaller section titles, hero title and award names
 @mixin below-phone-small {
   @media (max-width: #{$phone-small - 0.02px}) {
+    @content;
+  }
+}
+
+// 412px and below: the standings controls stack
+@mixin up-to-phone-medium {
+  @media (max-width: $phone-medium) {
     @content;
   }
 }
