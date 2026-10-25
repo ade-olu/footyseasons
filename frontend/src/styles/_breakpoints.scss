@@ -34,6 +34,13 @@ $phone-medium: 412px;
   }
 }
 
+// Tablet width and up
+@mixin tablet-up {
+  @media (min-width: $tablet) {
+    @content;
+  }
+}
+
 // Below laptop width
 @mixin below-laptop {
   @media (max-width: #{$laptop - 0.02px}) {

@@ -87,7 +87,10 @@ export default function Navbar({
         )}
         {showSelection && (
           <h2 className="navbar__league-name">
-            {league?.name}{" "}
+            <span className="navbar__league-full-name">{league?.name}</span>
+            <span className="navbar__league-short-name">
+              {league?.shortName ?? league?.name}
+            </span>{" "}
             <span className="navbar__league-season">
               {formatSeason(selectedSeason)}
             </span>

@@ -15,6 +15,7 @@ export const LEAGUES: {
   code: LeagueCode;
   slug: string; // First part of the URL, e.g. /premier-league/standings
   name: string;
+  shortName?: string; // Shown in the navbar on phones, where the full name doesn't fit
   logo: string;
   logoAlt?: string;
 }[] = [
@@ -22,6 +23,7 @@ export const LEAGUES: {
     code: "PL",
     slug: "premier-league",
     name: "Premier League",
+    shortName: "EPL",
     logo: premierLeagueLogo,
     logoAlt: premierLeaguelogoAlt,
   },
