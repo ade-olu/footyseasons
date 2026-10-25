@@ -86,6 +86,7 @@ $sidebar-drawer-duration: 0.25s;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: rem(16);
     flex-shrink: 0;
     height: rem(88);
     padding: 0 rem(24);
@@ -129,6 +130,11 @@ $sidebar-drawer-duration: 0.25s;
   &__logo {
     height: rem(24);
     flex-shrink: 0;
+
+    // Smaller in the drawer, leaving room for the close button
+    @include below-laptop {
+      height: rem(20);
+    }
   }
 
   // Sidebar navigation styles
