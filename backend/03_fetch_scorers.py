@@ -1,14 +1,9 @@
 """
 03_fetch_scorers.py
 
-Fetches top scorers for every season in SEASONS across the same 5
-leagues used in 02_fetch_matches.py, and loads them into
-player_season_stats.
-
-Safe to re-run: uses INSERT OR IGNORE. Note this means goal/assist
-counts won't update if a player's stats change later in the season -
-re-running just skips rows that already exist. If live updates matter
-later, that would need INSERT OR REPLACE or a manual UPDATE instead.
+Loads football-data.org's top 100 scorers per league-season into
+player_season_stats (legacy: the app uses 07's Understat stats).
+Uses INSERT OR IGNORE, so existing rows don't update on a re-run.
 """
 
 import time
@@ -19,11 +14,9 @@ import requests
 DB_FILE = "football.db"
 API_KEY_FILE = "api_key.txt"
 
-# Kept in sync with SEASONS in 02_fetch_matches.py
+# Same as 02's, copied so each script runs on its own
 SEASONS = [2023, 2024, 2025]
 
-# Kept as its own copy (rather than imported from 02_fetch_matches.py)
-# so this script can run independently on its own
 LEAGUES = [
     {"id": 2021, "name": "Premier League", "code": "PL"},
     {"id": 2014, "name": "La Liga",         "code": "PD"},
@@ -32,7 +25,7 @@ LEAGUES = [
     {"id": 2015, "name": "Ligue 1",         "code": "FL1"},
 ]
 
-# The API defaults to only 10 scorers per league, but we want the top 100 for each
+# The API defaults to 10
 SCORERS_LIMIT = 100
 
 # Pause between requests to stay under the free tier's 10 calls/minute
@@ -65,8 +58,7 @@ def fetch_scorers(api_key, league_code, start_year):
 
 
 def get_season_id(cursor, league_id, start_year):
-    # Only looks up an existing season as it doesn't create one. If none is
-    # found, 02_fetch_matches.py hasn't been run for this league yet
+    # Look-up only: 02 creates the seasons
     cursor.execute(
         "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
         (league_id, start_year),
@@ -84,8 +76,7 @@ def get_season_id(cursor, league_id, start_year):
 
 
 def ensure_club(cursor, team):
-    # Safety net in case a scorer's club somehow isn't already in the
-    # table from 02_fetch_matches.py
+    # In case 02 didn't add the club
     cursor.execute(
         """INSERT OR IGNORE INTO clubs (club_id, name, short_name, tla, crest_url)
            VALUES (?, ?, ?, ?, ?)""",
@@ -107,8 +98,7 @@ def insert_scorers(cursor, scorers, season_id):
 
         ensure_club(cursor, team)
 
-        # API sends null for assists when there are none
-        # Convert to 0 so the column is never left empty
+        # The API sends null for no assists
         assists = entry.get("assists")
         if assists is None:
             assists = 0

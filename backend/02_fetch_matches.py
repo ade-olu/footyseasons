@@ -1,28 +1,22 @@
 """
 02_fetch_matches.py
 
-Fetches all matches for every season in SEASONS (2023/24 to 2025/26)
-across 5 leagues (Premier League, La Liga, Serie A, Bundesliga,
-Ligue 1) from football-data.org and loads them into the database,
-along with their leagues, seasons, and clubs.
-
-Safe to re-run: leagues and clubs use INSERT OR IGNORE, and existing
-matches get their date, status and score updated, so new results show up.
+Loads the 2023/24+ leagues, seasons, clubs and matches from football-data.org.
+Safe to re-run: existing matches get their date, status and score updated.
 """
 
 import time
 import sqlite3
-import requests  # Not in the standard library - install via requirements.txt
+import requests
 
 
 DB_FILE = "football.db"
 API_KEY_FILE = "api_key.txt"
 
-# Season start years to fetch. The API refers to the 2025/26 season as "2025".
-# The free tier only allows the current season and the few before it, so older years return 403.
+# Start years (2025 = 2025/26). The free tier returns 403 before 2023
 SEASONS = [2023, 2024, 2025]
 
-# football-data.org's own ids and codes for each league, so they line up directly with what the API sends back
+# football-data.org's league ids and codes
 LEAGUES = [
     {"id": 2021, "name": "Premier League", "code": "PL"},
     {"id": 2014, "name": "La Liga",         "code": "PD"},
@@ -36,7 +30,7 @@ SECONDS_BETWEEN_REQUESTS = 7
 
 
 def load_api_key():
-    # Kept in its own file so the real key never ends up in a script
+    # Kept out of git
     with open(API_KEY_FILE, "r") as f:
         return f.read().strip()
 
@@ -64,7 +58,7 @@ def fetch_matches(api_key, league_code, start_year):
     matches = data["matches"]
     expected_count = data["resultSet"]["count"]
 
-    # Make sure we got everything the API says it sent, not a partial response
+    # Catch a partial response
     if len(matches) != expected_count:
         raise Exception(
             f"{league_code}: expected {expected_count} matches but got "
@@ -83,7 +77,7 @@ def ensure_league(cursor, league_id, league_name, league_code):
 
 
 def ensure_season(cursor, league_id, start_year):
-    # season_id is auto-generated, so we check for an existing row first instead of using INSERT OR IGNORE
+    # season_id is autoincrement, so look for an existing row first
     cursor.execute(
         "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
         (league_id, start_year),
@@ -101,7 +95,7 @@ def ensure_season(cursor, league_id, start_year):
 
 
 def ensure_clubs(cursor, matches):
-    # Keying by club id naturally de-dupes clubs that appear in multiple matches (home in some, away in others)
+    # Keyed by id to de-dupe
     clubs = {}
     for match in matches:
         home = match["homeTeam"]
@@ -152,7 +146,7 @@ def insert_matches(cursor, matches, season_id):
                 match["awayTeam"]["id"],
                 score.get("home"),
                 score.get("away"),
-                None,  # Attendance isn't available on this endpoint/tier
+                None,  # Attendance isn't on the free tier
             ),
         )
         inserted += 1
@@ -166,7 +160,7 @@ def main():
     connection = sqlite3.connect(DB_FILE)
     cursor = connection.cursor()
 
-    # Seasons in the outer loop so season_ids come out in year order (all 2023 rows, then 2024, ...)
+    # Seasons in the outer loop so season_ids follow the year
     jobs = [(year, league) for year in SEASONS for league in LEAGUES]
 
     for i, (year, league) in enumerate(jobs, start=1):
@@ -182,7 +176,7 @@ def main():
         ensure_clubs(cursor, matches)
         insert_matches(cursor, matches, season_id)
 
-        # Commit after each league so partial progress is saved even if a later league fails
+        # Commit per league so a failure keeps earlier progress
         connection.commit()
 
         print(f"  season_id = {season_id}")

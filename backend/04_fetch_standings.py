@@ -1,19 +1,9 @@
 """
 04_fetch_standings.py
 
-Fetches league standings for every season in SEASONS across the same
-5 leagues used in the other scripts, merges the TOTAL/HOME/AWAY tables
-football-data.org returns into one combined row per club, and saves
-that into club_season_stats. Also records each season's champion
-(the club in 1st place in the TOTAL table), but only once the
-season's end date has passed.
-
-Unlike 02 and 03, this script uses INSERT OR REPLACE instead of
-INSERT OR IGNORE. Matches and scorer counts are historical facts that
-don't change once recorded, but a league table updates every
-matchday, so we want each re-run to overwrite the numbers with the
-latest standings rather than leave the old ones in place.
-
+Loads football-data.org's 2023/24+ tables (total, home and away) into
+club_season_stats, and each finished season's champion.
+INSERT OR REPLACE wipes 06's columns, so re-run 06 after this.
 """
 
 import time
@@ -25,10 +15,9 @@ import requests
 DB_FILE = "football.db"
 API_KEY_FILE = "api_key.txt"
 
-# Kept in sync with SEASONS in 02_fetch_matches.py
+# Same as 02's, copied so each script runs on its own
 SEASONS = [2023, 2024, 2025]
 
-# Kept as its own copy so this script can run independently of the others
 LEAGUES = [
     {"id": 2021, "name": "Premier League", "code": "PL"},
     {"id": 2014, "name": "La Liga",         "code": "PD"},
@@ -59,14 +48,12 @@ def fetch_standings(api_key, league_code, start_year):
             f"{response.status_code}: {response.text}"
         )
 
-    # data["standings"] is a list of table blocks (TOTAL, HOME, AWAY) rather than a single table,
-    # build_club_stats() below sorts out which block is which. data["season"] holds the season's dates
+    # "standings" has TOTAL, HOME and AWAY tables; "season" has the dates
     return response.json()
 
 
 def get_season_id(cursor, league_id, start_year):
-    # Look-up only - this script expects 02_fetch_matches.py to have
-    # already created the season row.
+    # Look-up only: 02 creates the seasons
     cursor.execute(
         "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
         (league_id, start_year),
@@ -84,7 +71,7 @@ def get_season_id(cursor, league_id, start_year):
 
 
 def ensure_club(cursor, team):
-    # Safety net in case a club here somehow isn't already in the table
+    # In case 02 didn't add the club
     cursor.execute(
         """INSERT OR IGNORE INTO clubs (club_id, name, short_name, tla, crest_url)
            VALUES (?, ?, ?, ?, ?)""",
@@ -99,14 +86,13 @@ def ensure_club(cursor, team):
 
 
 def build_club_stats(standings):
-    # Build one combined dictionary per club by walking through the TOTAL, HOME, and AWAY blocks in turn 
-    # Keying by club_id means each club ends up with a single merged entry
+    # Merges the three tables into one entry per club_id
     stats = {}
 
     for block in standings:
-        table_type = block.get("type")  # "TOTAL", "HOME", or "AWAY"
+        table_type = block.get("type")
 
-        # Skip any block types we're not expecting (e.g. group stages)
+        # Skip anything else (e.g. group stages)
         if table_type not in ("TOTAL", "HOME", "AWAY"):
             continue
 
@@ -147,11 +133,8 @@ def build_club_stats(standings):
 
 
 def find_champion_club_id(standings, season):
-    # Find the club in position 1 of the TOTAL table. Returns None while
-    # the season is still in progress, so the current leader isn't
-    # recorded as champion. Uses the season's end date rather than
-    # playedGames, because AWARDED matches (results given without the game
-    # being played) aren't counted in playedGames
+    # 1st in the TOTAL table, or None until the end date has passed
+    # (not playedGames, which leaves out AWARDED matches)
     if date.fromisoformat(season["endDate"]) >= date.today():
         return None
 

@@ -1,28 +1,11 @@
 """
 07_fetch_understat.py
 
-Fetches stats for EVERY player in each league-season from understat.com
-(goals, assists, minutes, xG, xA and more) and loads them into
-understat_player_stats + understat_player_clubs. This fills the gap
-left by 03_fetch_scorers.py, which only gets the top 100 scorers.
-
-Understat has no official API. This uses the same JSON endpoint the
-league pages on understat.com load their tables from, so it could
-change or break without warning. No api_key.txt needed.
-
-Understat names clubs differently from football-data.org ("Bayern
-Munich" vs "FC Bayern München"), so each Understat team is matched to
-a club_id from that league-season's matches. Names that can't be
-matched automatically go in UNDERSTAT_CLUB_NAMES below.
-
-For mid-season transfers it also saves each club's last match date
-(from getPlayerData/<id>) to put the clubs in order. Saved dates are
-reused, so only new transfers are fetched.
-
-Safe to re-run anytime, including mid-season: each league-season's
-rows are deleted and re-inserted, so stats always reflect the latest
-fetch. Run 02_fetch_matches.py and 05_fetch_understat_history.py first,
-since clubs are matched against the matches table.
+Loads every player's season stats from understat.com into
+understat_player_stats and understat_player_clubs, plus each transferred
+player's last match date per club. Understat has no official API, so this
+uses the JSON its own pages load. Safe to re-run: each league-season's rows
+are replaced. Run 02 and 05 first.
 """
 
 import html
@@ -35,13 +18,10 @@ import requests
 
 DB_FILE = "football.db"
 
-# Every season in the database: 2014-2022 come from
-# 05_fetch_understat_history.py, 2023 onwards from 02_fetch_matches.py
+# Every season in the database
 SEASONS = list(range(2014, 2026))
 
-# Kept as its own copy (rather than imported from 02_fetch_matches.py)
-# so this script can run independently on its own. "understat" is the
-# league's name in Understat URLs
+# Copied so each script runs on its own. "understat" is the URL name
 LEAGUES = [
     {"id": 2021, "name": "Premier League", "code": "PL",  "understat": "EPL"},
     {"id": 2014, "name": "La Liga",         "code": "PD",  "understat": "La_liga"},
@@ -50,16 +30,14 @@ LEAGUES = [
     {"id": 2015, "name": "Ligue 1",         "code": "FL1", "understat": "Ligue_1"},
 ]
 
-# Understat team names that don't share enough words with the
-# football-data.org name to be matched automatically.
-# Understat name -> clubs.name
+# Understat name -> clubs.name, for names that don't match
 UNDERSTAT_CLUB_NAMES = {
     "Bayern Munich": "FC Bayern München",
     "FC Cologne": "1. FC Köln",
     "Borussia M.Gladbach": "Borussia Mönchengladbach",
     "RasenBallsport Leipzig": "RB Leipzig",
     "Rennes": "Stade Rennais FC 1901",
-    # "Verona" also fits AC Chievo Verona, which shared the league until 2019
+    # Not Chievo Verona
     "Verona": "Hellas Verona FC",
     "Hertha Berlin": "Hertha BSC",
     "SPAL 2013": "SPAL",
@@ -118,21 +96,18 @@ DISPLAY_NAME_FIXES = {
     "Huddersfield": "Huddersfield Town",
 }
 
-# Understat only answers this endpoint for requests that look like
-# they come from its own league page
+# Understat only answers requests that look like they're from its pages
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "X-Requested-With": "XMLHttpRequest",
 }
 
-# Understat isn't rate limited like football-data.org, but there's no
-# need to hit an unofficial site any faster than this
+# Not rate limited, but I keep it gentle
 SECONDS_BETWEEN_REQUESTS = 3
 
 
 def fetch_league_data(understat_league, start_year):
-    # Returns {"teams": {...}, "players": [...], "dates": [...]}.
-    # Every player value comes back as a string, e.g. "goals": "27"
+    # {"teams", "players", "dates"}; player values are strings ("27")
     url = f"https://understat.com/getLeagueData/{understat_league}/{start_year}"
     headers = {
         **HEADERS,
@@ -203,7 +178,7 @@ def get_saved_match_dates(cursor, season_id):
 
 
 def get_last_match_dates(cursor, players, club_lookup, season_id, start_year, match_cache):
-    # (understat_player_id, club_id) -> last match date, for multi-club players only
+    # (understat_player_id, club_id) -> last match date, transfers only
     saved = get_saved_match_dates(cursor, season_id)
     dates = {}
 
@@ -233,8 +208,7 @@ def get_last_match_dates(cursor, players, club_lookup, season_id, start_year, ma
 
 
 def get_season_id(cursor, league_id, start_year):
-    # Only looks up an existing season as it doesn't create one. If none is
-    # found, 02_fetch_matches.py hasn't been run for this league yet
+    # Look-up only: 02 and 05 create the seasons
     cursor.execute(
         "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
         (league_id, start_year),
@@ -252,8 +226,7 @@ def get_season_id(cursor, league_id, start_year):
 
 
 def get_season_clubs(cursor, season_id):
-    # Returns (club_id, name, short_name) for every club that played a
-    # match in this season
+    # (club_id, name, short_name) of every club with a match this season
     cursor.execute(
         """SELECT club_id, name, short_name FROM clubs
            WHERE club_id IN (
@@ -267,31 +240,26 @@ def get_season_clubs(cursor, season_id):
 
 
 def name_words(name):
-    # "Club Atlético de Madrid" -> {"club", "atletico", "de", "madrid"}.
-    # Strips accents and punctuation so names compare on plain words
+    # "Club Atlético de Madrid" -> {"club", "atletico", "de", "madrid"}
     plain = unicodedata.normalize("NFKD", name)
     plain = plain.encode("ascii", "ignore").decode().lower()
     return set(re.findall(r"[a-z0-9]+", plain))
 
 
 def match_club(understat_name, clubs):
-    # Finds the club_id for an Understat team name among this season's
-    # clubs. Raises if there's no single clear match, so a wrong mapping
-    # never gets saved silently
+    # Raises unless exactly one of the season's clubs matches
     if understat_name in UNDERSTAT_CLUB_NAMES:
         wanted = UNDERSTAT_CLUB_NAMES[understat_name]
         candidates = [club for club in clubs if club[1] == wanted]
     else:
-        # Every word of the Understat name has to appear in the club's
-        # name or short name, e.g. "Atletico Madrid" -> "Club Atlético de Madrid"
+        # Every word has to be in the club's name or short name
         words = name_words(understat_name)
         candidates = [
             club for club in clubs
             if words <= name_words(club[1]) | name_words(club[2] or "")
         ]
 
-        # "Barcelona" fits both FC Barcelona and RCD Espanyol de Barcelona,
-        # so on a tie keep the club whose name has the fewest extra words
+        # On a tie ("Barcelona" vs Espanyol), fewest extra words wins
         if len(candidates) > 1:
             extra = {club: len(name_words(club[1]) - words) for club in candidates}
             fewest = min(extra.values())
@@ -326,9 +294,7 @@ def update_display_names(cursor, club_lookup):
 
 
 def replace_players(cursor, players, club_lookup, match_dates, season_id):
-    # Clears this season's rows first so players whose stats changed (or
-    # who were dropped by Understat) don't leave stale rows behind.
-    # understat_player_clubs rows have to go first because of the foreign key
+    # Clubs first, because of the foreign key
     cursor.execute(
         """DELETE FROM understat_player_clubs WHERE player_stats_id IN
            (SELECT id FROM understat_player_stats WHERE season_id = ?)""",
@@ -396,8 +362,7 @@ def main():
         season_id = get_season_id(cursor, league["id"], year)
         data = fetch_league_data(league["understat"], year)
 
-        # Match every team before touching the database, so a missing
-        # mapping stops the run without wiping this season's rows
+        # Match every team first, so a missing name wipes nothing
         club_lookup = build_club_lookup(data, get_season_clubs(cursor, season_id))
         match_dates = get_last_match_dates(
             cursor, data["players"], club_lookup, season_id, year, match_cache

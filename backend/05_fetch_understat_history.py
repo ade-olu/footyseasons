@@ -1,36 +1,10 @@
 """
 05_fetch_understat_history.py
 
-Loads the seasons football-data.org's free tier can't reach (2014/15 to
-2022/23) from understat.com: creates the seasons, the clubs that aren't
-in the database yet, every match, and a league table per season in
-club_season_stats (with home/away splits, official position and
-champion).
-
-Understat only has match results, so the tables are calculated here.
-They were checked against Wikipedia's final tables for all 45
-league-seasons and match exactly (record, points and position) once
-these are applied:
-  - RESULT_OVERRIDES: matches whose result was awarded instead of the
-    score on the pitch
-  - TABLE_CORRECTIONS: points deductions and other adjustments
-  - each league's tie-breakers (see calculate_standings)
-
-Clubs already in the database (from football-data.org) are matched by
-Understat's own team id: this script fetches the 2023-2025 seasons too,
-matches those team names to clubs the same way 07_fetch_understat.py
-does, and reuses that team id -> club_id mapping for older seasons.
-Clubs that only played before 2023 are listed in HISTORIC_CLUBS and get
-a negative club_id (minus their Understat team id), so they can never
-clash with a football-data.org id. Matches get negative ids the same
-way. Older matches have no matchday (Understat doesn't give one).
-
-Safe to re-run: seasons and clubs are only created if missing, and
-matches and club_season_stats use INSERT OR REPLACE. Like
-04_fetch_standings.py, REPLACE wipes the columns 06 computes, so
-**always re-run 06_calculate_aggregates.py after this**. Then run
-07_fetch_understat.py (players) and 08_fetch_crests.py (crests) for the
-new seasons and clubs.
+Loads 2014/15-2022/23 from understat.com: seasons, missing clubs, matches,
+and tables I calculate myself (they match Wikipedia's for all 45 seasons).
+Pre-2023 clubs and all matches here get negative ids (-Understat id).
+INSERT OR REPLACE wipes 06's columns, so re-run 06 after this.
 """
 
 import re
@@ -43,16 +17,13 @@ import requests
 
 DB_FILE = "football.db"
 
-# Seasons to load from Understat (start years). Understat goes back to
-# 2014; 2023 onwards comes from football-data.org (02-04)
+# Understat starts in 2014; 2023+ comes from 02-04
 SEASONS = list(range(2014, 2023))
 
-# Seasons that come from football-data.org. Only used to learn the
-# Understat team id of every club already in the database
+# Only used to learn the Understat ids of clubs already in the database
 RECENT_SEASONS = [2023, 2024, 2025]
 
-# Kept as its own copy (rather than imported from 07_fetch_understat.py)
-# so this script can run independently on its own
+# Copied so each script runs on its own
 LEAGUES = [
     {"id": 2021, "name": "Premier League", "code": "PL",  "understat": "EPL"},
     {"id": 2014, "name": "La Liga",         "code": "PD",  "understat": "La_liga"},
@@ -61,16 +32,14 @@ LEAGUES = [
     {"id": 2015, "name": "Ligue 1",         "code": "FL1", "understat": "Ligue_1"},
 ]
 
-# Copied from 07_fetch_understat.py: Understat team names that don't
-# share enough words with the football-data.org name to be matched
-# automatically. Understat name -> clubs.name
+# Copied from 07. Understat name -> clubs.name, for names that don't match
 UNDERSTAT_CLUB_NAMES = {
     "Bayern Munich": "FC Bayern München",
     "FC Cologne": "1. FC Köln",
     "Borussia M.Gladbach": "Borussia Mönchengladbach",
     "RasenBallsport Leipzig": "RB Leipzig",
     "Rennes": "Stade Rennais FC 1901",
-    # "Verona" also fits AC Chievo Verona, which shared the league until 2019
+    # Not Chievo Verona
     "Verona": "Hellas Verona FC",
     "Hertha Berlin": "Hertha BSC",
     "SPAL 2013": "SPAL",
@@ -79,17 +48,14 @@ UNDERSTAT_CLUB_NAMES = {
     "Greuther Fuerth": "SpVgg Greuther Fürth",
 }
 
-# Understat team ids for older versions of a club already in the
-# database. Parma went bankrupt in 2015 and was refounded as Parma
-# Calcio 1913, which Understat counts as a new team, but it carries the
-# old club's history. Understat team id -> clubs.name
+# Older Understat teams that are the same club. Understat team id -> clubs.name
+# (pre-2015 Parma, refounded after going bankrupt)
 SAME_CLUB = {
     204: "Parma Calcio 1913",
 }
 
-# Clubs that only played in these leagues before 2023, so they aren't in
-# the database from football-data.org. Saved with club_id = -(Understat
-# team id). Understat team id -> (name, short name, three-letter code)
+# Clubs that only played before 2023, saved as club_id -(Understat id).
+# Understat team id -> (name, short name, TLA)
 HISTORIC_CLUBS = {
     # Premier League
     227: ("Cardiff City FC", "Cardiff", "CAR"),
@@ -146,17 +112,14 @@ HISTORIC_CLUBS = {
     172: ("ES Troyes AC", "Troyes", "ETA"),
 }
 
-# Matches whose official result isn't the score on the pitch. Understat
-# match id -> (home goals, away goals). Saved with status AWARDED
+# Awarded results, saved as AWARDED. Understat match id -> (home, away)
 RESULT_OVERRIDES = {
-    945: (0, 3),    # Sassuolo 2-1 Pescara, 2016/17: awarded to Pescara (Sassuolo fielded an ineligible player)
-    4238: (0, 3),   # Bastia v Lyon, 2016/17: abandoned for crowd trouble, awarded to Lyon
-    14117: (3, 0),  # Verona 0-0 Roma, 2020/21: awarded to Verona (Roma fielded an ineligible player)
+    945: (0, 3),    # Sassuolo 2-1 Pescara, 2016/17: ineligible player
+    4238: (0, 3),   # Bastia v Lyon, 2016/17: abandoned for crowd trouble
+    14117: (3, 0),  # Verona 0-0 Roma, 2020/21: ineligible player
 }
 
-# Adjustments to the calculated table, all from Wikipedia's final tables.
-# (league code, start year) -> list of
-# (Understat team id, points, goals for, goals against, reason)
+# From Wikipedia's tables. (league, year) -> [(team id, pts, GF, GA, reason)]
 TABLE_CORRECTIONS = {
     ("PD", 2014): [(208, -3, 0, 0, "Almería docked 3 points for an unpaid transfer fee")],
     ("SA", 2014): [(204, -7, 0, 0, "Parma docked 7 points for unpaid wages")],
@@ -166,7 +129,6 @@ TABLE_CORRECTIONS = {
         (96, -2, 0, 0, "Lazio deducted 2 points by the Italian Football Federation"),
     ],
     ("SA", 2022): [(98, -10, 0, 0, "Juventus deducted 10 points for capital gain violations")],
-    # The official table counts Lyon's awarded win at Bastia without the 3 goals
     ("FL1", 2016): [
         (178, 0, -3, 0, "Lyon's awarded win at Bastia counts without goals"),
         (162, 0, 0, -3, "Bastia's awarded loss to Lyon counts without goals"),
@@ -177,12 +139,10 @@ TABLE_CORRECTIONS = {
     ],
 }
 
-# Leagues that separate clubs level on points by their head-to-head
-# record before goal difference. The others use goal difference, then
-# goals scored
+# Head-to-head before goal difference
 HEAD_TO_HEAD_LEAGUES = {"PD", "SA"}
 
-# Seasons stopped early (COVID), ranked on points per game, then head-to-head
+# Stopped early (COVID): points per game, then head-to-head
 POINTS_PER_GAME_SEASONS = {("FL1", 2019)}
 
 HEADERS = {
@@ -190,14 +150,12 @@ HEADERS = {
     "X-Requested-With": "XMLHttpRequest",
 }
 
-# Understat isn't rate limited like football-data.org, but there's no
-# need to hit an unofficial site any faster than this
+# Not rate limited, but I keep it gentle
 SECONDS_BETWEEN_REQUESTS = 3
 
 
 def fetch_league_data(understat_league, start_year):
-    # Returns {"teams": {...}, "players": [...], "dates": [...]}.
-    # "dates" is every match of the season
+    # {"teams", "players", "dates"}; "dates" is every match
     url = f"https://understat.com/getLeagueData/{understat_league}/{start_year}"
     headers = {
         **HEADERS,
@@ -225,8 +183,7 @@ def get_season_id(cursor, league_id, start_year):
 
 
 def ensure_season(cursor, league_id, start_year):
-    # Creates the season row if it doesn't exist yet. Label matches
-    # 02_fetch_matches.py, e.g. 2014 -> "2014/15"
+    # Label as in 02, e.g. "2014/15"
     season_id = get_season_id(cursor, league_id, start_year)
     if season_id is not None:
         return season_id
@@ -240,8 +197,7 @@ def ensure_season(cursor, league_id, start_year):
 
 
 def get_season_clubs(cursor, season_id):
-    # Returns (club_id, name, short_name) for every club that played a
-    # match in this season
+    # (club_id, name, short_name) of every club with a match this season
     cursor.execute(
         """SELECT club_id, name, short_name FROM clubs
            WHERE club_id IN (
@@ -255,16 +211,14 @@ def get_season_clubs(cursor, season_id):
 
 
 def name_words(name):
-    # Copied from 07_fetch_understat.py.
-    # "Club Atlético de Madrid" -> {"club", "atletico", "de", "madrid"}
+    # Copied from 07. "Club Atlético de Madrid" -> {"club", "atletico", "de", "madrid"}
     plain = unicodedata.normalize("NFKD", name)
     plain = plain.encode("ascii", "ignore").decode().lower()
     return set(re.findall(r"[a-z0-9]+", plain))
 
 
 def match_club(understat_name, clubs):
-    # Copied from 07_fetch_understat.py. Finds the club_id for an
-    # Understat team name among a season's clubs, or raises
+    # Copied from 07
     if understat_name in UNDERSTAT_CLUB_NAMES:
         wanted = UNDERSTAT_CLUB_NAMES[understat_name]
         candidates = [club for club in clubs if club[1] == wanted]
@@ -291,8 +245,7 @@ def match_club(understat_name, clubs):
 
 
 def learn_known_clubs(cursor, league):
-    # Understat team id -> club_id for every club already in the database,
-    # worked out from the seasons football-data.org covers
+    # Understat team id -> club_id, from the 2023+ seasons
     known = {}
     for year in RECENT_SEASONS:
         season_id = get_season_id(cursor, league["id"], year)
@@ -319,8 +272,7 @@ def find_club_id_by_name(cursor, name):
 
 
 def resolve_club(cursor, team_id, title, known):
-    # Returns the club_id for an Understat team, creating the club first
-    # if it's one of HISTORIC_CLUBS
+    # Creates the club first if it's in HISTORIC_CLUBS
     if team_id in known:
         return known[team_id]
 
@@ -329,7 +281,7 @@ def resolve_club(cursor, team_id, title, known):
 
     if team_id in HISTORIC_CLUBS:
         name, short_name, tla = HISTORIC_CLUBS[team_id]
-        # crest_url stays NULL until 08_fetch_crests.py fills it in
+        # 08 fills in crest_url
         cursor.execute(
             """INSERT OR IGNORE INTO clubs (club_id, name, short_name, tla, crest_url)
                VALUES (?, ?, ?, ?, NULL)""",
@@ -344,7 +296,6 @@ def resolve_club(cursor, team_id, title, known):
 
 
 def build_matches(data, club_ids):
-    # Turns Understat's match list into rows for the matches table
     matches = []
     for match in data["dates"]:
         match_id = int(match["id"])
@@ -357,15 +308,13 @@ def build_matches(data, club_ids):
             home_goals = int(match["goals"]["h"])
             away_goals = int(match["goals"]["a"])
         else:
-            # Only Ligue 1 2019/20 has these: matches never played after
-            # the season was stopped for COVID
+            # Ligue 1 2019/20's unplayed matches (COVID)
             status = "CANCELLED"
             home_goals = away_goals = None
 
         matches.append({
             "match_id": -match_id,
-            # "2014-08-16 12:45:00" (UTC) -> "2014-08-16T12:45:00Z", the
-            # same format football-data.org uses
+            # "2014-08-16 12:45:00" -> "2014-08-16T12:45:00Z", as in 02
             "utc_date": match["datetime"].replace(" ", "T") + "Z",
             "status": status,
             "home_club_id": club_ids[int(match["h"]["id"])],
@@ -387,9 +336,7 @@ def empty_row():
 
 
 def build_table(matches, only_clubs=None):
-    # Adds up a league table (total plus home/away) from played matches.
-    # With only_clubs, only counts matches between those clubs (a
-    # head-to-head mini table)
+    # Total and home/away table; only_clubs gives a head-to-head table
     table = defaultdict(empty_row)
 
     for match in matches:
@@ -424,12 +371,8 @@ def build_table(matches, only_clubs=None):
 
 
 def calculate_standings(matches, league_code, start_year, corrections):
-    # Builds the final table and sets each club's position. Clubs are
-    # ranked on points (or points per game), then:
-    #   - La Liga, Serie A and stopped-early seasons: head-to-head points
-    #     and goal difference between the tied clubs, but only once they've
-    #     all played each other home and away
-    #   - then (everywhere) goal difference, then goals scored
+    # Ranks on points (or per game), then head-to-head where it applies
+    # (once the tied clubs have all met twice), then GD, then goals scored
     table = build_table(matches)
 
     for club_id, points, goals_for, goals_against in corrections:
@@ -444,7 +387,7 @@ def calculate_standings(matches, league_code, start_year, corrections):
         row = table[club_id]
         return row["points"] / row["games_played"] if per_game else row["points"]
 
-    # Group clubs level on points, then order each group with the tie-breakers
+    # Groups clubs level on points, then orders each group
     tied_groups = defaultdict(list)
     for club_id in table:
         tied_groups[primary(club_id)].append(club_id)
