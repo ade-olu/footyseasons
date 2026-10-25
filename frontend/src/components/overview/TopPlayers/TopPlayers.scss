@@ -60,7 +60,7 @@ $top-players-text-muted: #7d8180;
 
     // Shrinks the cut-out so the whole head fits, shoulders on the bottom edge
     &:is(img) {
-      padding: 0 rem(4);
+      padding: 0 rem(2);
       object-fit: contain;
       object-position: bottom;
     }
