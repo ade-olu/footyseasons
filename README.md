@@ -5,6 +5,8 @@ Bundesliga and Ligue 1, covering every season from 2014/15 to 2025/26. Pick a
 league and a season and see how it played out: the table, the top scorers, the
 award winners and the final day.
 
+**Live:** [footyseasons.vercel.app](https://footyseasons.vercel.app)
+
 > Still in development. The Overview and Standings pages are done, with
 > Matches, Player Stats and Clubs next.
 
@@ -79,7 +81,9 @@ players, including everyone shown on the Overview page.
 
 ## API
 
-Runs on `http://localhost:3001`. League routes take an optional `?season=` with
+Runs on `http://localhost:3001` locally and at
+[footyseasons.vercel.app/api](https://footyseasons.vercel.app/api/leagues) in
+production. League routes take an optional `?season=` with
 the season's start year (`2024` = 2024/25) and default to the latest season.
 
 | Method | Endpoint                       | Description                                        |
@@ -167,7 +171,6 @@ frontend/
 
 ## Roadmap
 
-- Deploy to Vercel
 - Matches, Player Stats (goals, assists, xG and xA for every player) and Clubs
   pages
 - Charts for player and club stats
