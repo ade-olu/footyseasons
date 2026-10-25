@@ -20,6 +20,6 @@ $section-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   overflow: hidden; // Keeps full-width content (e.g. the standings table) inside the rounded corners
 
   @include below-tablet {
-    padding: rem(16);
+    padding: rem(24) rem(16);
   }
 }

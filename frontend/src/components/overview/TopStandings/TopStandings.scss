@@ -11,10 +11,6 @@ $top-standings-text-muted: #7d8180;
   gap: rem(16);
   padding: rem(24) 0 0;
 
-  @include below-tablet {
-    padding: rem(16) 0 0;
-  }
-
   &__header {
     padding: 0 rem(24);
 

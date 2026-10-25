@@ -25,7 +25,7 @@ $highlight-card-shadow-hover: 0 8px 24px 0 rgba(11, 15, 14, 0.08);
   border-radius: 16px;
 
   @include below-tablet {
-    padding: rem(16);
+    padding: rem(24) rem(16);
   }
 
   transition:

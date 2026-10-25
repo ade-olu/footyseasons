@@ -10,10 +10,6 @@ $league-table-text-muted: #7d8180;
   gap: rem(16);
   padding: rem(24) 0 0;
 
-  @include below-tablet {
-    padding: rem(16) 0 0;
-  }
-
   // Title on the left, toggle on the right; the toggle wraps below when narrow
   &__header {
     display: flex;
