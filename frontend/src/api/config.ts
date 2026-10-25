@@ -1,2 +1,2 @@
-// Base URL for the Express API
-export const API_URL = "http://localhost:3001/api";
+// Base URL for the Express API (same site in production, localhost in dev)
+export const API_URL = import.meta.env.VITE_API_URL ?? "/api";
