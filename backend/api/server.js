@@ -19,7 +19,11 @@ app.get("/", (req, res) => {
   res.json({ status: "ok", message: "pitchdata API is running" });
 });
 
-// Start the server and listen on the specified port
-app.listen(PORT, () => {
-  console.log(`pitchdata API listening on http://localhost:${PORT}`);
-});
+// Start the server only when run directly (node server.js), not on Vercel
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`pitchdata API listening on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
