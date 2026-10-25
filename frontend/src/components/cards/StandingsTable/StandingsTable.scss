@@ -210,7 +210,7 @@ $standings-table-relegation-row-hover: color.mix(
 
     // Points becomes the last column: pad it off the card's edge
     &__col-points {
-      width: rem(56); // 40 + the 16 padding
+      width: rem(64); // 48 + the 16 padding
     }
 
     th#{&}__points,
@@ -233,7 +233,7 @@ $standings-table-relegation-row-hover: color.mix(
     }
 
     &__col-position {
-      width: rem(40);
+      width: rem(52);
     }
 
     &__col-stat {
