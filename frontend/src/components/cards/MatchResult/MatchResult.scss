@@ -49,17 +49,17 @@ $match-result-text-muted: #6d6f6e;
     white-space: nowrap;
   }
 
-  // Display name, swapped for the short name on phones
-  &__name-short {
+  // Short name, swapped for the three-letter code on phones
+  &__name-tla {
     display: none;
   }
 
   @include below-tablet {
-    &__name-full {
+    &__name-short {
       display: none;
     }
 
-    &__name-short {
+    &__name-tla {
       display: inline;
     }
   }

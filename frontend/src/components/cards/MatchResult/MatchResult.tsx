@@ -1,4 +1,5 @@
 import ClubCrest from "../../ui/ClubCrest/ClubCrest";
+import { getTableName } from "../../../data/tableNames";
 import type { Match } from "../../../types/api"; // Types for API responses
 import "./MatchResult.scss";
 
@@ -7,8 +8,8 @@ type MatchResultProps = {
   match: Match;
 };
 
-// One result: home club, score, away club. The losing club's name is muted,
-// and phones show short names
+// One result: home club, score, away club. The losing club's name is muted.
+// Names are the table's short names, or three-letter codes on phones
 export default function MatchResult({ match }: MatchResultProps) {
   const homeGoals = match.homeGoals ?? 0;
   const awayGoals = match.awayGoals ?? 0;
@@ -22,12 +23,10 @@ export default function MatchResult({ match }: MatchResultProps) {
           className="match-result__club-name"
           title={match.homeClubDisplayName}
         >
-          <span className="match-result__name-full">
-            {match.homeClubDisplayName}
-          </span>
           <span className="match-result__name-short">
-            {match.homeClubShortName}
+            {getTableName(match.homeClubId, match.homeClubDisplayName)}
           </span>
+          <span className="match-result__name-tla">{match.homeClubTla}</span>
         </span>
         <span className="match-result__crest-slot">
           <ClubCrest
@@ -54,12 +53,10 @@ export default function MatchResult({ match }: MatchResultProps) {
           className="match-result__club-name"
           title={match.awayClubDisplayName}
         >
-          <span className="match-result__name-full">
-            {match.awayClubDisplayName}
-          </span>
           <span className="match-result__name-short">
-            {match.awayClubShortName}
+            {getTableName(match.awayClubId, match.awayClubDisplayName)}
           </span>
+          <span className="match-result__name-tla">{match.awayClubTla}</span>
         </span>
       </p>
     </div>
