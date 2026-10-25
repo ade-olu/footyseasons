@@ -17,7 +17,8 @@
     padding: rem(32);
 
     @include below-tablet {
-      padding: rem(16);
+      gap: rem(24);
+      padding: rem(24) rem(16);
     }
 
     container-type: inline-size; // Lets page grids respond to the space left beside the sidebar, not the whole screen
