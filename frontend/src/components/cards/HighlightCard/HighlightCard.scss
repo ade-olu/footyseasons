@@ -1,5 +1,6 @@
 @use "../../../styles/functions" as *;
 @use "../../../styles/typography" as *;
+@use "../../../styles/breakpoints" as *;
 
 // Highlight Card color variables
 $highlight-card-bg: #ffffff;
@@ -22,6 +23,10 @@ $highlight-card-shadow-hover: 0 8px 24px 0 rgba(11, 15, 14, 0.08);
   color: $highlight-card-text;
   padding: rem(24);
   border-radius: 16px;
+
+  @include below-tablet {
+    padding: rem(16);
+  }
 
   transition:
     transform 0.2s,

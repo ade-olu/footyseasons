@@ -10,6 +10,10 @@ $league-table-text-muted: #7d8180;
   gap: rem(16);
   padding: rem(24) 0 0;
 
+  @include below-tablet {
+    padding: rem(16) 0 0;
+  }
+
   // Title on the left, toggle on the right; the toggle wraps below when narrow
   &__header {
     display: flex;
@@ -18,6 +22,10 @@ $league-table-text-muted: #7d8180;
     justify-content: space-between;
     gap: rem(16) rem(24);
     padding: 0 rem(24);
+
+    @include below-tablet {
+      padding: 0 rem(16);
+    }
 
     > :first-child {
       flex: 1 1 rem(240);
@@ -40,7 +48,7 @@ $league-table-text-muted: #7d8180;
       align-items: center;
       justify-content: space-between;
       gap: rem(12);
-      padding: 0 rem(24);
+      padding: 0 rem(16);
     }
 
     // Dropdown goes below the toggle on narrow phones

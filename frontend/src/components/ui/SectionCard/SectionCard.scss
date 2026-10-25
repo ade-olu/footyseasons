@@ -1,4 +1,5 @@
 @use "../../../styles/functions" as *;
+@use "../../../styles/breakpoints" as *;
 
 // Section Card color variables (same as HighlightCard)
 $section-card-bg: #ffffff;
@@ -17,4 +18,8 @@ $section-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   border-radius: 16px;
   box-shadow: $section-card-shadow;
   overflow: hidden; // Keeps full-width content (e.g. the standings table) inside the rounded corners
+
+  @include below-tablet {
+    padding: rem(16);
+  }
 }
