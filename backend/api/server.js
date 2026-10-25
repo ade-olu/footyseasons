@@ -16,13 +16,13 @@ app.use("/api/clubs", clubsRouter);
 
 // Define a simple route to check if the API is running
 app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "pitchdata API is running" });
+  res.json({ status: "ok", message: "FootySeasons API is running" });
 });
 
 // Start the server only when run directly (node server.js), not on Vercel
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`pitchdata API listening on http://localhost:${PORT}`);
+    console.log(`FootySeasons API listening on http://localhost:${PORT}`);
   });
 }
 

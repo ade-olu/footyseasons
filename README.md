@@ -1,6 +1,6 @@
-# PitchData
+# FootySeasons
 
-PitchData is a football stats web app for the Premier League, La Liga, Serie A,
+FootySeasons is a football stats web app for the Premier League, La Liga, Serie A,
 Bundesliga and Ligue 1, covering every season from 2014/15 to 2025/26. Pick a
 league and a season and see how it played out: the table, the top scorers, the
 award winners and the final day.
@@ -107,8 +107,8 @@ League codes: `PL` (Premier League), `PD` (La Liga), `SA` (Serie A), `BL1` (Bund
 The database is committed, so you can run the app straight away.
 
 ```bash
-git clone https://github.com/ade-olu/pitchdata.git
-cd pitchdata
+git clone https://github.com/ade-olu/footyseasons.git
+cd footyseasons
 
 # API
 cd backend/api

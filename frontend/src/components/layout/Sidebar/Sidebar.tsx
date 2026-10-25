@@ -100,7 +100,7 @@ export default function Sidebar({
           <Link
             to={pathTo("")}
             className="sidebar__logo-link"
-            aria-label="PitchData home"
+            aria-label="FootySeasons home"
             onClick={onClose}
           >
             <img className="sidebar__logo" src={logoIcon} alt="" />
