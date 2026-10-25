@@ -68,11 +68,13 @@ export type Match = {
   homeClubDisplayName: string;
   homeClubId: number;
   homeClubShortName: string;
+  homeClubTla: string;
   homeClubCrestUrl: string | null;
   awayClubName: string;
   awayClubDisplayName: string;
   awayClubId: number;
   awayClubShortName: string;
+  awayClubTla: string;
   awayClubCrestUrl: string | null;
 };
 
