@@ -414,13 +414,13 @@ $standings-table-relegation-row-hover: color.mix(
 
       .standings-table__col-form {
         display: table-column;
-        width: rem(156); // 5 badges 4px apart + 20px right padding
+        width: rem(152); // 5 badges 4px apart + 16px right padding
       }
 
       th.standings-table__form,
       td.standings-table__form {
         display: table-cell;
-        padding: 0 rem(20) 0 0;
+        padding: 0 rem(16) 0 0;
       }
 
       .standings-table__form-list {
