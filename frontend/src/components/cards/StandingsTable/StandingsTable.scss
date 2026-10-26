@@ -329,6 +329,7 @@ $standings-table-relegation-row-hover: color.mix(
   // Phones: short club names in a slimmer crest slot
   @include below-tablet {
     &__legend {
+      column-gap: rem(16);
       padding: rem(24) rem(16);
     }
 
