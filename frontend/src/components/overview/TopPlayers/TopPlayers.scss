@@ -32,7 +32,7 @@ $top-players-text-muted: #7d8180;
     display: grid;
     grid-template-columns: minmax(rem(8), auto) minmax(0, 1fr) auto;
     align-items: center;
-    padding: rem(14) 0;
+    padding: rem(16) 0;
   }
 
   &__rank {
