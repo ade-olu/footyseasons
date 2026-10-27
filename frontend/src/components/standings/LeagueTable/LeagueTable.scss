@@ -44,6 +44,7 @@ $league-table-text-muted: #7d8180;
       align-items: center;
       justify-content: space-between;
       gap: rem(16);
+      margin-top: rem(8); // 24px below the header, with the card's 16px gap
       padding: 0 rem(16);
     }
 
