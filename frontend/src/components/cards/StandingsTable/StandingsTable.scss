@@ -8,6 +8,7 @@ $standings-table-text: #0b0f0e;
 $standings-table-text-muted: #7d8180;
 $standings-table-border: #dadbdb;
 $standings-table-bg: #ffffff;
+$standings-table-head-bg: #eff4f3; // The page background
 $standings-table-win: #007330;
 $standings-table-draw: #6d6f6e;
 $standings-table-loss: #d23333;
@@ -79,6 +80,7 @@ $standings-table-relegation-row-hover: color.mix(
   thead th {
     font-weight: 500;
     color: $standings-table-text-muted;
+    background-color: $standings-table-head-bg;
   }
 
   abbr {
@@ -398,6 +400,11 @@ $standings-table-relegation-row-hover: color.mix(
 
       th.standings-table__club {
         left: rem(48); // After the position column
+      }
+
+      thead th.standings-table__position,
+      thead th.standings-table__club {
+        background-color: $standings-table-head-bg;
       }
 
       .standings-table__row--relegation > * {
