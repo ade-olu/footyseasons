@@ -1,4 +1,4 @@
-import FinalDayMatches from "@/components/overview/FinalDayMatches/FinalDayMatches";
+import FinalDayMatches from "@/features/matches/components/FinalDayMatches/FinalDayMatches";
 import HeroBanner from "@/components/overview/HeroBanner/HeroBanner";
 import SeasonAwards from "@/components/overview/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "@/components/overview/SeasonHighlights/SeasonHighlights";

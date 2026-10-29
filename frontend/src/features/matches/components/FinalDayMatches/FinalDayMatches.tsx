@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchSeasonData } from "@/api/seasonData";
-import MatchResult from "@/components/cards/MatchResult/MatchResult";
+import MatchResult from "@/features/matches/components/MatchResult/MatchResult";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
