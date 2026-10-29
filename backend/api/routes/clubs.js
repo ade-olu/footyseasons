@@ -3,29 +3,14 @@
 
 const express = require("express");
 const db = require("../db");
+const { parseInteger, parseSeason } = require("../params");
 
 const router = express.Router();
 
-// Read the optional ?season= start year, or send a 400 and return undefined if it's malformed.
-// Returns null when no season was asked for.
-function parseSeason(req, res) {
-  const { season } = req.query;
-
-  if (season === undefined) return null;
-
-  if (!/^\d{4}$/.test(season)) {
-    res
-      .status(400)
-      .json({ error: `season must be a start year like 2025, got "${season}"` });
-    return undefined;
-  }
-
-  return Number(season);
-}
-
 // Get a club's profile and stats for one season (?season=, defaults to its latest).
 router.get("/:id", (req, res) => {
-  const clubId = Number(req.params.id);
+  const clubId = parseInteger(req.params.id, "id", res);
+  if (clubId === undefined) return;
   const startYear = parseSeason(req, res);
   if (startYear === undefined) return;
 
@@ -83,7 +68,8 @@ router.get("/:id", (req, res) => {
 
 // Get the matches played by a club, optionally for one season (?season=).
 router.get("/:id/matches", (req, res) => {
-  const clubId = Number(req.params.id);
+  const clubId = parseInteger(req.params.id, "id", res);
+  if (clubId === undefined) return;
   const startYear = parseSeason(req, res);
   if (startYear === undefined) return;
 

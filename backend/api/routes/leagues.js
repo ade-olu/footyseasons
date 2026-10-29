@@ -3,6 +3,7 @@
 
 const express = require("express");
 const db = require("../db");
+const { parseInteger, parseSeason } = require("../params");
 
 const router = express.Router();
 
@@ -31,16 +32,9 @@ function findSeason(code, startYear) {
 // Find the season for a request's :code and optional ?season=, or send a 400/404 and return null.
 function resolveSeason(req, res) {
   const { code } = req.params;
-  const { season } = req.query;
+  const startYear = parseSeason(req, res);
+  if (startYear === undefined) return null;
 
-  if (season !== undefined && !/^\d{4}$/.test(season)) {
-    res
-      .status(400)
-      .json({ error: `season must be a start year like 2025, got "${season}"` });
-    return null;
-  }
-
-  const startYear = season === undefined ? null : Number(season);
   const row = findSeason(code, startYear);
 
   if (!row) {
@@ -155,9 +149,11 @@ router.get("/:code/matches", (req, res) => {
   const params = [season.seasonId];
 
   // Filter matches by matchday when provided.
-  if (req.query.matchday) {
+  if (req.query.matchday !== undefined) {
+    const matchday = parseInteger(req.query.matchday, "matchday", res, 1);
+    if (matchday === undefined) return;
     sql += " AND m.matchday = ?";
-    params.push(Number(req.query.matchday));
+    params.push(matchday);
   }
 
   sql += " ORDER BY m.utc_date DESC";
@@ -189,13 +185,11 @@ router.get("/:code/players", (req, res) => {
     return;
   }
 
-  const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
-  if (!Number.isInteger(limit) || limit < 0) {
-    res
-      .status(400)
-      .json({ error: `limit must be a whole number, got "${req.query.limit}"` });
-    return;
-  }
+  const limit =
+    req.query.limit === undefined
+      ? 20
+      : parseInteger(req.query.limit, "limit", res, 0);
+  if (limit === undefined) return;
 
   // Totals cover every player in the league, not just the ones returned below.
   const totals = db
