@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { API_URL } from "@/api/config";
+import { usePlayers } from "@/api/players";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
-import type { Player, PlayersResponse } from "@/types/api"; // Types for API responses
 import "./TopPlayers.scss";
 
 // Number of players shown on the overview
@@ -19,13 +17,6 @@ const STATS = {
 
 type TopPlayersStat = keyof typeof STATS;
 
-// The top players for one league, season and stat
-type TopPlayersData = {
-  league: LeagueCode;
-  season: number;
-  players: Player[];
-};
-
 // Props: league, season start year (2025 = 2025/26), stat and title
 type TopPlayersProps = {
   league: LeagueCode;
@@ -34,27 +25,6 @@ type TopPlayersProps = {
   title: string;
 };
 
-// Fetches a league's top players for one stat
-async function fetchTopPlayers(
-  league: LeagueCode,
-  season: number,
-  stat: TopPlayersStat,
-  signal: AbortSignal,
-): Promise<TopPlayersData> {
-  const res = await fetch(
-    `${API_URL}/leagues/${league}/players?season=${season}&sort=${stat}&limit=${TOP_PLAYERS}`,
-    { signal },
-  );
-
-  if (!res.ok) {
-    throw new Error(`Could not load top players for ${league}`);
-  }
-
-  const { players } = (await res.json()) as PlayersResponse;
-
-  return { league, season, players };
-}
-
 // Overview section with the top 3 players for one stat
 export default function TopPlayers({
   league,
@@ -62,35 +32,7 @@ export default function TopPlayers({
   stat,
   title,
 }: TopPlayersProps) {
-  const [data, setData] = useState<TopPlayersData | null>(null);
-  const [error, setError] = useState<{
-    league: LeagueCode;
-    season: number;
-  } | null>(null);
-
-  // Refetch whenever the selected league or season changes
-  useEffect(() => {
-    // Cancels the request if the selection changes before it finishes
-    const controller = new AbortController();
-
-    fetchTopPlayers(league, season, stat, controller.signal)
-      .then((result) => {
-        setData(result);
-        setError(null);
-      })
-      .catch((err: Error) => {
-        if (err.name !== "AbortError") {
-          setError({ league, season });
-        }
-      });
-
-    return () => controller.abort();
-  }, [league, season, stat]);
-
-  // Old data or errors from a previous selection don't count for the current one
-  const hasError = error?.league === league && error.season === season;
-  const isReady =
-    !hasError && data?.league === league && data.season === season;
+  const { data, isError } = usePlayers(league, season, stat, TOP_PLAYERS);
 
   return (
     <SectionCard className="top-players">
@@ -98,7 +40,7 @@ export default function TopPlayers({
         title={title}
         action={{ label: "All players", to: "/player-stats" }}
       />
-      {isReady ? (
+      {data ? (
         <ol className="top-players__list">
           {data.players.map((player) => {
             const value = player[stat];
@@ -150,7 +92,7 @@ export default function TopPlayers({
         </ol>
       ) : (
         <p className="top-players__status">
-          {hasError ? "Couldn't load the players." : "Loading…"}
+          {isError ? "Couldn't load the players." : "Loading…"}
         </p>
       )}
     </SectionCard>

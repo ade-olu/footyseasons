@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { API_URL } from "@/api/config";
-import { fetchSeasonData } from "@/api/seasonData";
+import { usePlayers } from "@/api/players";
+import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 
 import type { LeagueCode } from "@/data/leagues";
@@ -9,8 +8,6 @@ import { isPlayed } from "@/utils/match";
 
 // Everything the highlight cards need, worked out from the standings, matches and players responses
 type HighlightsData = {
-  league: LeagueCode;
-  season: number;
   matchesFinished: number;
   goalsScored: number;
   assists: number;
@@ -24,31 +21,11 @@ type SeasonHighlightsProps = {
   season: number;
 };
 
-// Gets standings + matches + player totals for a league's season and turns them into HighlightsData
-async function fetchHighlightsData(
-  league: LeagueCode,
-  season: number,
-  signal: AbortSignal,
-): Promise<HighlightsData> {
-  // Run both requests at the same time instead of one after the other
-  const [seasonData, playersRes] = await Promise.all([
-    fetchSeasonData(league, season),
-    // limit=0 skips the player list, since only the league-wide totals are needed here
-    fetch(`${API_URL}/leagues/${league}/players?season=${season}&limit=0`, {
-      signal,
-    }),
-  ]);
-
-  // Check the players response was successful before proceeding
-  if (!playersRes.ok) {
-    throw new Error(`Could not load season highlights for ${league}`);
-  }
-
-  const {
-    standings: { standings },
-    matches,
-  } = seasonData;
-  const { totals } = (await playersRes.json()) as PlayersResponse;
+// Turns a league season's standings, matches and player totals into HighlightsData
+function getHighlightsData(
+  { standings: { standings }, matches }: SeasonData,
+  { totals }: PlayersResponse,
+): HighlightsData {
 
   // Only matches that were actually played count here (AWARDED scores aren't real goals)
   const finished = matches
@@ -76,8 +53,6 @@ async function fetchHighlightsData(
   );
 
   return {
-    league,
-    season,
     matchesFinished: finished.length,
     goalsScored,
     assists: totals.assists, // Every player's assists, from Understat
@@ -101,39 +76,14 @@ export default function SeasonHighlights({
   league,
   season,
 }: SeasonHighlightsProps) {
-  const [data, setData] = useState<HighlightsData | null>(null);
-  const [error, setError] = useState<{
-    league: LeagueCode;
-    season: number;
-  } | null>(null);
-
-  // Refetch whenever the selected league or season changes
-  useEffect(() => {
-    // Cancels the request if the selection changes before it finishes
-    const controller = new AbortController();
-
-    fetchHighlightsData(league, season, controller.signal)
-      .then((highlights) => {
-        setData(highlights);
-        setError(null);
-      })
-      .catch((err: Error) => {
-        if (err.name !== "AbortError") {
-          setError({ league, season });
-        }
-      });
-
-    return () => controller.abort();
-  }, [league, season]);
-
-  // Old data or errors from a previous selection don't count for the current one
-  const hasError = error?.league === league && error.season === season;
-  const isReady =
-    !hasError && data?.league === league && data.season === season;
+  // Both load at once; limit 0 skips the player list, since only the totals are needed
+  const seasonQuery = useSeasonData(league, season);
+  const playersQuery = usePlayers(league, season, "goals", 0);
 
   // Loading and error states keep the cards in place with a dash, so the grid doesn't jump
-  if (!isReady || !data) {
-    const placeholder = hasError ? "Couldn't load" : "Loading…";
+  if (!seasonQuery.data || !playersQuery.data) {
+    const placeholder =
+      seasonQuery.isError || playersQuery.isError ? "Couldn't load" : "Loading…";
 
     return (
       <>
@@ -151,6 +101,7 @@ export default function SeasonHighlights({
     );
   }
 
+  const data = getHighlightsData(seasonQuery.data, playersQuery.data);
   const { matchesFinished, streakClub } = data;
   const streak = streakClub?.longestWinStreak ?? 0;
 

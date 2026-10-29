@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { API_URL } from "@/api/config";
 import type { RefObject } from "react";
+import { useLeagues } from "@/api/leagues";
 import { Menu as MenuIcon } from "reicon-react"; // Opens the sidebar below laptop width
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
 import type { LeagueCode } from "@/data/leagues";
 import { LEAGUES } from "@/data/leagues";
-import type { League, Season } from "@/types/api";
+import type { Season } from "@/types/api";
 
 import "./Navbar.scss";
 
@@ -35,7 +34,8 @@ export default function Navbar({
   isMenuOpen,
   onOpenMenu,
 }: NavbarProps) {
-  const [leagues, setLeagues] = useState<League[]>([]);
+  // Empty until /leagues responds; if it fails, the fallback season below is kept
+  const { data: leagues = [] } = useLeagues();
 
   const league = LEAGUES.find((item) => item.code === selectedLeague);
 
@@ -47,24 +47,6 @@ export default function Navbar({
     apiSeasons.length > 0
       ? apiSeasons
       : [{ startYear: selectedSeason, label: formatSeason(selectedSeason) }];
-
-  // Load the leagues and their seasons once
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`${API_URL}/leagues`, { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not load seasons");
-        return res.json() as Promise<League[]>;
-      })
-      .then(setLeagues)
-      .catch((err: Error) => {
-        // Keep the fallback season; the dropdown still works with one option
-        if (err.name !== "AbortError") console.error(err);
-      });
-
-    return () => controller.abort();
-  }, []);
 
   return (
     // Navbar component for displaying the selected league and a dropdown for selecting the season
