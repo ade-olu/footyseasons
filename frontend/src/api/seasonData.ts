@@ -9,17 +9,17 @@ export type SeasonData = {
   matches: Match[];
 };
 
-// One request per league season, shared by every component that asks for it
-const cache = new Map<string, Promise<SeasonData>>();
-
-// Fetches standings + matches for a league's season
-async function loadSeasonData(
+// Fetches standings + matches for a league's season at the same time
+async function fetchSeasonData(
   league: LeagueCode,
   season: number,
+  signal: AbortSignal,
 ): Promise<SeasonData> {
   const [standingsRes, matchesRes] = await Promise.all([
-    fetch(`${API_URL}/leagues/${league}/standings?season=${season}`),
-    fetch(`${API_URL}/leagues/${league}/matches?season=${season}`),
+    fetch(`${API_URL}/leagues/${league}/standings?season=${season}`, {
+      signal,
+    }),
+    fetch(`${API_URL}/leagues/${league}/matches?season=${season}`, { signal }),
   ]);
 
   if (!standingsRes.ok || !matchesRes.ok) {
@@ -32,28 +32,11 @@ async function loadSeasonData(
   };
 }
 
-// Cached standings + matches for a league's season; a failed request is retried next time
-export function fetchSeasonData(
-  league: LeagueCode,
-  season: number,
-): Promise<SeasonData> {
-  const key = `${league}-${season}`;
-  let request = cache.get(key);
-
-  if (!request) {
-    request = loadSeasonData(league, season);
-    cache.set(key, request);
-    request.catch(() => cache.delete(key));
-  }
-
-  return request;
-}
-
-// A league season's standings and matches, as a TanStack Query; every component
-// asking for the same league and season shares one cached result
+// A league season's standings and matches; every component asking for the
+// same league and season shares one request and one cached result
 export function useSeasonData(league: LeagueCode, season: number) {
   return useQuery({
     queryKey: ["season", league, season],
-    queryFn: () => fetchSeasonData(league, season),
+    queryFn: ({ signal }) => fetchSeasonData(league, season, signal),
   });
 }
