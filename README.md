@@ -153,6 +153,7 @@ stay within rate limits.
 ```
 backend/
   01_ … 10_*.py       # data pipeline, run in number order
+  common/             # helpers shared by the pipeline scripts
   schema.sql          # database tables
   awards.csv          # season awards, compiled by hand
   football.db         # the database
