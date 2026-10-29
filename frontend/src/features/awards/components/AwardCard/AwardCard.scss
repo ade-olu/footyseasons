@@ -1,15 +1,8 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
+@use "@/styles/colors" as *;
 
-// Award Card color variables
-$award-card-bg: #0b0f0e;
-$award-card-text: #ffffff;
-$award-card-text-muted: #9ba6a5;
-$award-card-trophy: #f9a825;
-$award-card-accent: #2fe6b8; // Same accent as the sidebar
-$award-card-accent-bg: rgba(47, 230, 184, 0.1);
-$award-card-photo-bg: #16201f;
 $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
 
 .award-card {
@@ -18,9 +11,9 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
   gap: rem(32);
   min-width: 0;
   padding: rem(24);
-  background-color: $award-card-bg;
+  background-color: $color-bg-inverse;
   border-radius: 16px;
-  color: $award-card-text;
+  color: $color-text-inverse;
 
   @include below-tablet {
     gap: rem(24);
@@ -49,13 +42,13 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
     gap: rem(8);
     @include text(14);
     font-weight: 500;
-    color: $award-card-text-muted;
+    color: $color-text-inverse-secondary;
   }
 
   &__award-icon {
     width: rem(16);
     height: rem(16);
-    color: $award-card-trophy;
+    color: $color-award-trophy;
   }
 
   // margin-top: auto keeps the body at the bottom when a card in the same row is taller
@@ -110,7 +103,7 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
     align-items: center;
     gap: rem(8);
     @include text(14);
-    color: $award-card-text-muted;
+    color: $color-text-inverse-secondary;
   }
 
   // Long club names get cut off with an ellipsis (full name is in the title attribute)
@@ -131,11 +124,11 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
 
   &__stats {
     padding: rem(4) rem(8);
-    background-color: $award-card-accent-bg;
+    background-color: $color-bg-accent-subtle;
     border-radius: 8px;
     @include text(14);
     font-weight: 500;
-    color: $award-card-accent;
+    color: $color-accent;
   }
 
   &__photo {
@@ -145,7 +138,7 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
     flex-shrink: 0;
     width: rem(120);
     height: rem(120);
-    background-color: $award-card-photo-bg;
+    background-color: $color-bg-inverse-raised;
     border-radius: 50%;
     overflow: hidden;
   }
@@ -163,7 +156,7 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
   &__photo-icon {
     width: rem(48);
     height: rem(48);
-    color: $award-card-text-muted;
+    color: $color-text-inverse-secondary;
     transition: transform 0.3s;
   }
 }

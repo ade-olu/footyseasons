@@ -1,15 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
-
-// Standings Banner color variables
-$banner-bg: #0b0f0e;
-$banner-text: #ffffff;
-$banner-text-muted: #9ba6a5;
-$banner-accent: #2fe6b8;
-$bar-bg: #16201f;
-$bar-bg-first: #0f241f;
-$bar-border: #2a3c3b;
+@use "@/styles/colors" as *;
 
 .standings-banner {
   display: flex;
@@ -20,8 +12,8 @@ $bar-border: #2a3c3b;
   padding: rem(48) rem(48) 0; // Podium bars sit on the bottom edge
   overflow: hidden;
   border-radius: 24px;
-  background: $banner-bg;
-  color: $banner-text;
+  background: $color-bg-inverse;
+  color: $color-text-inverse;
 
   // Podium below the text
   @container (max-width: #{rem(900)}) {
@@ -64,7 +56,7 @@ $bar-border: #2a3c3b;
   &__description {
     max-width: rem(440);
     @include text(16, $wrap: true);
-    color: $banner-text-muted;
+    color: $color-text-inverse-secondary;
   }
 
   // Bars line up at the bottom
@@ -131,7 +123,7 @@ $bar-border: #2a3c3b;
   &__points {
     margin-top: rem(2);
     @include text(12);
-    color: $banner-text-muted;
+    color: $color-text-inverse-secondary;
   }
 
   &__bar {
@@ -141,10 +133,10 @@ $bar-border: #2a3c3b;
     width: 100%;
     height: rem(48);
     margin-top: rem(8);
-    border: 1px solid $bar-border;
+    border: 1px solid $color-border-inverse;
     border-bottom: none;
     border-radius: 8px 8px 0 0;
-    background: $bar-bg;
+    background: $color-bg-inverse-raised;
     @include text(20);
     font-weight: 600;
   }
@@ -152,8 +144,8 @@ $bar-border: #2a3c3b;
   // Step heights: 1st tallest
   &__step--1 &__bar {
     height: rem(80);
-    background: $bar-bg-first;
-    color: $banner-accent;
+    background: $color-bg-champion;
+    color: $color-accent;
   }
 
   &__step--2 &__bar {

@@ -2,15 +2,9 @@
 @use "@/styles/typography" as *;
 @use "@/styles/motion" as *;
 @use "@/styles/breakpoints" as *;
+@use "@/styles/colors" as *;
 
 // Sidebar styles using SCSS variables for colors
-$sidebar-bg: #0b0f0e;
-$sidebar-border: #2a3c3b;
-$sidebar-item-active-bg: #16201f;
-$sidebar-text: #ffffff;
-$sidebar-text-muted: #9ba6a5;
-$sidebar-accent: #2fe6b8;
-$sidebar-backdrop: rgba(11, 15, 14, 0.5);
 $sidebar-drawer-duration: 0.25s;
 
 // Below laptop width the sidebar is a drawer, so it sits above the navbar (z-index 100)
@@ -22,7 +16,7 @@ $sidebar-drawer-duration: 0.25s;
     position: fixed;
     inset: 0;
     z-index: 200;
-    background: $sidebar-backdrop;
+    background: $color-bg-backdrop;
     opacity: 0;
     pointer-events: none;
     transition: opacity $sidebar-drawer-duration;
@@ -44,8 +38,8 @@ $sidebar-drawer-duration: 0.25s;
   position: sticky;
   top: 0;
   overflow: hidden auto;
-  background: $sidebar-bg;
-  color: $sidebar-text-muted;
+  background: $color-bg-inverse;
+  color: $color-text-inverse-secondary;
   scrollbar-width: none; // Hides scrollbar in Firefox
   -ms-overflow-style: none; // Hides scrollbar in IE and Edge
 
@@ -90,7 +84,7 @@ $sidebar-drawer-duration: 0.25s;
     flex-shrink: 0;
     height: rem(88);
     padding: 0 rem(24);
-    border-bottom: 1px solid $sidebar-border;
+    border-bottom: 1px solid $color-border-inverse;
   }
 
   // Close button, only shown in the drawer
@@ -107,16 +101,16 @@ $sidebar-drawer-duration: 0.25s;
       border: 0;
       border-radius: 8px;
       background: transparent;
-      color: $sidebar-text-muted;
+      color: $color-text-inverse-secondary;
       cursor: pointer;
       @include press(0.92, color 0.15s);
 
       &:hover {
-        color: $sidebar-text;
+        color: $color-text-inverse;
       }
 
       &:focus-visible {
-        outline: 2px solid $sidebar-accent;
+        outline: 2px solid $color-accent;
       }
     }
   }
@@ -175,7 +169,7 @@ $sidebar-drawer-duration: 0.25s;
     background: transparent;
     @include text(14);
     font-weight: 500;
-    color: $sidebar-text-muted;
+    color: $color-text-inverse-secondary;
     text-decoration: none;
     white-space: nowrap;
     text-align: left;
@@ -183,25 +177,25 @@ $sidebar-drawer-duration: 0.25s;
     @include press(0.98, background-color 0.15s, color 0.15s); // Wide, so a smaller shrink
 
     &:hover {
-      color: $sidebar-text;
+      color: $color-text-inverse;
     }
 
     &:focus-visible {
-      outline: 2px solid $sidebar-accent;
+      outline: 2px solid $color-accent;
       outline-offset: -2px;
     }
 
     &--active {
-      background: $sidebar-item-active-bg;
-      color: $sidebar-text;
+      background: $color-bg-inverse-raised;
+      color: $color-text-inverse;
 
       .sidebar__nav-icon {
-        color: $sidebar-accent;
+        color: $color-accent;
       }
     }
 
     &--selected {
-      color: $sidebar-text;
+      color: $color-text-inverse;
     }
   }
 

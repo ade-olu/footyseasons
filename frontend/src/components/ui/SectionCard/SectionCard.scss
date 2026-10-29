@@ -1,9 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/breakpoints" as *;
+@use "@/styles/colors" as *;
 
-// Section Card color variables (same as HighlightCard)
-$section-card-bg: #ffffff;
-$section-card-border: #dadbdb;
 $section-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
 
 // The gap varies in Figma (16-32px), so sections can override it via className
@@ -13,8 +11,8 @@ $section-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   gap: rem(24);
   min-width: 0;
   padding: rem(24);
-  background-color: $section-card-bg;
-  border: 1px solid $section-card-border;
+  background-color: $color-bg-surface;
+  border: 1px solid $color-border-default;
   border-radius: 16px;
   box-shadow: $section-card-shadow;
   overflow: hidden; // Keeps full-width content (e.g. the standings table) inside the rounded corners

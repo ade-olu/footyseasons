@@ -1,7 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
+@use "@/styles/colors" as *;
 
-$season-awards-text-muted: #7d8180;
 
 .season-awards {
   grid-column: 1 / -1; // Full width of the overview grid
@@ -20,6 +20,6 @@ $season-awards-text-muted: #7d8180;
 
   &__status {
     @include text(14);
-    color: $season-awards-text-muted;
+    color: $color-text-secondary;
   }
 }

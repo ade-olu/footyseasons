@@ -1,13 +1,8 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/motion" as *;
+@use "@/styles/colors" as *;
 
-// Segmented Control color variables
-$segmented-control-bg: #eff4f3;
-$segmented-control-selected-bg: #ffffff;
-$segmented-control-border: #dadbdb;
-$segmented-control-text: #0b0f0e;
-$segmented-control-text-muted: #7d8180;
 $segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
 
 // Equal-width options, so the pill moves in equal steps.
@@ -23,7 +18,7 @@ $segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   gap: var(--segmented-gap);
   padding: var(--segmented-padding);
   border-radius: 12px;
-  background-color: $segmented-control-bg;
+  background-color: $color-bg-subtle;
 
   // Sits behind the selected option. Its edges move separately: the leading
   // edge first, the trailing one 0.1s later, so it stretches, then bounces
@@ -47,9 +42,9 @@ $segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
         (var(--segmented-count) - 1 - var(--segmented-index)) *
         var(--segmented-step)
     );
-    border: 1px solid $segmented-control-border;
+    border: 1px solid $color-border-default;
     border-radius: 8px;
-    background-color: $segmented-control-selected-bg;
+    background-color: $color-bg-surface;
     box-shadow: $segmented-control-shadow;
   }
 
@@ -75,14 +70,14 @@ $segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     background: none;
     @include text(14);
     font-weight: 500;
-    color: $segmented-control-text-muted;
+    color: $color-text-secondary;
     white-space: nowrap;
     cursor: pointer;
     @include press(0.96, color 0.2s);
 
     &:hover:not(:disabled),
     &[aria-pressed="true"] {
-      color: $segmented-control-text;
+      color: $color-text-primary;
     }
 
     &:disabled {

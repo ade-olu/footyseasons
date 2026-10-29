@@ -1,15 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
-
-// Hero Banner color variables
-$hero-bg: #0b0f0e;
-$hero-text: #ffffff;
-$hero-text-muted: rgba(255, 255, 255, 0.7);
-$hero-accent: #2fe6b8;
-$hero-glass-bg: rgba(22, 32, 31, 0.5);
-$hero-card-bg: rgba(22, 32, 31, 0.8);
-$hero-glass-border: rgba(124, 143, 140, 0.1);
+@use "@/styles/colors" as *;
 
 .hero-banner {
   position: relative; // Anchors the photo and credit
@@ -17,8 +9,8 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
   min-height: rem(356); // Grows when the text wraps
   overflow: hidden;
   border-radius: 24px;
-  background: $hero-bg; // Shown while loading or without a photo
-  color: $hero-text;
+  background: $color-bg-inverse; // Shown while loading or without a photo
+  color: $color-text-inverse;
 
   // Loading and error states
   &--empty {
@@ -29,7 +21,7 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
 
   &__message {
     @include text(14);
-    color: $hero-text-muted;
+    color: $color-text-inverse-muted;
   }
 
   // Background photo, cropped to fit
@@ -118,13 +110,13 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
   // Season date range
   &__pill {
     padding: rem(8) rem(16);
-    border: 1px solid $hero-glass-border;
+    border: 1px solid $color-border-glass;
     border-radius: 999px;
-    background: $hero-glass-bg;
+    background: $color-bg-glass;
     backdrop-filter: blur(8px);
     @include text(14);
     font-weight: 500;
-    color: $hero-text-muted;
+    color: $color-text-inverse-muted;
     white-space: nowrap;
   }
 
@@ -152,7 +144,7 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
 
   &__summary {
     @include text(16, $wrap: true);
-    color: $hero-text-muted;
+    color: $color-text-inverse-muted;
   }
 
   &__metrics {
@@ -176,7 +168,7 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
 
   &__metric-label {
     @include text(14);
-    color: $hero-text-muted;
+    color: $color-text-inverse-muted;
   }
 
   &__metric-value {
@@ -194,9 +186,9 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
     gap: rem(32);
     max-width: 100%;
     padding: rem(16) rem(24);
-    border: 1px solid $hero-glass-border;
+    border: 1px solid $color-border-glass;
     border-radius: 12px;
-    background: $hero-card-bg;
+    background: $color-bg-glass-strong;
     backdrop-filter: blur(8px);
 
     @container (max-width: #{rem(900)}) {
@@ -232,7 +224,7 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
 
   &__champion-label {
     @include text(14);
-    color: $hero-text-muted;
+    color: $color-text-inverse-muted;
   }
 
   // Long names get an ellipsis
@@ -255,12 +247,12 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
   &__points-value {
     @include text(24);
     font-weight: 600;
-    color: $hero-accent;
+    color: $color-accent;
   }
 
   &__points-unit {
     @include text(14);
-    color: $hero-text-muted;
+    color: $color-text-inverse-muted;
     text-decoration: none;
     text-transform: uppercase;
   }
@@ -270,6 +262,6 @@ $hero-glass-border: rgba(124, 143, 140, 0.1);
     top: rem(16);
     right: rem(24);
     @include text(12);
-    color: $hero-text-muted;
+    color: $color-text-inverse-muted;
   }
 }

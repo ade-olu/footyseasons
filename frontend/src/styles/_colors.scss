@@ -1,0 +1,47 @@
+// Colours by role, named after the Figma Tokens (color/text/primary -> $color-text-primary)
+
+// Text
+$color-text-primary: #0b0f0e;
+$color-text-secondary: #7d8180;
+$color-text-tertiary: #6d6f6e;
+$color-text-inverse: #ffffff;
+$color-text-inverse-secondary: #9ba6a5;
+$color-text-inverse-muted: rgba(255, 255, 255, 0.7);
+
+// Backgrounds
+$color-bg-page: #eff4f3;
+$color-bg-subtle: #eff4f3; // Page grey inside cards
+$color-bg-surface: #ffffff;
+$color-bg-surface-hover: #f5f8f7;
+$color-bg-inverse: #0b0f0e;
+$color-bg-inverse-raised: #16201f;
+$color-bg-champion: #0f241f;
+$color-bg-accent-subtle: rgba(47, 230, 184, 0.1);
+$color-bg-glass: rgba(22, 32, 31, 0.5);
+$color-bg-glass-strong: rgba(22, 32, 31, 0.8);
+$color-bg-navbar-blur: rgba(239, 244, 243, 0.8);
+$color-bg-backdrop: rgba(11, 15, 14, 0.5);
+
+// Borders
+$color-border-default: #dadbdb;
+$color-border-inverse: #2a3c3b;
+$color-border-glass: rgba(124, 143, 140, 0.1);
+
+// Accent and icons
+$color-accent: #2fe6b8;
+$color-icon-placeholder: #b7b9b8;
+
+// Last-5 form badges
+$color-form-win: #007330;
+$color-form-draw: #6d6f6e;
+$color-form-loss: #d23333;
+
+// Table places
+$color-zone-champions-league: #00943e;
+$color-zone-europa-league: #0046a7;
+$color-zone-conference-league: #02b8d8;
+$color-zone-relegation-playoff: #e7982c;
+$color-zone-relegation: #d23333;
+
+// Awards
+$color-award-trophy: #f9a825;

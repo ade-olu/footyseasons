@@ -1,9 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
-
-// Top Standings color variables
-$top-standings-text-muted: #7d8180;
+@use "@/styles/colors" as *;
 
 // The table runs edge to edge, so only the header gets side padding
 .top-standings {
@@ -21,6 +19,6 @@ $top-standings-text-muted: #7d8180;
   &__status {
     padding: rem(24);
     @include text(14);
-    color: $top-standings-text-muted;
+    color: $color-text-secondary;
   }
 }

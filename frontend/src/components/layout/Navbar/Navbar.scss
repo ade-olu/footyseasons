@@ -2,14 +2,8 @@
 @use "@/styles/typography" as *;
 @use "@/styles/motion" as *;
 @use "@/styles/breakpoints" as *;
+@use "@/styles/colors" as *;
 
-// Navbar color variables
-$navbar-bg-blur: rgba(239, 244, 243, 0.8);
-$navbar-inner-bg: #ffffff;
-$navbar-border: #dadbdb;
-$navbar-text: #0b0f0e;
-$navbar-text-muted: #7d8180;
-$navbar-accent: #2fe6b8; // Same accent as the sidebar
 $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
 
 .navbar {
@@ -22,8 +16,8 @@ $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   gap: rem(16);
   width: 100%;
   height: rem(88);
-  background-color: $navbar-bg-blur;
-  border-bottom: 1px solid $navbar-border;
+  background-color: $color-bg-navbar-blur;
+  border-bottom: 1px solid $color-border-default;
   backdrop-filter: blur(24px);
   padding: 0 rem(32);
 
@@ -55,20 +49,20 @@ $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     flex-shrink: 0;
     margin-right: rem(8);
     padding: 0;
-    border: 1px solid $navbar-border;
+    border: 1px solid $color-border-default;
     border-radius: 12px;
-    background-color: $navbar-inner-bg;
+    background-color: $color-bg-surface;
     box-shadow: $navbar-shadow;
-    color: $navbar-text;
+    color: $color-text-primary;
     cursor: pointer;
     @include press(0.92, border-color 0.15s);
 
     &:hover {
-      border-color: $navbar-text-muted;
+      border-color: $color-text-secondary;
     }
 
     &:focus-visible {
-      outline: 2px solid $navbar-accent;
+      outline: 2px solid $color-accent;
       outline-offset: 2px;
     }
 
@@ -93,7 +87,7 @@ $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     @include text(24);
     margin: 0;
     font-weight: 600;
-    color: $navbar-text;
+    color: $color-text-primary;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

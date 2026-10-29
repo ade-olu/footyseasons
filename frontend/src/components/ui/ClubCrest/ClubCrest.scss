@@ -1,5 +1,4 @@
-// Club Crest color variables
-$club-crest-fallback: #b7b9b8;
+@use "@/styles/colors" as *;
 
 .club-crest {
   object-fit: contain;
@@ -10,7 +9,7 @@ $club-crest-fallback: #b7b9b8;
     align-items: center;
     justify-content: center;
     aspect-ratio: 1;
-    color: $club-crest-fallback;
+    color: $color-icon-placeholder;
   }
 
   &__icon {

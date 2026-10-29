@@ -2,10 +2,7 @@
 @use "@/styles/typography" as *;
 @use "@/styles/motion" as *;
 @use "@/styles/breakpoints" as *;
-
-// Section Header color variables
-$section-header-text: #0b0f0e;
-$section-header-text-muted: #7d8180;
+@use "@/styles/colors" as *;
 
 // Title and description on the left, link on the right
 .section-header {
@@ -22,7 +19,7 @@ $section-header-text-muted: #7d8180;
     grid-column: 1;
     @include text(24);
     font-weight: 600;
-    color: $section-header-text;
+    color: $color-text-primary;
 
     @include below-phone {
       @include text(22);
@@ -36,7 +33,7 @@ $section-header-text-muted: #7d8180;
   &__description {
     grid-column: 1;
     @include text(14);
-    color: $section-header-text-muted;
+    color: $color-text-secondary;
 
     // Phones: full width under the title and link
     @include below-tablet {
@@ -51,13 +48,13 @@ $section-header-text-muted: #7d8180;
     align-items: center;
     gap: rem(8);
     @include text(14);
-    color: $section-header-text-muted;
+    color: $color-text-secondary;
     text-decoration: none;
     @include press(0.96, color 0.15s);
 
     &:hover,
     &:focus-visible {
-      color: $section-header-text;
+      color: $color-text-primary;
     }
   }
 

@@ -2,30 +2,17 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
+@use "@/styles/colors" as *;
 
 // Standings Table color variables
-$standings-table-text: #0b0f0e;
-$standings-table-text-muted: #7d8180;
-$standings-table-border: #dadbdb;
-$standings-table-bg: #ffffff;
-$standings-table-head-bg: #eff4f3; // The page background
-$standings-table-win: #007330;
-$standings-table-draw: #6d6f6e;
-$standings-table-loss: #d23333;
-$standings-table-champions-league: #00943e;
-$standings-table-europa-league: #0046a7;
-$standings-table-conference-league: #02b8d8;
-$standings-table-relegation-playoff: #e7982c;
-$standings-table-relegation: #d23333;
 $standings-table-relegation-row: color.mix(
-  $standings-table-relegation,
-  $standings-table-bg,
+  $color-zone-relegation,
+  $color-bg-surface,
   4%
 ); // Opaque, so sticky cells hide what scrolls under them
-$standings-table-row-hover: #f5f8f7; // A lighter page background (#eff4f3)
 $standings-table-relegation-row-hover: color.mix(
-  $standings-table-relegation,
-  $standings-table-bg,
+  $color-zone-relegation,
+  $color-bg-surface,
   8%
 );
 
@@ -68,10 +55,10 @@ $standings-table-relegation-row-hover: color.mix(
   td {
     height: rem(60);
     padding: 0;
-    border-bottom: 1px solid $standings-table-border;
+    border-bottom: 1px solid $color-border-default;
     @include text(14);
     font-weight: 400;
-    color: $standings-table-text;
+    color: $color-text-primary;
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
@@ -79,8 +66,8 @@ $standings-table-relegation-row-hover: color.mix(
 
   thead th {
     font-weight: 500;
-    color: $standings-table-text-muted;
-    background-color: $standings-table-head-bg;
+    color: $color-text-secondary;
+    background-color: $color-bg-subtle;
   }
 
   abbr {
@@ -88,7 +75,7 @@ $standings-table-relegation-row-hover: color.mix(
   }
 
   td#{&}__position {
-    color: $standings-table-text-muted;
+    color: $color-text-secondary;
   }
 
   td#{&}__points {
@@ -103,7 +90,7 @@ $standings-table-relegation-row-hover: color.mix(
   // Rows shade on hover; set on the cells so sticky ones shade too
   @media (hover: hover) {
     &__table tbody tr:hover > * {
-      background-color: $standings-table-row-hover;
+      background-color: $color-bg-surface-hover;
     }
 
     &__table tbody &__row--relegation:hover > * {
@@ -120,23 +107,23 @@ $standings-table-relegation-row-hover: color.mix(
   // Table zone indicator (European place or relegation): a 2px stripe down the left of the position cell
   &__position {
     &--champions-league {
-      box-shadow: inset 2px 0 0 $standings-table-champions-league;
+      box-shadow: inset 2px 0 0 $color-zone-champions-league;
     }
 
     &--europa-league {
-      box-shadow: inset 2px 0 0 $standings-table-europa-league;
+      box-shadow: inset 2px 0 0 $color-zone-europa-league;
     }
 
     &--conference-league {
-      box-shadow: inset 2px 0 0 $standings-table-conference-league;
+      box-shadow: inset 2px 0 0 $color-zone-conference-league;
     }
 
     &--relegation-playoff {
-      box-shadow: inset 2px 0 0 $standings-table-relegation-playoff;
+      box-shadow: inset 2px 0 0 $color-zone-relegation-playoff;
     }
 
     &--relegation {
-      box-shadow: inset 2px 0 0 $standings-table-relegation;
+      box-shadow: inset 2px 0 0 $color-zone-relegation;
     }
   }
 
@@ -265,18 +252,18 @@ $standings-table-relegation-row-hover: color.mix(
     border-radius: 50%;
     @include text(10);
     font-weight: 600;
-    color: $standings-table-bg;
+    color: $color-bg-surface;
 
     &--win {
-      background-color: $standings-table-win;
+      background-color: $color-form-win;
     }
 
     &--draw {
-      background-color: $standings-table-draw;
+      background-color: $color-form-draw;
     }
 
     &--loss {
-      background-color: $standings-table-loss;
+      background-color: $color-form-loss;
     }
   }
 
@@ -294,7 +281,7 @@ $standings-table-relegation-row-hover: color.mix(
     align-items: center;
     gap: rem(8);
     @include text(12);
-    color: $standings-table-text-muted;
+    color: $color-text-secondary;
   }
 
   &__legend-dot {
@@ -304,23 +291,23 @@ $standings-table-relegation-row-hover: color.mix(
     border-radius: 50%;
 
     &--champions-league {
-      background-color: $standings-table-champions-league;
+      background-color: $color-zone-champions-league;
     }
 
     &--europa-league {
-      background-color: $standings-table-europa-league;
+      background-color: $color-zone-europa-league;
     }
 
     &--conference-league {
-      background-color: $standings-table-conference-league;
+      background-color: $color-zone-conference-league;
     }
 
     &--relegation-playoff {
-      background-color: $standings-table-relegation-playoff;
+      background-color: $color-zone-relegation-playoff;
     }
 
     &--relegation {
-      background-color: $standings-table-relegation;
+      background-color: $color-zone-relegation;
     }
   }
 
@@ -395,7 +382,7 @@ $standings-table-relegation-row-hover: color.mix(
         position: sticky;
         left: 0;
         z-index: 1;
-        background-color: $standings-table-bg;
+        background-color: $color-bg-surface;
       }
 
       th.standings-table__club {
@@ -404,7 +391,7 @@ $standings-table-relegation-row-hover: color.mix(
 
       thead th.standings-table__position,
       thead th.standings-table__club {
-        background-color: $standings-table-head-bg;
+        background-color: $color-bg-subtle;
       }
 
       .standings-table__row--relegation > * {

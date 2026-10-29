@@ -1,9 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
-
-// Final Day Matches color variables
-$final-day-matches-text-muted: #7d8180;
+@use "@/styles/colors" as *;
 
 .final-day-matches {
   grid-column: 1 / -1; // Full width of the overview grid
@@ -23,7 +21,7 @@ $final-day-matches-text-muted: #7d8180;
   &__date {
     @include text(14);
     font-weight: 500;
-    color: $final-day-matches-text-muted;
+    color: $color-text-secondary;
   }
 
   // 1 column on smaller screens, 2 once both club names fit.
@@ -47,6 +45,6 @@ $final-day-matches-text-muted: #7d8180;
 
   &__status {
     @include text(14);
-    color: $final-day-matches-text-muted;
+    color: $color-text-secondary;
   }
 }

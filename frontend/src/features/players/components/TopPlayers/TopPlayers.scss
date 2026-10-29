@@ -1,9 +1,6 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
-
-// Top Players color variables
-$top-players-text: #0b0f0e;
-$top-players-text-muted: #7d8180;
+@use "@/styles/colors" as *;
 
 // Full width when narrow, then one column each (2-column grid), then half (4-column grid)
 .top-players {
@@ -38,7 +35,7 @@ $top-players-text-muted: #7d8180;
   &__rank {
     justify-self: center;
     @include text(14);
-    color: $top-players-text-muted;
+    color: $color-text-secondary;
   }
 
   &__player {
@@ -77,7 +74,7 @@ $top-players-text-muted: #7d8180;
   &__name {
     @include text(16);
     font-weight: 500;
-    color: $top-players-text;
+    color: $color-text-primary;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -88,7 +85,7 @@ $top-players-text-muted: #7d8180;
     align-items: center;
     gap: rem(8);
     @include text(12);
-    color: $top-players-text-muted;
+    color: $color-text-secondary;
   }
 
   &__club-name {
@@ -116,16 +113,16 @@ $top-players-text-muted: #7d8180;
   &__stat-value {
     @include text(20);
     font-weight: 600;
-    color: $top-players-text;
+    color: $color-text-primary;
   }
 
   &__stat-label {
     @include text(12);
-    color: $top-players-text-muted;
+    color: $color-text-secondary;
   }
 
   &__status {
     @include text(14);
-    color: $top-players-text-muted;
+    color: $color-text-secondary;
   }
 }

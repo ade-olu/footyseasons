@@ -1,9 +1,8 @@
 @use "@/styles/typography" as *;
+@use "@/styles/colors" as *;
 
 // Player Photo color variables
-$player-photo-bg: #eff4f3;
 $player-photo-image-bg: #cecfcf;
-$player-photo-border: #dadbdb;
 $player-photo-text: rgb(
   11,
   15,
@@ -25,8 +24,8 @@ $player-photo-text: rgb(
     @include text(14);
     font-weight: 600;
     color: $player-photo-text;
-    background-color: $player-photo-bg;
-    border: 1px solid $player-photo-border;
+    background-color: $color-bg-subtle;
+    border: 1px solid $color-border-default;
     user-select: none;
   }
 }

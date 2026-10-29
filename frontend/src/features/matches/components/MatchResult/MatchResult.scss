@@ -1,13 +1,7 @@
 @use "@/styles/breakpoints" as *;
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
-
-// Match Result color variables
-$match-result-bg: #eff4f3;
-$match-result-border: #dadbdb;
-$match-result-score-bg: #ffffff;
-$match-result-text: #0b0f0e;
-$match-result-text-muted: #6d6f6e;
+@use "@/styles/colors" as *;
 
 // Home club, score and away club, with the score in the middle
 .match-result {
@@ -20,8 +14,8 @@ $match-result-text-muted: #6d6f6e;
   @include below-tablet {
     padding: rem(14) rem(16);
   }
-  background-color: $match-result-bg;
-  border: 1px solid $match-result-border;
+  background-color: $color-bg-subtle;
+  border: 1px solid $color-border-default;
   border-radius: 12px;
 
   &__club {
@@ -30,14 +24,14 @@ $match-result-text-muted: #6d6f6e;
     gap: rem(8);
     min-width: 0;
     @include text(14);
-    color: $match-result-text;
+    color: $color-text-primary;
 
     &--home {
       justify-content: flex-end;
     }
 
     &--lost {
-      color: $match-result-text-muted;
+      color: $color-text-tertiary;
     }
   }
 
@@ -82,11 +76,11 @@ $match-result-text-muted: #6d6f6e;
     padding: rem(8) rem(16);
     @include text(14);
     font-weight: 500;
-    color: $match-result-text;
+    color: $color-text-primary;
     text-align: center;
     white-space: nowrap;
-    background-color: $match-result-score-bg;
-    border: 1px solid $match-result-border;
+    background-color: $color-bg-surface;
+    border: 1px solid $color-border-default;
     border-radius: 8px;
 
     @include below-tablet {

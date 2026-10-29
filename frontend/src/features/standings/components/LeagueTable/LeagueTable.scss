@@ -1,9 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
-
-// League Table color variables
-$league-table-text-muted: #7d8180;
+@use "@/styles/colors" as *;
 
 // The table runs edge to edge, so only the header gets side padding
 .league-table {
@@ -61,6 +59,6 @@ $league-table-text-muted: #7d8180;
   &__status {
     padding: rem(24);
     @include text(14);
-    color: $league-table-text-muted;
+    color: $color-text-secondary;
   }
 }
