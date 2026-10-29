@@ -4,7 +4,7 @@ import {
   getTableZone,
   type TablePlaces,
   type TableZone,
-} from "@/data/tablePlaces";
+} from "@/features/standings/data/tablePlaces";
 import { getTableName } from "@/data/tableNames";
 import type { Standing } from "@/types/api";
 import "./StandingsTable.scss";

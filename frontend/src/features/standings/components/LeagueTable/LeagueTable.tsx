@@ -7,10 +7,10 @@ import Dropdown from "@/components/ui/Dropdown/Dropdown";
 import StandingsTable, {
   type FormResult,
   type TableView,
-} from "@/components/cards/StandingsTable/StandingsTable";
+} from "@/features/standings/components/StandingsTable/StandingsTable";
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
-import { TABLE_PLACES } from "@/data/tablePlaces";
-import { getClubForm } from "@/utils/form";
+import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
+import { getClubForm } from "@/features/standings/utils/form";
 import type { Standing, StandingsResponse } from "@/types/api"; // Types for API responses
 import "./LeagueTable.scss";
 

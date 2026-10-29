@@ -4,10 +4,10 @@ import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import StandingsTable, {
   type FormResult,
-} from "@/components/cards/StandingsTable/StandingsTable";
+} from "@/features/standings/components/StandingsTable/StandingsTable";
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
-import { TABLE_PLACES } from "@/data/tablePlaces";
-import { getClubForm } from "@/utils/form";
+import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
+import { getClubForm } from "@/features/standings/utils/form";
 import type { StandingsResponse } from "@/types/api"; // Types for API responses
 import "./TopStandings.scss";
 

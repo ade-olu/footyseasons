@@ -1,6 +1,6 @@
-import LeagueTable from "@/components/standings/LeagueTable/LeagueTable";
-import StandingsBanner from "@/components/standings/StandingsBanner/StandingsBanner";
-import StandingsHighlights from "@/components/standings/StandingsHighlights/StandingsHighlights";
+import LeagueTable from "@/features/standings/components/LeagueTable/LeagueTable";
+import StandingsBanner from "@/features/standings/components/StandingsBanner/StandingsBanner";
+import StandingsHighlights from "@/features/standings/components/StandingsHighlights/StandingsHighlights";
 import type { LeagueCode } from "@/data/leagues";
 import { pageTitle } from "@/utils/pageTitle";
 import "./StandingsPage.scss";

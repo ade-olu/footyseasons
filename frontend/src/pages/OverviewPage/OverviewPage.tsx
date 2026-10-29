@@ -5,7 +5,7 @@ import SeasonHighlights from "@/components/overview/SeasonHighlights/SeasonHighl
 import type { LeagueCode } from "@/data/leagues";
 import { pageTitle } from "@/utils/pageTitle";
 import TopPlayers from "@/components/overview/TopPlayers/TopPlayers";
-import TopStandings from "@/components/overview/TopStandings/TopStandings";
+import TopStandings from "@/features/standings/components/TopStandings/TopStandings";
 import "./OverviewPage.scss";
 
 // Props for the OverviewPage: the selected league and season start year (2025 = 2025/26)
