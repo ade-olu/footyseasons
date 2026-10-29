@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { API_URL } from "./config";
+import { fetchJson } from "./fetchJson";
 import type { LeagueCode } from "@/data/leagues";
 import type { Match, StandingsResponse } from "@/types/api"; // Types for API responses
 
@@ -15,21 +15,15 @@ async function fetchSeasonData(
   season: number,
   signal: AbortSignal,
 ): Promise<SeasonData> {
-  const [standingsRes, matchesRes] = await Promise.all([
-    fetch(`${API_URL}/leagues/${league}/standings?season=${season}`, {
+  const [standings, matches] = await Promise.all([
+    fetchJson<StandingsResponse>(
+      `/leagues/${league}/standings?season=${season}`,
       signal,
-    }),
-    fetch(`${API_URL}/leagues/${league}/matches?season=${season}`, { signal }),
+    ),
+    fetchJson<Match[]>(`/leagues/${league}/matches?season=${season}`, signal),
   ]);
 
-  if (!standingsRes.ok || !matchesRes.ok) {
-    throw new Error(`Could not load season data for ${league}`);
-  }
-
-  return {
-    standings: (await standingsRes.json()) as StandingsResponse,
-    matches: (await matchesRes.json()) as Match[],
-  };
+  return { standings, matches };
 }
 
 // A league season's standings and matches; every component asking for the
