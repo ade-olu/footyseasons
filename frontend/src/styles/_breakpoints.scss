@@ -1,3 +1,5 @@
+@use "functions" as *;
+
 // Screen widths (viewport, for media queries)
 $phone: 440px;
 $tablet: 768px;
@@ -51,6 +53,26 @@ $phone-medium: 412px;
 // Laptop width and up
 @mixin laptop-up {
   @media (min-width: $laptop) {
+    @content;
+  }
+}
+
+// Content area widths (beside the sidebar, for container queries on .app__content)
+$content-grid-two: rem(560); // Overview and Standings grids go to 2 columns
+$content-phone: rem(600); // Figma's phone frame: banners get phone padding and type
+$content-medium: rem(900); // Banners stack; award and result cards go to 2 columns
+$content-grid-four: rem(1000); // Grids go to 4 columns
+
+// Nearest container (.app__content, or a component's own) at most $width wide
+@mixin container-up-to($width) {
+  @container (max-width: #{$width}) {
+    @content;
+  }
+}
+
+// Nearest container at least $width wide
+@mixin container-from($width) {
+  @container (min-width: #{$width}) {
     @content;
   }
 }

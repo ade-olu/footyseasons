@@ -69,7 +69,7 @@
     }
 
     // One column: champion card below the content
-    @container (max-width: #{rem(900)}) {
+    @include container-up-to($content-medium) {
       grid-template-columns: minmax(0, 1fr);
       row-gap: rem(32);
       background: linear-gradient(
@@ -86,7 +86,7 @@
       }
     }
 
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       row-gap: rem(24);
       padding: rem(24);
     }
@@ -99,7 +99,7 @@
     justify-content: space-between;
     gap: rem(32);
 
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       gap: rem(24);
     }
   }
@@ -129,7 +129,7 @@
     @include text(48);
     font-weight: 600;
 
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       padding-right: 0;
       @include text(32);
     }
@@ -151,7 +151,7 @@
     margin: 0;
     white-space: nowrap;
 
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       row-gap: rem(16);
     }
   }
@@ -188,12 +188,12 @@
     background: $color-bg-glass-strong;
     backdrop-filter: $blur-glass;
 
-    @container (max-width: #{rem(900)}) {
+    @include container-up-to($content-medium) {
       justify-self: start;
     }
 
     // Full width, points on the right
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       justify-self: stretch;
       justify-content: space-between;
     }

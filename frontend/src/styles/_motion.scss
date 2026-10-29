@@ -3,13 +3,41 @@
 // Ease-out-back: overshoots a little, then settles
 $ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
 
+// Animations, only for users who haven't asked for reduced motion
+@mixin motion-allowed {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+// Undoes motion for users who asked for less
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// Hover styles, only on devices that can hover (not touch)
+@mixin can-hover {
+  @media (hover: hover) {
+    @content;
+  }
+}
+
+// Hover animations: a device that can hover and no reduced motion
+@mixin hover-motion {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
 // Shrinks while pressed and springs back on release (not for disabled or reduced motion).
 // Pass the element's own transitions after the scale, e.g. press(0.96, border-color 0.15s),
 // since this sets `transition`
 @mixin press($scale, $transitions...) {
   transition: $transitions;
 
-  @media (prefers-reduced-motion: no-preference) {
+  @include motion-allowed {
     transition: list.append($transitions, scale 0.3s $ease-out-back, comma);
 
     // Shrinks instantly, so even a quick tap gets the full spring back

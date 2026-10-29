@@ -43,7 +43,7 @@
     box-shadow: $shadow-resting;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @include motion-allowed {
     &--right &__indicator {
       transition:
         right 0.3s $ease-out-back,

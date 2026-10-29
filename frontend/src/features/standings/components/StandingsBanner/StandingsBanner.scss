@@ -13,12 +13,12 @@
   color: $color-text-inverse;
 
   // Podium below the text
-  @container (max-width: #{rem(900)}) {
+  @include container-up-to($content-medium) {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  @container (max-width: #{rem(600)}) {
+  @include container-up-to($content-phone) {
     gap: rem(48);
     padding: rem(24) rem(24) 0;
   }
@@ -31,7 +31,7 @@
     align-self: center;
     padding-bottom: rem(48);
 
-    @container (max-width: #{rem(900)}) {
+    @include container-up-to($content-medium) {
       align-self: auto;
       padding-bottom: 0;
     }
@@ -41,7 +41,7 @@
     @include text(48);
     font-weight: 600;
 
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       @include text(32);
     }
 
@@ -67,7 +67,7 @@
     list-style: none;
 
     // Full width, steps shrink to fit
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       align-self: stretch;
       justify-content: center;
     }
@@ -81,7 +81,7 @@
     width: rem(112);
     min-width: 0;
 
-    @container (max-width: #{rem(600)}) {
+    @include container-up-to($content-phone) {
       flex: 1 1 0;
       width: auto;
       max-width: rem(112);

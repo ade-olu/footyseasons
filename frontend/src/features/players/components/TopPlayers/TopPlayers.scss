@@ -6,11 +6,11 @@
   gap: rem(32);
   container-type: inline-size;
 
-  @container (min-width: #{rem(720)}) {
+  @include container-from(rem(720)) {
     grid-column: span 1;
   }
 
-  @container (min-width: #{rem(1000)}) {
+  @include container-from($content-grid-four) {
     grid-column: span 2;
   }
 
@@ -43,7 +43,7 @@
     min-width: 0;
     padding: 0 rem(24);
 
-    @container (max-width: #{rem(500)}) {
+    @include container-up-to(rem(500)) {
       padding: 0 rem(16);
     }
   }

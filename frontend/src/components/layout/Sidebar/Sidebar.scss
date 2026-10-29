@@ -63,7 +63,7 @@ $sidebar-drawer-duration: 0.25s;
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
     transition: none;
 
     &--open {

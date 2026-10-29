@@ -85,7 +85,7 @@ $standings-table-relegation-row-hover: color.mix(
   }
 
   // Rows shade on hover; set on the cells so sticky ones shade too
-  @media (hover: hover) {
+  @include can-hover {
     &__table tbody tr:hover > * {
       background-color: $color-bg-surface-hover;
     }
@@ -95,7 +95,7 @@ $standings-table-relegation-row-hover: color.mix(
     }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @include motion-allowed {
     &__table tbody tr > * {
       transition: background-color 0.2s;
     }
@@ -169,7 +169,7 @@ $standings-table-relegation-row-hover: color.mix(
   }
 
   // Goal difference covers GF/GA, so they're the first to go
-  @container (max-width: #{rem(939)}) {
+  @include container-up-to(rem(939)) {
     &__col-goals,
     th#{&}__goals,
     td#{&}__goals {
@@ -179,7 +179,7 @@ $standings-table-relegation-row-hover: color.mix(
 
   // Too narrow for the form badges and a readable club name: drop the Form
   // column, so the table only has to scroll sideways on much smaller widths
-  @container (max-width: #{rem(759)}) {
+  @include container-up-to(rem(759)) {
     &__table {
       min-width: rem(500);
     }
@@ -207,7 +207,7 @@ $standings-table-relegation-row-hover: color.mix(
 
   // Phones (as in Figma's mobile frame): drop W/D/L too, so the club name
   // keeps its room without scrolling sideways
-  @container (max-width: #{rem(499)}) {
+  @include container-up-to(rem(499)) {
     &__table {
       min-width: rem(300);
     }
