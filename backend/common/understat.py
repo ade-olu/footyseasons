@@ -1,7 +1,7 @@
 """
 common/understat.py
 Requests to understat.com and matching its team names to clubs, shared by
-05, 07 and 09. Understat has no official API: these are the JSON endpoints
+04, 06 and 08. Understat has no official API: these are the JSON endpoints
 its own pages load, which could change without warning.
 """
 

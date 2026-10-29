@@ -1,5 +1,5 @@
 """
-10_fetch_player_profiles.py
+09_fetch_player_profiles.py
 
 Matches Understat players to FotMob (photo) and Transfermarkt (date of
 birth, from the CC0 transfermarkt-datasets export) and saves them in
@@ -9,7 +9,7 @@ FotMob has no official API: this uses the JSON its own site loads, which
 could change without warning.
 
 Safe to re-run: the table is rebuilt each time. I cache downloads in
-cache/; delete it to refetch everything. Run 07_fetch_understat.py first.
+cache/; delete it to refetch everything. Run 06_fetch_understat.py first.
 """
 
 import csv

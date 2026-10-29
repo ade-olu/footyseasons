@@ -1,5 +1,5 @@
 """
-08_fetch_crests.py
+07_fetch_crests.py
 
 Downloads each club's SVG crest from footylogos.com into
 frontend/public/crests/ and sets clubs.crest_url to it
@@ -152,7 +152,7 @@ CLUB_CRESTS = {
     547: "stade-de-reims",               # Stade de Reims
     511: "toulouse-fc",                  # Toulouse FC
 
-    # Pre-2023 clubs (negative ids, added by 05)
+    # Pre-2023 clubs (negative ids, added by 04)
     # Premier League
     -227: "cardiff-city",                # Cardiff City FC
     -219: "huddersfield-town",           # Huddersfield Town AFC
@@ -304,7 +304,7 @@ def main():
     if missing:
         print(
             "These clubs aren't in CLUB_CRESTS and keep their current "
-            "crest_url (football-data.org's, or none for clubs added by 05, "
+            "crest_url (football-data.org's, or none for clubs added by 04, "
             "which the frontend shows as a shield):"
         )
         for name in missing:

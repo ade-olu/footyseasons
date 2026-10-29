@@ -69,7 +69,7 @@ CREATE TABLE seasons (
 -- doesn't get a new row just because a new season starts.
 -- ------------------------------------------------------------
 CREATE TABLE clubs (
-    club_id     INTEGER PRIMARY KEY,   -- reuses the API's own team id, same reasoning as leagues.league_id. Clubs that only played before 2023 (added by 05_fetch_understat_history.py) use minus their Understat team id instead
+    club_id     INTEGER PRIMARY KEY,   -- reuses the API's own team id, same reasoning as leagues.league_id. Clubs that only played before 2023 (added by 04_fetch_understat_history.py) use minus their Understat team id instead
     name        TEXT NOT NULL,         -- e.g. "Arsenal FC"
     short_name  TEXT,                  -- e.g. "Arsenal"
     tla         TEXT,                  -- three-letter code, e.g. "ARS"
@@ -84,7 +84,7 @@ CREATE TABLE clubs (
 -- 380 rows for a full Premier League season.
 -- ------------------------------------------------------------
 CREATE TABLE matches (
-    match_id      INTEGER PRIMARY KEY,  -- reuses the API's own match id; minus the Understat match id for 2014-2022 matches (05_fetch_understat_history.py)
+    match_id      INTEGER PRIMARY KEY,  -- reuses the API's own match id; minus the Understat match id for 2014-2022 matches (04_fetch_understat_history.py)
     season_id     INTEGER NOT NULL,
     matchday      INTEGER,              -- NULL for 2014-2022 matches, since Understat doesn't give one
     utc_date      TEXT,                 -- stored as ISO text, e.g. "2025-08-16T14:00:00Z" — SQLite has no dedicated date type, so text in this sortable format is the standard approach
@@ -163,7 +163,7 @@ CREATE INDEX idx_club_season_stats_season ON club_season_stats(season_id);
 -- ------------------------------------------------------------
 -- TABLE: understat_player_stats
 -- One row per player PER SEASON, for EVERY player who played in
--- the league. Filled in by 07_fetch_understat.py from
+-- the league. Filled in by 06_fetch_understat.py from
 -- understat.com, which also gives minutes, xG and xA.
 --
 -- A player who moved clubs mid-season gets ONE row with their
@@ -224,7 +224,7 @@ CREATE INDEX idx_understat_player_clubs_club ON understat_player_clubs(club_id);
 -- One row per winner of a season award (player, manager,
 -- goalkeeper, young_player). A shared award gets one row per
 -- winner. Loaded from the hand-written awards.csv by
--- 09_load_awards.py.
+-- 08_load_awards.py.
 -- ------------------------------------------------------------
 CREATE TABLE season_awards (
     id                   INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -248,7 +248,7 @@ CREATE TABLE season_awards (
 -- ------------------------------------------------------------
 -- TABLE: player_profiles
 -- Photo (FotMob) and date of birth (Transfermarkt) per Understat
--- player. Filled in by 10_fetch_player_profiles.py.
+-- player. Filled in by 09_fetch_player_profiles.py.
 -- ------------------------------------------------------------
 CREATE TABLE player_profiles (
     understat_player_id  INTEGER PRIMARY KEY,

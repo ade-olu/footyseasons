@@ -1,11 +1,11 @@
 """
-07_fetch_understat.py
+06_fetch_understat.py
 
 Loads every player's season stats from understat.com into
 understat_player_stats and understat_player_clubs, plus each transferred
 player's last match date per club. Understat has no official API, so this
 uses the JSON its own pages load. Safe to re-run: each league-season's rows
-are replaced. Run 02 and 05 first.
+are replaced. Run 02 and 04 first.
 """
 
 import html

@@ -20,14 +20,14 @@ def find_season_id(cursor, league_id, start_year):
 
 
 def get_season_id(cursor, league_id, start_year):
-    # Look-up only: 02 creates the 2023+ seasons and 05 the older ones
+    # Look-up only: 02 creates the 2023+ seasons and 04 the older ones
     season_id = find_season_id(cursor, league_id, start_year)
 
     if season_id is None:
         raise Exception(
             f"No season found for league_id {league_id}, start_year "
             f"{start_year}. Run 02_fetch_matches.py (2023 onwards) or "
-            "05_fetch_understat_history.py (2014-2022) first."
+            "04_fetch_understat_history.py (2014-2022) first."
         )
 
     return season_id

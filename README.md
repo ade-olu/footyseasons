@@ -48,7 +48,7 @@ Transfermarkt ─────┤
 footylogos.com ────┘
 ```
 
-Ten Python scripts in `backend/` pull data from five sources into one SQLite
+Nine Python scripts in `backend/` pull data from five sources into one SQLite
 file. The Express API serves it as JSON, and the React app fetches from the API.
 
 | Source                                                                       | Used for                                       |
@@ -142,7 +142,7 @@ pip install -r requirements.txt
 python 01_create_database.py   # deletes and recreates football.db
 python 02_fetch_matches.py
 # ...
-python 10_fetch_player_profiles.py
+python 09_fetch_player_profiles.py
 ```
 
 A full rebuild takes a few hours, since the scripts wait between requests to
@@ -152,7 +152,7 @@ stay within rate limits.
 
 ```
 backend/
-  01_ … 10_*.py       # data pipeline, run in number order
+  01_ … 09_*.py       # data pipeline, run in number order
   common/             # helpers shared by the pipeline scripts
   schema.sql          # database tables
   awards.csv          # season awards, compiled by hand

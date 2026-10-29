@@ -1,10 +1,10 @@
 """
-05_fetch_understat_history.py
+04_fetch_understat_history.py
 
 Loads 2014/15-2022/23 from understat.com: seasons, missing clubs, matches,
 and tables I calculate myself (they match Wikipedia's for all 45 seasons).
 Pre-2023 clubs and all matches here get negative ids (-Understat id).
-INSERT OR REPLACE wipes 06's columns, so re-run 06 after this.
+INSERT OR REPLACE wipes 05's columns, so re-run 05 after this.
 """
 
 import time
@@ -21,7 +21,7 @@ from common.understat import (
 
 DB_FILE = "football.db"
 
-# Understat starts in 2014; 2023+ comes from 02-04
+# Understat starts in 2014; 2023+ comes from 02 and 03
 SEASONS = list(range(2014, 2023))
 
 # Only used to learn the Understat ids of clubs already in the database
@@ -172,7 +172,7 @@ def resolve_club(cursor, team_id, title, known):
 
     if team_id in HISTORIC_CLUBS:
         name, short_name, tla = HISTORIC_CLUBS[team_id]
-        # 08 fills in crest_url
+        # 07 fills in crest_url
         cursor.execute(
             """INSERT OR IGNORE INTO clubs (club_id, name, short_name, tla, crest_url)
                VALUES (?, ?, ?, ?, NULL)""",
@@ -405,8 +405,8 @@ def main():
 
     print(
         f"\nDone. Loaded {len(LEAGUES)} leagues x {len(SEASONS)} seasons from "
-        "Understat. Now run 06_calculate_aggregates.py, then "
-        "07_fetch_understat.py and 08_fetch_crests.py."
+        "Understat. Now run 05_calculate_aggregates.py, then "
+        "06_fetch_understat.py and 07_fetch_crests.py."
     )
 
 

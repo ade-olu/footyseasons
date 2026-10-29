@@ -75,7 +75,7 @@ export default function TopStandings({ league, season }: TopStandingsProps) {
     !hasError && data?.league === league && data.season === season;
 
   const leagueName = LEAGUES.find((item) => item.code === league)?.name;
-  // A season has a champion once it's over (04 only sets it after the end date)
+  // A season has a champion once it's over (03 only sets it after the end date)
   const isFinal = isReady && data.standings.championClubId !== null;
 
   return (

@@ -1,9 +1,9 @@
 """
-04_fetch_standings.py
+03_fetch_standings.py
 
 Loads football-data.org's 2023/24+ tables (total, home and away) into
 club_season_stats, and each finished season's champion.
-INSERT OR REPLACE wipes 06's columns, so re-run 06 after this.
+INSERT OR REPLACE wipes 05's columns, so re-run 05 after this.
 """
 
 import time

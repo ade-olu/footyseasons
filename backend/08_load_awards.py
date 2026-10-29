@@ -1,12 +1,12 @@
 """
-09_load_awards.py
+08_load_awards.py
 
 Loads the season awards from the hand-written awards.csv into
 season_awards, and counts goalkeepers' and young players' starts and
 clean sheets from their Understat match logs (saved counts are reused).
 
 Safe to re-run: the table is rebuilt from the CSV each time. Run
-07_fetch_understat.py first.
+06_fetch_understat.py first.
 """
 
 import csv

@@ -57,7 +57,7 @@ async function fetchHighlightsData(
     0,
   );
 
-  // Clean sheets are null until 06_calculate_aggregates.py has run
+  // Clean sheets are null until 05_calculate_aggregates.py has run
   const cleanSheets = standings.reduce(
     (total, club) => total + (club.cleanSheets ?? 0),
     0,
