@@ -23,15 +23,6 @@ from common.leagues import API_SEASONS, LEAGUES
 DB_FILE = "football.db"
 
 
-def fetch_standings(api_key, league_code, start_year):
-    # "standings" has TOTAL, HOME and AWAY tables; "season" has the dates
-    return fetch(
-        api_key,
-        f"/competitions/{league_code}/standings",
-        {"season": start_year},
-    )
-
-
 def build_club_stats(standings):
     # Merges the three tables into one entry per club_id
     stats = {}
@@ -161,7 +152,12 @@ def main():
         print(f"\n[{i}/{len(jobs)}] {league['name']} ({league['code']}) {year}")
 
         season_id = get_season_id(cursor, league["id"], year)
-        data = fetch_standings(api_key, league["code"], year)
+        # "standings" has TOTAL, HOME and AWAY tables; "season" has the dates
+        data = fetch(
+            api_key,
+            f"/competitions/{league['code']}/standings",
+            {"season": year},
+        )
         standings = data["standings"]
 
         club_stats = build_club_stats(standings)
