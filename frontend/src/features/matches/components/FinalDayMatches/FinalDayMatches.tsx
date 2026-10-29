@@ -4,11 +4,9 @@ import MatchResult from "@/features/matches/components/MatchResult/MatchResult";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
-import type { Match } from "@/types/api"; // Types for API responses
+import type { Match, PlayedMatch } from "@/types/api"; // Types for API responses
+import { isPlayed } from "@/utils/match";
 import "./FinalDayMatches.scss";
-
-// Statuses of matches that count as played
-const PLAYED_STATUSES = ["FINISHED", "AWARDED"];
 
 // The last matchweek's results for one league and season
 type FinalDayData = {
@@ -22,7 +20,7 @@ type FinalDayData = {
 // One day's matches (UTC date "2026-05-24")
 type MatchDay = {
   date: string;
-  matches: Match[];
+  matches: PlayedMatch[];
 };
 
 // Props for the FinalDayMatches component: the selected league and season start year (2025 = 2025/26)
@@ -35,11 +33,9 @@ type FinalDayMatchesProps = {
 // so it's every club's last match, and the number is the most games any club played
 function getLastMatchweek(matches: Match[]): {
   matchweek: number;
-  matches: Match[];
+  matches: PlayedMatch[];
 } {
-  const played = matches.filter((match) =>
-    PLAYED_STATUSES.includes(match.status),
-  );
+  const played = matches.filter(isPlayed);
   const matchdays = played.map((match) => match.matchday ?? 0);
   const lastMatchday = Math.max(0, ...matchdays);
 
@@ -51,7 +47,7 @@ function getLastMatchweek(matches: Match[]): {
   }
 
   // Each club's last match and number of games
-  const lastMatches = new Map<number, Match>();
+  const lastMatches = new Map<number, PlayedMatch>();
   const gamesPlayed = new Map<number, number>();
 
   for (const match of played) {
@@ -71,7 +67,7 @@ function getLastMatchweek(matches: Match[]): {
 }
 
 // Groups matches by UTC date, oldest first, then by kick-off and home club
-function groupByDay(matches: Match[]): MatchDay[] {
+function groupByDay(matches: PlayedMatch[]): MatchDay[] {
   const sorted = [...matches].sort(
     (a, b) =>
       a.utcDate.localeCompare(b.utcDate) ||

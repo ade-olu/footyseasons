@@ -3,6 +3,7 @@ import { fetchSeasonData } from "@/api/seasonData";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
+import { isPlayed } from "@/utils/match";
 import "./StandingsBanner.scss";
 
 // The top 3 and the line under the title for one league and season
@@ -31,9 +32,7 @@ async function fetchStandingsBannerData(
 
   // Every club plays every other club home and away
   const total = standings.length * (standings.length - 1);
-  const played = matches.filter(
-    (match) => match.status === "FINISHED" || match.status === "AWARDED",
-  ).length;
+  const played = matches.filter(isPlayed).length;
   const places = "with European qualification and relegation places.";
 
   let description = `The table so far, after ${played} of ${total} matches, ${places}`;

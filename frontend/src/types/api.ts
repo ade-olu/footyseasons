@@ -56,14 +56,42 @@ export type StandingsResponse = {
   standings: Standing[];
 };
 
-// One match in GET /api/leagues/:code/matches
-export type Match = {
+// football-data.org's match statuses (2014-2022 matches are only FINISHED, AWARDED or CANCELLED)
+export type MatchStatus =
+  | "SCHEDULED"
+  | "TIMED"
+  | "IN_PLAY"
+  | "PAUSED"
+  | "EXTRA_TIME"
+  | "PENALTY_SHOOTOUT"
+  | "FINISHED"
+  | "SUSPENDED"
+  | "POSTPONED"
+  | "CANCELLED"
+  | "AWARDED";
+
+// Statuses that count as a result in the table (an AWARDED score is given without the game being played)
+export type PlayedStatus = "FINISHED" | "AWARDED";
+
+// One match in GET /api/leagues/:code/matches: a played match always has a score
+export type Match = PlayedMatch | UnplayedMatch;
+
+export type PlayedMatch = MatchDetails & {
+  status: PlayedStatus;
+  homeGoals: number;
+  awayGoals: number;
+};
+
+export type UnplayedMatch = MatchDetails & {
+  status: Exclude<MatchStatus, PlayedStatus>;
+  homeGoals: number | null; // Set while a match is in play
+  awayGoals: number | null;
+};
+
+type MatchDetails = {
   matchId: number;
   matchday: number | null; // Null for 2014-2022 matches
   utcDate: string;
-  status: string;
-  homeGoals: number | null;
-  awayGoals: number | null;
   homeClubName: string;
   homeClubDisplayName: string;
   homeClubId: number;

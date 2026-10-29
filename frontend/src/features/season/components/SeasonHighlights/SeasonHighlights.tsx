@@ -5,6 +5,7 @@ import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 
 import type { LeagueCode } from "@/data/leagues";
 import type { PlayersResponse, Standing } from "@/types/api"; // Types for API responses
+import { isPlayed } from "@/utils/match";
 
 // Everything the highlight cards need, worked out from the standings, matches and players responses
 type HighlightsData = {
@@ -50,10 +51,12 @@ async function fetchHighlightsData(
   const { totals } = (await playersRes.json()) as PlayersResponse;
 
   // Only matches that were actually played count here (AWARDED scores aren't real goals)
-  const finished = matches.filter((match) => match.status === "FINISHED");
+  const finished = matches
+    .filter(isPlayed)
+    .filter((match) => match.status === "FINISHED");
 
   const goalsScored = finished.reduce(
-    (total, match) => total + (match.homeGoals ?? 0) + (match.awayGoals ?? 0),
+    (total, match) => total + match.homeGoals + match.awayGoals,
     0,
   );
 

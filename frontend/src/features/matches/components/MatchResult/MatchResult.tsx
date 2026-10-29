@@ -1,18 +1,17 @@
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import { getTableName } from "@/data/tableNames";
-import type { Match } from "@/types/api"; // Types for API responses
+import type { PlayedMatch } from "@/types/api"; // Types for API responses
 import "./MatchResult.scss";
 
 // Props for the MatchResult component: one played match
 type MatchResultProps = {
-  match: Match;
+  match: PlayedMatch;
 };
 
 // One result: home club, score, away club. The losing club's name is muted.
 // Names are the table's short names, or three-letter codes on phones
 export default function MatchResult({ match }: MatchResultProps) {
-  const homeGoals = match.homeGoals ?? 0;
-  const awayGoals = match.awayGoals ?? 0;
+  const { homeGoals, awayGoals } = match;
 
   return (
     <div className="match-result">

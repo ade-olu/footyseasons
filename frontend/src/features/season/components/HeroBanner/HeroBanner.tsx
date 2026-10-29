@@ -5,6 +5,7 @@ import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
+import { isPlayed } from "@/utils/match";
 import { getHeroImage } from "@/features/season/data/heroImages"; // Get the hero image for a given club and season
 import { SEASON_STORIES } from "@/features/season/data/seasonStories"; // Hand-written stories for each season
 
@@ -50,17 +51,12 @@ async function fetchHeroData(
   const runnerUp = standings.find((club) => club.clubId !== champion.clubId);
 
   // AWARDED matches (result given without the game being played) count towards the league, so include them
-  const played = matches.filter(
-    (match) => match.status === "FINISHED" || match.status === "AWARDED",
-  );
+  const played = matches.filter(isPlayed);
 
   // Goals only come from matches that were actually played, since an awarded score isn't real goals
   const goalsScored = played
     .filter((match) => match.status === "FINISHED")
-    .reduce(
-      (total, match) => total + (match.homeGoals ?? 0) + (match.awayGoals ?? 0),
-      0,
-    );
+    .reduce((total, match) => total + match.homeGoals + match.awayGoals, 0);
 
   // Match order isn't chronological, so take the earliest and latest kickoff times
   const times = played.map((match) => new Date(match.utcDate).getTime());

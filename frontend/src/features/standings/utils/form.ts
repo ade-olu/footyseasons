@@ -1,8 +1,6 @@
 import type { FormResult } from "@/features/standings/components/StandingsTable/StandingsTable";
 import type { Match } from "@/types/api";
-
-// Statuses that count as a result in the table (an AWARDED score is given without the game being played)
-const PLAYED_STATUSES = new Set(["FINISHED", "AWARDED"]);
+import { isPlayed } from "@/utils/match";
 
 // Each club's last `count` results, oldest first, keyed by clubId; `side` keeps only home or away games.
 // Matches can come in any order; they're sorted by date here.
@@ -12,12 +10,7 @@ export function getClubForm(
   side?: "home" | "away",
 ): Record<number, FormResult[]> {
   const played = matches
-    .filter(
-      (match) =>
-        PLAYED_STATUSES.has(match.status) &&
-        match.homeGoals !== null &&
-        match.awayGoals !== null,
-    )
+    .filter(isPlayed)
     .sort((a, b) => b.utcDate.localeCompare(a.utcDate)); // Newest first
 
   const form: Record<number, FormResult[]> = {};
@@ -32,11 +25,9 @@ export function getClubForm(
     );
   };
 
-  for (const match of played) {
-    const homeGoals = match.homeGoals ?? 0;
-    const awayGoals = match.awayGoals ?? 0;
-    if (side !== "away") addResult(match.homeClubId, homeGoals, awayGoals);
-    if (side !== "home") addResult(match.awayClubId, awayGoals, homeGoals);
+  for (const { homeClubId, awayClubId, homeGoals, awayGoals } of played) {
+    if (side !== "away") addResult(homeClubId, homeGoals, awayGoals);
+    if (side !== "home") addResult(awayClubId, awayGoals, homeGoals);
   }
 
   return form;
