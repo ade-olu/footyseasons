@@ -1,7 +1,7 @@
 import FinalDayMatches from "@/features/matches/components/FinalDayMatches/FinalDayMatches";
-import HeroBanner from "@/components/overview/HeroBanner/HeroBanner";
+import HeroBanner from "@/features/season/components/HeroBanner/HeroBanner";
 import SeasonAwards from "@/features/awards/components/SeasonAwards/SeasonAwards";
-import SeasonHighlights from "@/components/overview/SeasonHighlights/SeasonHighlights";
+import SeasonHighlights from "@/features/season/components/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "@/data/leagues";
 import { pageTitle } from "@/utils/pageTitle";
 import TopPlayers from "@/features/players/components/TopPlayers/TopPlayers";
