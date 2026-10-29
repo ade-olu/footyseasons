@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { API_URL } from "./config";
 import type { LeagueCode } from "@/data/leagues";
 import type { Match, StandingsResponse } from "@/types/api"; // Types for API responses
@@ -46,4 +47,13 @@ export function fetchSeasonData(
   }
 
   return request;
+}
+
+// A league season's standings and matches, as a TanStack Query; every component
+// asking for the same league and season shares one cached result
+export function useSeasonData(league: LeagueCode, season: number) {
+  return useQuery({
+    queryKey: ["season", league, season],
+    queryFn: () => fetchSeasonData(league, season),
+  });
 }
