@@ -17,20 +17,10 @@ from common.football_data import (
     fetch,
     load_api_key,
 )
+from common.leagues import API_SEASONS, LEAGUES
 
 
 DB_FILE = "football.db"
-
-# Same as 02's, copied so each script runs on its own
-SEASONS = [2023, 2024, 2025]
-
-LEAGUES = [
-    {"id": 2021, "name": "Premier League", "code": "PL"},
-    {"id": 2014, "name": "La Liga",         "code": "PD"},
-    {"id": 2019, "name": "Serie A",         "code": "SA"},
-    {"id": 2002, "name": "Bundesliga",      "code": "BL1"},
-    {"id": 2015, "name": "Ligue 1",         "code": "FL1"},
-]
 
 
 def fetch_standings(api_key, league_code, start_year):
@@ -165,7 +155,7 @@ def main():
     connection = sqlite3.connect(DB_FILE)
     cursor = connection.cursor()
 
-    jobs = [(year, league) for year in SEASONS for league in LEAGUES]
+    jobs = [(year, league) for year in API_SEASONS for league in LEAGUES]
 
     for i, (year, league) in enumerate(jobs, start=1):
         print(f"\n[{i}/{len(jobs)}] {league['name']} ({league['code']}) {year}")
@@ -191,7 +181,7 @@ def main():
 
     print(
         f"\nDone. Fetched and saved standings for {len(LEAGUES)} leagues "
-        f"x {len(SEASONS)} seasons."
+        f"x {len(API_SEASONS)} seasons."
     )
 
 

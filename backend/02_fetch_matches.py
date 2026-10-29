@@ -10,21 +10,10 @@ import sqlite3
 
 from common.db import ensure_season, season_label
 from common.football_data import SECONDS_BETWEEN_REQUESTS, fetch, load_api_key
+from common.leagues import API_SEASONS, LEAGUES
 
 
 DB_FILE = "football.db"
-
-# Start years (2025 = 2025/26). The free tier returns 403 before 2023
-SEASONS = [2023, 2024, 2025]
-
-# football-data.org's league ids and codes
-LEAGUES = [
-    {"id": 2021, "name": "Premier League", "code": "PL"},
-    {"id": 2014, "name": "La Liga",         "code": "PD"},
-    {"id": 2019, "name": "Serie A",         "code": "SA"},
-    {"id": 2002, "name": "Bundesliga",      "code": "BL1"},
-    {"id": 2015, "name": "Ligue 1",         "code": "FL1"},
-]
 
 # Three-letter codes the API gets wrong. club_id -> code
 TLA_FIXES = {
@@ -127,7 +116,7 @@ def main():
     cursor = connection.cursor()
 
     # Seasons in the outer loop so season_ids follow the year
-    jobs = [(year, league) for year in SEASONS for league in LEAGUES]
+    jobs = [(year, league) for year in API_SEASONS for league in LEAGUES]
 
     for i, (year, league) in enumerate(jobs, start=1):
         print(
@@ -154,7 +143,7 @@ def main():
 
     print(
         f"\nDone. Fetched and inserted {len(LEAGUES)} leagues "
-        f"x {len(SEASONS)} seasons."
+        f"x {len(API_SEASONS)} seasons."
     )
 
 

@@ -12,6 +12,7 @@ import sqlite3
 from collections import defaultdict
 
 from common.db import ensure_season, find_season_id, get_season_clubs
+from common.leagues import API_SEASONS, LEAGUES, UNDERSTAT_ONLY_SEASONS
 from common.understat import (
     SECONDS_BETWEEN_REQUESTS,
     fetch_league_data,
@@ -20,21 +21,6 @@ from common.understat import (
 
 
 DB_FILE = "football.db"
-
-# Understat starts in 2014; 2023+ comes from 02 and 03
-SEASONS = list(range(2014, 2023))
-
-# Only used to learn the Understat ids of clubs already in the database
-RECENT_SEASONS = [2023, 2024, 2025]
-
-# Copied so each script runs on its own
-LEAGUES = [
-    {"id": 2021, "name": "Premier League", "code": "PL",  "understat": "EPL"},
-    {"id": 2014, "name": "La Liga",         "code": "PD",  "understat": "La_liga"},
-    {"id": 2019, "name": "Serie A",         "code": "SA",  "understat": "Serie_A"},
-    {"id": 2002, "name": "Bundesliga",      "code": "BL1", "understat": "Bundesliga"},
-    {"id": 2015, "name": "Ligue 1",         "code": "FL1", "understat": "Ligue_1"},
-]
 
 # Older Understat teams that are the same club. Understat team id -> clubs.name
 # (pre-2015 Parma, refounded after going bankrupt)
@@ -137,7 +123,8 @@ POINTS_PER_GAME_SEASONS = {("FL1", 2019)}
 def learn_known_clubs(cursor, league):
     # Understat team id -> club_id, from the 2023+ seasons
     known = {}
-    for year in RECENT_SEASONS:
+    # Only used to learn the Understat ids of clubs already in the database
+    for year in API_SEASONS:
         season_id = find_season_id(cursor, league["id"], year)
         if season_id is None:
             raise Exception(
@@ -370,7 +357,7 @@ def main():
         print("  Matching clubs already in the database to Understat team ids...")
         known = learn_known_clubs(cursor, league)
 
-        for year in SEASONS:
+        for year in UNDERSTAT_ONLY_SEASONS:
             data = fetch_league_data(league["understat"], year)
             time.sleep(SECONDS_BETWEEN_REQUESTS)
 
@@ -404,8 +391,8 @@ def main():
     connection.close()
 
     print(
-        f"\nDone. Loaded {len(LEAGUES)} leagues x {len(SEASONS)} seasons from "
-        "Understat. Now run 05_calculate_aggregates.py, then "
+        f"\nDone. Loaded {len(LEAGUES)} leagues x "
+        f"{len(UNDERSTAT_ONLY_SEASONS)} seasons from Understat. Now run 05_calculate_aggregates.py, then "
         "06_fetch_understat.py and 07_fetch_crests.py."
     )
 

@@ -13,6 +13,7 @@ import time
 import sqlite3
 
 from common.db import get_season_clubs, get_season_id
+from common.leagues import ALL_SEASONS, LEAGUES
 from common.understat import (
     SECONDS_BETWEEN_REQUESTS,
     fetch_league_data,
@@ -22,18 +23,6 @@ from common.understat import (
 
 
 DB_FILE = "football.db"
-
-# Every season in the database
-SEASONS = list(range(2014, 2026))
-
-# Copied so each script runs on its own. "understat" is the URL name
-LEAGUES = [
-    {"id": 2021, "name": "Premier League", "code": "PL",  "understat": "EPL"},
-    {"id": 2014, "name": "La Liga",         "code": "PD",  "understat": "La_liga"},
-    {"id": 2019, "name": "Serie A",         "code": "SA",  "understat": "Serie_A"},
-    {"id": 2002, "name": "Bundesliga",      "code": "BL1", "understat": "Bundesliga"},
-    {"id": 2015, "name": "Ligue 1",         "code": "FL1", "understat": "Ligue_1"},
-]
 
 # clubs.display_name is Understat's team name, except these.
 # Understat name -> display name
@@ -222,7 +211,7 @@ def main():
     connection = sqlite3.connect(DB_FILE)
     cursor = connection.cursor()
 
-    jobs = [(year, league) for year in SEASONS for league in LEAGUES]
+    jobs = [(year, league) for year in ALL_SEASONS for league in LEAGUES]
     # Player id -> match log, so each player is fetched once per run
     match_cache = {}
 
@@ -255,7 +244,7 @@ def main():
 
     print(
         f"\nDone. Fetched and inserted Understat player stats for "
-        f"{len(LEAGUES)} leagues x {len(SEASONS)} seasons."
+        f"{len(LEAGUES)} leagues x {len(ALL_SEASONS)} seasons."
     )
 
 

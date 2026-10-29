@@ -23,6 +23,8 @@ import unicodedata
 from collections import Counter, defaultdict
 import requests
 
+from common.leagues import LATEST_SEASON, LEAGUES
+
 
 DB_FILE = "football.db"
 CACHE_DIR = "cache"
@@ -30,18 +32,8 @@ TRANSFERMARKT_URL = "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data"
 FOTMOB_URL = "https://www.fotmob.com/api/data"
 PHOTO_URL = "https://images.fotmob.com/image_resources/playerimages/{}.png"
 
-SEASONS = list(range(2014, 2026))
 # FotMob has no player stats before 2016/17
 FOTMOB_FIRST_SEASON = 2016
-
-# League code -> (Transfermarkt competition id, FotMob league id)
-LEAGUES = {
-    "PL": ("GB1", 47),
-    "PD": ("ES1", 87),
-    "SA": ("IT1", 55),
-    "BL1": ("L1", 54),
-    "FL1": ("FR1", 53),
-}
 
 # Names that don't match: understat_player_id -> Transfermarkt player_id
 TRANSFERMARKT_IDS = {
@@ -164,7 +156,7 @@ def read_transfermarkt(table):
 
 
 def load_transfermarkt():
-    competitions = {tm_id: code for code, (tm_id, _) in LEAGUES.items()}
+    competitions = {league["transfermarkt"]: league["code"] for league in LEAGUES}
     games = {
         game["game_id"]: (competitions[game["competition_id"]], int(game["season"]))
         for game in read_transfermarkt("games")
@@ -194,21 +186,22 @@ def fotmob_get(url, params=None):
     return response.json()
 
 
-def load_fotmob_season(code, year):
+def load_fotmob_season(league, year):
     # The latest season is always refetched
+    code = league["code"]
     path = os.path.join(CACHE_DIR, "fotmob", f"{code}-{year}.json")
-    if os.path.exists(path) and year != SEASONS[-1]:
+    if os.path.exists(path) and year != LATEST_SEASON:
         with open(path, encoding="utf-8") as file:
             return json.load(file)
 
     print(f"  FotMob {code} {year}")
-    league = fotmob_get(
+    league_page = fotmob_get(
         f"{FOTMOB_URL}/leagues",
-        {"id": LEAGUES[code][1], "season": f"{year}/{year + 1}"},
+        {"id": league["fotmob"], "season": f"{year}/{year + 1}"},
     )
     url = next(
         stat["fetchAllUrl"]
-        for stat in league["stats"]["players"]
+        for stat in league_page["stats"]["players"]
         if stat["fetchAllUrl"].endswith("/mins_played.json")
     )
     players = [
@@ -225,10 +218,10 @@ def load_fotmob_season(code, year):
 
 def load_fotmob():
     season_players = defaultdict(dict)
-    for year in range(FOTMOB_FIRST_SEASON, SEASONS[-1] + 1):
-        for code in LEAGUES:
-            for p in load_fotmob_season(code, year):
-                name, teams = season_players[(code, year)].setdefault(
+    for year in range(FOTMOB_FIRST_SEASON, LATEST_SEASON + 1):
+        for league in LEAGUES:
+            for p in load_fotmob_season(league, year):
+                name, teams = season_players[(league["code"], year)].setdefault(
                     p["id"], (p["name"], set())
                 )
                 teams.add(p["teamId"])
