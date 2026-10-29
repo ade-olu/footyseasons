@@ -34,6 +34,7 @@ the same clean dashboard feel as the apps I use every week.
 - **React 19 + TypeScript:** Frontend, built with Vite and React Compiler
 - **SCSS:** Styling, with BEM class names
 - **React Router:** Routing, with the league and season in the URL
+- **TanStack Query:** Loading and caching API data
 - **Node.js + Express:** Read-only JSON API
 - **SQLite (better-sqlite3):** Database
 - **Python:** Data pipeline
