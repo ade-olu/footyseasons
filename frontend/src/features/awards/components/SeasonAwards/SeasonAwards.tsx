@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "@/api/config";
-import AwardCard from "@/components/cards/AwardCard/AwardCard";
+import AwardCard from "@/features/awards/components/AwardCard/AwardCard";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import { LEAGUES, type LeagueCode } from "@/data/leagues";

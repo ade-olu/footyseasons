@@ -1,6 +1,6 @@
 import FinalDayMatches from "@/features/matches/components/FinalDayMatches/FinalDayMatches";
 import HeroBanner from "@/components/overview/HeroBanner/HeroBanner";
-import SeasonAwards from "@/components/overview/SeasonAwards/SeasonAwards";
+import SeasonAwards from "@/features/awards/components/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "@/components/overview/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "@/data/leagues";
 import { pageTitle } from "@/utils/pageTitle";
