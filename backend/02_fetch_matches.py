@@ -7,11 +7,12 @@ Safe to re-run: existing matches get their date, status and score updated.
 
 import time
 import sqlite3
-import requests
+
+from common.db import ensure_season, season_label
+from common.football_data import SECONDS_BETWEEN_REQUESTS, fetch, load_api_key
 
 
 DB_FILE = "football.db"
-API_KEY_FILE = "api_key.txt"
 
 # Start years (2025 = 2025/26). The free tier returns 403 before 2023
 SEASONS = [2023, 2024, 2025]
@@ -30,35 +31,13 @@ TLA_FIXES = {
     576: "STR",  # Strasbourg, "RC " in the API
 }
 
-# Pause between requests to stay under the free tier's 10 calls/minute
-SECONDS_BETWEEN_REQUESTS = 7
-
-
-def load_api_key():
-    # Kept out of git
-    with open(API_KEY_FILE, "r") as f:
-        return f.read().strip()
-
-
-def season_label(start_year):
-    # 2025 -> "2025/26"
-    return f"{start_year}/{str(start_year + 1)[-2:]}"
-
 
 def fetch_matches(api_key, league_code, start_year):
-    headers = {"X-Auth-Token": api_key}
-    params = {"season": start_year}
-
-    url = f"https://api.football-data.org/v4/competitions/{league_code}/matches"
-    response = requests.get(url, headers=headers, params=params)
-
-    if response.status_code != 200:
-        raise Exception(
-            f"API request failed for {league_code} with status "
-            f"{response.status_code}: {response.text}"
-        )
-
-    data = response.json()
+    data = fetch(
+        api_key,
+        f"/competitions/{league_code}/matches",
+        {"season": start_year},
+    )
 
     matches = data["matches"]
     expected_count = data["resultSet"]["count"]
@@ -79,24 +58,6 @@ def ensure_league(cursor, league_id, league_name, league_code):
         "INSERT OR IGNORE INTO leagues (league_id, name, code) VALUES (?, ?, ?)",
         (league_id, league_name, league_code),
     )
-
-
-def ensure_season(cursor, league_id, start_year):
-    # season_id is autoincrement, so look for an existing row first
-    cursor.execute(
-        "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
-        (league_id, start_year),
-    )
-    row = cursor.fetchone()
-
-    if row is not None:
-        return row[0]
-
-    cursor.execute(
-        "INSERT INTO seasons (league_id, start_year, label) VALUES (?, ?, ?)",
-        (league_id, start_year, season_label(start_year)),
-    )
-    return cursor.lastrowid
 
 
 def ensure_clubs(cursor, matches):

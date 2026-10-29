@@ -8,11 +8,17 @@ Uses INSERT OR IGNORE, so existing rows don't update on a re-run.
 
 import time
 import sqlite3
-import requests
+
+from common.db import get_season_id
+from common.football_data import (
+    SECONDS_BETWEEN_REQUESTS,
+    ensure_club,
+    fetch,
+    load_api_key,
+)
 
 
 DB_FILE = "football.db"
-API_KEY_FILE = "api_key.txt"
 
 # Same as 02's, copied so each script runs on its own
 SEASONS = [2023, 2024, 2025]
@@ -28,66 +34,17 @@ LEAGUES = [
 # The API defaults to 10
 SCORERS_LIMIT = 100
 
-# Pause between requests to stay under the free tier's 10 calls/minute
-SECONDS_BETWEEN_REQUESTS = 7
-
-
-def load_api_key():
-    with open(API_KEY_FILE, "r") as f:
-        return f.read().strip()
-
 
 def fetch_scorers(api_key, league_code, start_year):
-    headers = {"X-Auth-Token": api_key}
-    params = {"season": start_year, "limit": SCORERS_LIMIT}
-
-    url = f"https://api.football-data.org/v4/competitions/{league_code}/scorers"
-    response = requests.get(url, headers=headers, params=params)
-
-    if response.status_code != 200:
-        raise Exception(
-            f"API request failed for {league_code} scorers with status "
-            f"{response.status_code}: {response.text}"
-        )
-
-    data = response.json()
+    data = fetch(
+        api_key,
+        f"/competitions/{league_code}/scorers",
+        {"season": start_year, "limit": SCORERS_LIMIT},
+    )
     scorers = data["scorers"]
 
     print(f"  Fetched {len(scorers)} scorers for {league_code}.")
     return scorers
-
-
-def get_season_id(cursor, league_id, start_year):
-    # Look-up only: 02 creates the seasons
-    cursor.execute(
-        "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
-        (league_id, start_year),
-    )
-    row = cursor.fetchone()
-
-    if row is None:
-        raise Exception(
-            f"No season found for league_id {league_id}, start_year "
-            f"{start_year}. Run 02_fetch_matches.py for this "
-            "league first."
-        )
-
-    return row[0]
-
-
-def ensure_club(cursor, team):
-    # In case 02 didn't add the club
-    cursor.execute(
-        """INSERT OR IGNORE INTO clubs (club_id, name, short_name, tla, crest_url)
-           VALUES (?, ?, ?, ?, ?)""",
-        (
-            team["id"],
-            team.get("name"),
-            team.get("shortName"),
-            team.get("tla"),
-            team.get("crest"),
-        ),
-    )
 
 
 def insert_scorers(cursor, scorers, season_id):
