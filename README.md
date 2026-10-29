@@ -162,12 +162,21 @@ backend/
 frontend/
   public/crests/      # club crests (SVG)
   src/
-    pages/            # one folder per page
-    components/       # layout, ui, cards, and sections per page
+    pages/            # one folder per page, built from features
+    features/         # standings, matches, players, awards, season
+      standings/
+        components/   # league table and its page sections
+        data/         # table places (European spots, relegation)
+        utils/        # last-5 form
+    components/       # shared layout and ui components
     api/              # API calls and caching
-    data/             # leagues, table places, hero images
+    data/             # leagues, short club names
     styles/           # type scale, breakpoints, motion
 ```
+
+The frontend is organised by feature. Each feature folder holds the
+components, data and helpers for one part of the app, pages combine features,
+and features only import shared code, never each other.
 
 ## Roadmap
 
