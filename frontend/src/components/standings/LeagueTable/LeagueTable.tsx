@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { fetchSeasonData } from "../../../api/seasonData";
-import SectionCard from "../../ui/SectionCard/SectionCard";
-import SectionHeader from "../../ui/SectionHeader/SectionHeader";
-import SegmentedControl from "../../ui/SegmentedControl/SegmentedControl";
-import Dropdown from "../../ui/Dropdown/Dropdown";
+import { fetchSeasonData } from "@/api/seasonData";
+import SectionCard from "@/components/ui/SectionCard/SectionCard";
+import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
+import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl";
+import Dropdown from "@/components/ui/Dropdown/Dropdown";
 import StandingsTable, {
   type FormResult,
   type TableView,
-} from "../../cards/StandingsTable/StandingsTable";
-import { LEAGUES, type LeagueCode } from "../../../data/leagues";
-import { TABLE_PLACES } from "../../../data/tablePlaces";
-import { getClubForm } from "../../../utils/form";
-import type { Standing, StandingsResponse } from "../../../types/api"; // Types for API responses
+} from "@/components/cards/StandingsTable/StandingsTable";
+import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { TABLE_PLACES } from "@/data/tablePlaces";
+import { getClubForm } from "@/utils/form";
+import type { Standing, StandingsResponse } from "@/types/api"; // Types for API responses
 import "./LeagueTable.scss";
 
 // Which matches the table counts

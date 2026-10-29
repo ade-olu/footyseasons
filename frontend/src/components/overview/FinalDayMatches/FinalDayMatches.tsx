@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { fetchSeasonData } from "../../../api/seasonData";
-import MatchResult from "../../cards/MatchResult/MatchResult";
-import SectionCard from "../../ui/SectionCard/SectionCard";
-import SectionHeader from "../../ui/SectionHeader/SectionHeader";
-import type { LeagueCode } from "../../../data/leagues";
-import type { Match } from "../../../types/api"; // Types for API responses
+import { fetchSeasonData } from "@/api/seasonData";
+import MatchResult from "@/components/cards/MatchResult/MatchResult";
+import SectionCard from "@/components/ui/SectionCard/SectionCard";
+import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
+import type { LeagueCode } from "@/data/leagues";
+import type { Match } from "@/types/api"; // Types for API responses
 import "./FinalDayMatches.scss";
 
 // Statuses of matches that count as played

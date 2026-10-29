@@ -1,6 +1,6 @@
-import ClubCrest from "../../ui/ClubCrest/ClubCrest";
-import { getTableName } from "../../../data/tableNames";
-import type { Match } from "../../../types/api"; // Types for API responses
+import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
+import { getTableName } from "@/data/tableNames";
+import type { Match } from "@/types/api"; // Types for API responses
 import "./MatchResult.scss";
 
 // Props for the MatchResult component: one played match

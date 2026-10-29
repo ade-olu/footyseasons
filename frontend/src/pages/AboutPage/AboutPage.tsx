@@ -1,4 +1,4 @@
-import { pageTitle } from "../../utils/pageTitle";
+import { pageTitle } from "@/utils/pageTitle";
 
 // About page ("/about")
 // Placeholder until the page is designed and built

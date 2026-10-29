@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../../../api/config";
+import { API_URL } from "@/api/config";
 import type { RefObject } from "react";
 import { Menu as MenuIcon } from "reicon-react"; // Opens the sidebar below laptop width
-import Dropdown from "../../ui/Dropdown/Dropdown";
-import type { LeagueCode } from "../../../data/leagues";
-import { LEAGUES } from "../../../data/leagues";
-import type { League, Season } from "../../../types/api";
+import Dropdown from "@/components/ui/Dropdown/Dropdown";
+import type { LeagueCode } from "@/data/leagues";
+import { LEAGUES } from "@/data/leagues";
+import type { League, Season } from "@/types/api";
 
 import "./Navbar.scss";
 

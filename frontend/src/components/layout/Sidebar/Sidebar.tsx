@@ -1,11 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import { useEffect, useRef, type ComponentType } from "react";
 import { X as CloseIcon } from "reicon-react";
-import { LEAGUES, type LeagueCode } from "../../../data/leagues";
+import { LEAGUES, type LeagueCode } from "@/data/leagues";
 import "./Sidebar.scss";
 
 // Sidebar icons
-import logoIcon from "../../../assets/logo.svg";
+import logoIcon from "@/assets/logo.svg";
 import { Grid as OverviewIcon } from "reicon-react";
 import { Trophy as StandingsIcon } from "reicon-react";
 import { CalendarDays as MatchesIcon } from "reicon-react";

@@ -1,6 +1,6 @@
 import { API_URL } from "./config";
-import type { LeagueCode } from "../data/leagues";
-import type { Match, StandingsResponse } from "../types/api"; // Types for API responses
+import type { LeagueCode } from "@/data/leagues";
+import type { Match, StandingsResponse } from "@/types/api"; // Types for API responses
 
 // A league season's standings and matches
 export type SeasonData = {

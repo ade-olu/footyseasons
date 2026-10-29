@@ -1,4 +1,4 @@
-import ClubCrest from "../../ui/ClubCrest/ClubCrest";
+import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import "./HighlightCard.scss";
 
 // Club shown next to the value (e.g. the club with the best win streak)

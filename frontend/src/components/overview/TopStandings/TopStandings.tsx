@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { fetchSeasonData } from "../../../api/seasonData";
-import SectionCard from "../../ui/SectionCard/SectionCard";
-import SectionHeader from "../../ui/SectionHeader/SectionHeader";
+import { fetchSeasonData } from "@/api/seasonData";
+import SectionCard from "@/components/ui/SectionCard/SectionCard";
+import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import StandingsTable, {
   type FormResult,
-} from "../../cards/StandingsTable/StandingsTable";
-import { LEAGUES, type LeagueCode } from "../../../data/leagues";
-import { TABLE_PLACES } from "../../../data/tablePlaces";
-import { getClubForm } from "../../../utils/form";
-import type { StandingsResponse } from "../../../types/api"; // Types for API responses
+} from "@/components/cards/StandingsTable/StandingsTable";
+import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { TABLE_PLACES } from "@/data/tablePlaces";
+import { getClubForm } from "@/utils/form";
+import type { StandingsResponse } from "@/types/api"; // Types for API responses
 import "./TopStandings.scss";
 
 // Number of clubs shown on the overview

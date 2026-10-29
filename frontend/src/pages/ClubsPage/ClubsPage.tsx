@@ -1,5 +1,5 @@
-import type { LeagueCode } from "../../data/leagues";
-import { pageTitle } from "../../utils/pageTitle";
+import type { LeagueCode } from "@/data/leagues";
+import { pageTitle } from "@/utils/pageTitle";
 
 // Props for the ClubsPage: the selected league and season start year (2025 = 2025/26)
 type ClubsPageProps = {

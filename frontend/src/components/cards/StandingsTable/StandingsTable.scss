@@ -1,7 +1,7 @@
 @use "sass:color";
-@use "../../../styles/functions" as *;
-@use "../../../styles/typography" as *;
-@use "../../../styles/breakpoints" as *;
+@use "@/styles/functions" as *;
+@use "@/styles/typography" as *;
+@use "@/styles/breakpoints" as *;
 
 // Standings Table color variables
 $standings-table-text: #0b0f0e;

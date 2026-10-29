@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useSelection } from "../../../hooks/useSelection";
+import { useSelection } from "@/hooks/useSelection";
 import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import "./SectionHeader.scss";
 

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../../../api/config";
-import { fetchSeasonData } from "../../../api/seasonData";
-import HighlightCard from "../../cards/HighlightCard/HighlightCard";
+import { API_URL } from "@/api/config";
+import { fetchSeasonData } from "@/api/seasonData";
+import HighlightCard from "@/components/cards/HighlightCard/HighlightCard";
 
-import type { LeagueCode } from "../../../data/leagues";
-import type { PlayersResponse, Standing } from "../../../types/api"; // Types for API responses
+import type { LeagueCode } from "@/data/leagues";
+import type { PlayersResponse, Standing } from "@/types/api"; // Types for API responses
 
 // Everything the highlight cards need, worked out from the standings, matches and players responses
 type HighlightsData = {

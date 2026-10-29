@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useSelection } from "../../hooks/useSelection";
-import { pageTitle } from "../../utils/pageTitle";
+import { useSelection } from "@/hooks/useSelection";
+import { pageTitle } from "@/utils/pageTitle";
 
 // Shown for any URL that doesn't match a route
 export default function NotFoundPage() {

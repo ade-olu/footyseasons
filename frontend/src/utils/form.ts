@@ -1,5 +1,5 @@
-import type { FormResult } from "../components/cards/StandingsTable/StandingsTable";
-import type { Match } from "../types/api";
+import type { FormResult } from "@/components/cards/StandingsTable/StandingsTable";
+import type { Match } from "@/types/api";
 
 // Statuses that count as a result in the table (an AWARDED score is given without the game being played)
 const PLAYED_STATUSES = new Set(["FINISHED", "AWARDED"]);

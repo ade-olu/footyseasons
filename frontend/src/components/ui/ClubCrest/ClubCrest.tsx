@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Shield as ShieldIcon } from "reicon-react"; // Placeholder shown when a crest is missing or fails to load
-import { DARK_CRESTS } from "../../../data/darkCrests";
+import { DARK_CRESTS } from "@/data/darkCrests";
 import "./ClubCrest.scss";
 
 // Props for the ClubCrest component: the crest URL from the API, the club name for alt text,

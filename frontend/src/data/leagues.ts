@@ -1,11 +1,11 @@
 // League logos
-import premierLeagueLogo from "../assets/sidebar/premier-league-logo.svg";
-import premierLeaguelogoAlt from "../assets/sidebar/premier-league-logo-alt.svg";
-import laLigaLogo from "../assets/sidebar/la-liga-logo.svg";
-import serieALogo from "../assets/sidebar/serie-a-logo.svg";
-import bundesligaLogo from "../assets/sidebar/bundesliga-logo.svg";
-import ligue1Logo from "../assets/sidebar/ligue-1-logo.svg";
-import ligue1logoAlt from "../assets/sidebar/ligue-1-logo-alt.svg";
+import premierLeagueLogo from "@/assets/sidebar/premier-league-logo.svg";
+import premierLeaguelogoAlt from "@/assets/sidebar/premier-league-logo-alt.svg";
+import laLigaLogo from "@/assets/sidebar/la-liga-logo.svg";
+import serieALogo from "@/assets/sidebar/serie-a-logo.svg";
+import bundesligaLogo from "@/assets/sidebar/bundesliga-logo.svg";
+import ligue1Logo from "@/assets/sidebar/ligue-1-logo.svg";
+import ligue1logoAlt from "@/assets/sidebar/ligue-1-logo-alt.svg";
 
 // League codes (same as the ones used in the API)
 export type LeagueCode = "PL" | "PD" | "SA" | "BL1" | "FL1";

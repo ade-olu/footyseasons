@@ -1,4 +1,4 @@
-import { LEAGUES, type LeagueCode } from "../data/leagues";
+import { LEAGUES, type LeagueCode } from "@/data/leagues";
 
 // Browser tab title, e.g. "Standings - Premier League 2016/17 | FootySeasons"
 export function pageTitle(page: string, league?: LeagueCode, season?: number) {

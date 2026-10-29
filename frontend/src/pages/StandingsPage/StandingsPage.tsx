@@ -1,8 +1,8 @@
-import LeagueTable from "../../components/standings/LeagueTable/LeagueTable";
-import StandingsBanner from "../../components/standings/StandingsBanner/StandingsBanner";
-import StandingsHighlights from "../../components/standings/StandingsHighlights/StandingsHighlights";
-import type { LeagueCode } from "../../data/leagues";
-import { pageTitle } from "../../utils/pageTitle";
+import LeagueTable from "@/components/standings/LeagueTable/LeagueTable";
+import StandingsBanner from "@/components/standings/StandingsBanner/StandingsBanner";
+import StandingsHighlights from "@/components/standings/StandingsHighlights/StandingsHighlights";
+import type { LeagueCode } from "@/data/leagues";
+import { pageTitle } from "@/utils/pageTitle";
 import "./StandingsPage.scss";
 
 // Props for the StandingsPage: the selected league and season start year (2025 = 2025/26)

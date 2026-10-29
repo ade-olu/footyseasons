@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CupStar as TrophyIcon } from "reicon-react";
 import { User as UserIcon } from "reicon-react"; // Placeholder shown when there's no photo
-import ClubCrest from "../../ui/ClubCrest/ClubCrest";
+import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import "./AwardCard.scss";
 
 // Club the winner played (or managed) for

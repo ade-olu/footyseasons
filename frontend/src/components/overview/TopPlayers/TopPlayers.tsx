@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../../../api/config";
-import ClubCrest from "../../ui/ClubCrest/ClubCrest";
-import PlayerPhoto from "../../ui/PlayerPhoto/PlayerPhoto";
-import SectionCard from "../../ui/SectionCard/SectionCard";
-import SectionHeader from "../../ui/SectionHeader/SectionHeader";
-import type { LeagueCode } from "../../../data/leagues";
-import type { Player, PlayersResponse } from "../../../types/api"; // Types for API responses
+import { API_URL } from "@/api/config";
+import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
+import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
+import SectionCard from "@/components/ui/SectionCard/SectionCard";
+import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
+import type { LeagueCode } from "@/data/leagues";
+import type { Player, PlayersResponse } from "@/types/api"; // Types for API responses
 import "./TopPlayers.scss";
 
 // Number of players shown on the overview

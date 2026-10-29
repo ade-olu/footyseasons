@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef } from "react";
-import ClubCrest from "../../ui/ClubCrest/ClubCrest";
+import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import {
   getTableZone,
   type TablePlaces,
   type TableZone,
-} from "../../../data/tablePlaces";
-import { getTableName } from "../../../data/tableNames";
-import type { Standing } from "../../../types/api";
+} from "@/data/tablePlaces";
+import { getTableName } from "@/data/tableNames";
+import type { Standing } from "@/types/api";
 import "./StandingsTable.scss";
 
 // One letter of a club's form: win, draw or loss

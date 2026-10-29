@@ -1,7 +1,7 @@
-@use "../../../styles/functions" as *;
-@use "../../../styles/typography" as *;
-@use "../../../styles/motion" as *;
-@use "../../../styles/breakpoints" as *;
+@use "@/styles/functions" as *;
+@use "@/styles/typography" as *;
+@use "@/styles/motion" as *;
+@use "@/styles/breakpoints" as *;
 
 // Sidebar styles using SCSS variables for colors
 $sidebar-bg: #0b0f0e;
