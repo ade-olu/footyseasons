@@ -8,8 +8,8 @@
 -- by the Python scripts.
 --
 -- 9 tables total: leagues, seasons, clubs, matches,
--- player_season_stats, club_season_stats,
--- understat_player_stats, understat_player_clubs, season_awards
+-- club_season_stats, understat_player_stats,
+-- understat_player_clubs, season_awards, player_profiles
 -- ============================================================
 
 -- PRAGMA = a SQLite-specific settings command (not standard SQL).
@@ -109,32 +109,6 @@ CREATE INDEX idx_matches_utc_date ON matches(utc_date);    -- needed for anythin
 
 
 -- ------------------------------------------------------------
--- TABLE: player_season_stats
--- One row per player PER SEASON PER CLUB (a player who is
--- transferred mid-season would get two rows — one per club).
--- ------------------------------------------------------------
-CREATE TABLE player_season_stats (
-    id           INTEGER PRIMARY KEY AUTOINCREMENT,
-    season_id    INTEGER NOT NULL,
-    club_id      INTEGER NOT NULL,
-    player_name  TEXT NOT NULL,
-    goals        INTEGER DEFAULT 0,
-    assists      INTEGER DEFAULT 0,   -- API sometimes sends null for this — the fetch script converts null to 0 before inserting, so this column should never actually be empty
-
-    FOREIGN KEY (season_id) REFERENCES seasons(season_id),
-    FOREIGN KEY (club_id)   REFERENCES clubs(club_id),
-
-    -- This is "the uniqueness guard" mentioned in the handoff:
-    -- it stops the same player/club/season combination from ever
-    -- being inserted twice, even if you accidentally run the
-    -- fetch script more than once.
-    UNIQUE (season_id, club_id, player_name)
-);
-
-CREATE INDEX idx_player_stats_season_club ON player_season_stats(season_id, club_id);
-
-
--- ------------------------------------------------------------
 -- TABLE: club_season_stats
 -- One row per club PER SEASON. This is the "everything about
 -- how this club's season went" table — mostly filled in by the
@@ -189,8 +163,7 @@ CREATE INDEX idx_club_season_stats_season ON club_season_stats(season_id);
 -- ------------------------------------------------------------
 -- TABLE: understat_player_stats
 -- One row per player PER SEASON, for EVERY player who played in
--- the league (not just the top 100 scorers like
--- player_season_stats). Filled in by 07_fetch_understat.py from
+-- the league. Filled in by 07_fetch_understat.py from
 -- understat.com, which also gives minutes, xG and xA.
 --
 -- A player who moved clubs mid-season gets ONE row with their

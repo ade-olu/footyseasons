@@ -1,6 +1,6 @@
 """
 common/football_data.py
-Requests to football-data.org v4, shared by 02, 03 and 04.
+Requests to football-data.org v4, shared by 02 and 04.
 """
 
 import requests
