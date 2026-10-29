@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import {
   Navigate,
   Outlet,
@@ -10,6 +10,8 @@ import {
 import Navbar from "./components/layout/Navbar/Navbar";
 import "./styles/App.scss";
 import Sidebar from "./components/layout/Sidebar/Sidebar";
+import type { LeagueCode } from "./data/leagues";
+import type { LeaguePagePath } from "./data/pages";
 import { useSelection } from "./hooks/useSelection";
 import OverviewPage from "./pages/OverviewPage/OverviewPage";
 import StandingsPage from "./pages/StandingsPage/StandingsPage";
@@ -18,6 +20,18 @@ import PlayerStatsPage from "./pages/PlayerStatsPage/PlayerStatsPage";
 import ClubsPage from "./pages/ClubsPage/ClubsPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+
+// Each league page in PAGES and its component; a page missing here won't compile
+const LEAGUE_PAGES: Record<
+  LeaguePagePath,
+  ComponentType<{ league: LeagueCode; season: number }>
+> = {
+  "": OverviewPage,
+  "/standings": StandingsPage,
+  "/matches": MatchesPage,
+  "/player-stats": PlayerStatsPage,
+  "/clubs": ClubsPage,
+};
 
 function App() {
   // Selected league and season, read from and written to the URL
@@ -76,31 +90,15 @@ function App() {
               path="/:league"
               element={isLeaguePage ? <Outlet /> : <NotFoundPage />}
             >
-              {/* Overview page route */}
-              <Route
-                index
-                element={<OverviewPage league={league} season={season} />}
-              />
-              {/* Standings page route */}
-              <Route
-                path="standings"
-                element={<StandingsPage league={league} season={season} />}
-              />
-              {/* Matches page route */}
-              <Route
-                path="matches"
-                element={<MatchesPage league={league} season={season} />}
-              />
-              {/* Player Stats page route */}
-              <Route
-                path="player-stats"
-                element={<PlayerStatsPage league={league} season={season} />}
-              />
-              {/* Clubs page route */}
-              <Route
-                path="clubs"
-                element={<ClubsPage league={league} season={season} />}
-              />
+              {Object.entries(LEAGUE_PAGES).map(([path, Page]) => {
+                const element = <Page league={league} season={season} />;
+                // Overview is the league's index route
+                return path === "" ? (
+                  <Route key="overview" index element={element} />
+                ) : (
+                  <Route key={path} path={path.slice(1)} element={element} />
+                );
+              })}
             </Route>
             {/* 404 page route */}
             <Route path="*" element={<NotFoundPage />} />

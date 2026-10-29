@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import type { LeaguePagePath } from "@/data/pages";
 import { useSelection } from "@/hooks/useSelection";
 import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import "./SectionHeader.scss";
@@ -6,7 +7,7 @@ import "./SectionHeader.scss";
 // Link shown on the right of the header (e.g. "All players ›")
 type SectionHeaderAction = {
   label: string;
-  to: string;
+  to: LeaguePagePath;
 };
 
 // Props for the SectionHeader component: a title, plus an optional description and link

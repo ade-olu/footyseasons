@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import type { LeaguePagePath } from "@/data/pages";
 
 // Season range as start years (2025 = 2025/26)
 export const EARLIEST_SEASON = 2014;
@@ -65,6 +66,7 @@ export function useSelection() {
     setLeague: (nextLeague: LeagueCode) => select({ league: nextLeague }),
     setSeason: (nextSeason: number) => select({ season: nextSeason }),
     // Link to a league page for the current selection, e.g. pathTo("/standings")
-    pathTo: (leaguePage: string) => leaguePath(league, leaguePage, season),
+    pathTo: (leaguePage: LeaguePagePath) =>
+      leaguePath(league, leaguePage, season),
   };
 }
