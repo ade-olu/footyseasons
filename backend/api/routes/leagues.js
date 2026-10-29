@@ -166,32 +166,6 @@ router.get("/:code/matches", (req, res) => {
   res.json(matches);
 });
 
-// Get the top scorers for a league.
-router.get("/:code/scorers", (req, res) => {
-  const season = resolveSeason(req, res);
-  if (!season) return;
-
-  // Limit the number of scorers returned.
-  const limit = Number(req.query.limit) || 20;
-
-  const scorers = db
-    .prepare(
-      `
-    SELECT
-      ps.player_name AS playerName, ps.goals, ps.assists,
-      c.club_id AS clubId, c.name AS clubName, c.crest_url AS crestUrl
-    FROM player_season_stats ps
-    JOIN clubs c ON c.club_id = ps.club_id
-    WHERE ps.season_id = ?
-    ORDER BY ps.goals DESC
-    LIMIT ?
-  `,
-    )
-    .all(season.seasonId, limit);
-
-  res.json(scorers);
-});
-
 // Columns /players can be sorted by, with tie-breakers. Whitelisted so ?sort= never goes into SQL directly.
 const PLAYER_SORTS = {
   goals: "ps.goals DESC, ps.xg DESC",
