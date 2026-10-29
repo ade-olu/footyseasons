@@ -1,4 +1,4 @@
-import { API_URL } from "./config";
+import { API_URL } from "@/api/config";
 
 // GETs an API path (e.g. "/leagues/PL/awards?season=2025") as JSON; throws on an error status
 export async function fetchJson<T>(

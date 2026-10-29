@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchJson } from "./fetchJson";
+import { fetchJson } from "@/api/fetchJson";
 import type { League } from "@/types/api"; // Types for API responses
 
 // Every league and its seasons, newest first (loaded once per visit)

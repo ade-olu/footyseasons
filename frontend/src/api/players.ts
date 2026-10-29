@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchJson } from "./fetchJson";
+import { fetchJson } from "@/api/fetchJson";
 import type { LeagueCode } from "@/data/leagues";
 import type { PlayersResponse } from "@/types/api"; // Types for API responses
 
