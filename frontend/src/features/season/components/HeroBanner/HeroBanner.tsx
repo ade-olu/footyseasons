@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { fetchSeasonData } from "@/api/seasonData";
+import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import "./HeroBanner.scss";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 
@@ -18,8 +17,6 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
 
 // Everything the hero needs, worked out from the standings and matches responses
 type HeroData = {
-  league: LeagueCode;
-  season: number;
   champion: Standing;
   runnerUp: Standing | undefined;
   clubCount: number;
@@ -35,15 +32,11 @@ type HeroBannerProps = {
   season: number;
 };
 
-// Gets standings + matches for a league's season and turns them into HeroData
-async function fetchHeroData(
-  league: LeagueCode,
-  season: number,
-): Promise<HeroData> {
-  const {
-    standings: { standings, championClubId },
-    matches,
-  } = await fetchSeasonData(league, season);
+// Turns a league season's standings and matches into HeroData
+function getHeroData({
+  standings: { standings, championClubId },
+  matches,
+}: SeasonData): HeroData {
 
   // Champion comes from the API; fall back to the top of the table if it's missing
   const champion =
@@ -62,8 +55,6 @@ async function fetchHeroData(
   const times = played.map((match) => new Date(match.utcDate).getTime());
 
   return {
-    league,
-    season,
     champion,
     runnerUp,
     clubCount: standings.length,
@@ -76,43 +67,10 @@ async function fetchHeroData(
 
 // HeroBanner component that shows the season summary and champion over a stadium photo
 export default function HeroBanner({ league, season }: HeroBannerProps) {
-  const [data, setData] = useState<HeroData | null>(null);
-  const [error, setError] = useState<{
-    league: LeagueCode;
-    season: number;
-    message: string;
-  } | null>(null);
-
-  // Refetch whenever the selected league or season changes
-  useEffect(() => {
-    // Ignores the result if the selection changes before it arrives
-    let ignore = false;
-
-    fetchHeroData(league, season)
-      .then((hero) => {
-        if (!ignore) {
-          setData(hero);
-          setError(null);
-        }
-      })
-      .catch((err: Error) => {
-        if (!ignore) {
-          setError({ league, season, message: err.message });
-        }
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [league, season]);
-
-  // Old data or errors from a previous selection don't count for the current one
-  const hasError = error?.league === league && error.season === season;
-  const isLoading =
-    !hasError && (data?.league !== league || data.season !== season);
+  const { data: seasonData, error } = useSeasonData(league, season);
 
   // Error state
-  if (hasError) {
+  if (error) {
     return (
       <section className="hero-banner hero-banner--empty" role="alert">
         <p className="hero-banner__message">{error.message}</p>
@@ -121,7 +79,7 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
   }
 
   // Loading state (keeps the same height so the page doesn't jump)
-  if (isLoading || !data) {
+  if (!seasonData) {
     return (
       <section
         className="hero-banner hero-banner--empty"
@@ -131,6 +89,7 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
     );
   }
 
+  const data = getHeroData(seasonData);
   const { champion, runnerUp } = data; // Extract the champion and runner-up from the hero data
   const photo = getHeroImage(champion.clubId, season); // Get the hero image for the champion's stadium
   const story = SEASON_STORIES[`${league}-${season}`]; // Get the hand-written story for the selected season, if available

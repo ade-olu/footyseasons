@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { fetchSeasonData } from "@/api/seasonData";
+import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import MatchResult from "@/features/matches/components/MatchResult/MatchResult";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
@@ -10,8 +9,6 @@ import "./FinalDayMatches.scss";
 
 // The last matchweek's results for one league and season
 type FinalDayData = {
-  league: LeagueCode;
-  season: number;
   matchweek: number;
   days: MatchDay[];
   isFinal: boolean; // The season has a champion, so its last matchweek is the final one
@@ -89,17 +86,11 @@ function groupByDay(matches: PlayedMatch[]): MatchDay[] {
   return days;
 }
 
-// Gets the last matchweek and champion for a league's season
-async function fetchFinalDayData(
-  league: LeagueCode,
-  season: number,
-): Promise<FinalDayData> {
-  const { standings, matches } = await fetchSeasonData(league, season);
+// The last matchweek and whether the season is over, from its standings and matches
+function getFinalDayData({ standings, matches }: SeasonData): FinalDayData {
   const lastMatchweek = getLastMatchweek(matches);
 
   return {
-    league,
-    season,
     matchweek: lastMatchweek.matchweek,
     days: groupByDay(lastMatchweek.matches),
     isFinal: standings.championClubId !== null,
@@ -142,42 +133,11 @@ export default function FinalDayMatches({
   league,
   season,
 }: FinalDayMatchesProps) {
-  const [data, setData] = useState<FinalDayData | null>(null);
-  const [error, setError] = useState<{
-    league: LeagueCode;
-    season: number;
-  } | null>(null);
+  const { data: seasonData, isError } = useSeasonData(league, season);
+  const data = seasonData ? getFinalDayData(seasonData) : null;
 
-  // Refetch whenever the selected league or season changes
-  useEffect(() => {
-    // Ignores the result if the selection changes before it arrives
-    let ignore = false;
-
-    fetchFinalDayData(league, season)
-      .then((result) => {
-        if (!ignore) {
-          setData(result);
-          setError(null);
-        }
-      })
-      .catch(() => {
-        if (!ignore) {
-          setError({ league, season });
-        }
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [league, season]);
-
-  // Old data or errors from a previous selection don't count for the current one
-  const hasError = error?.league === league && error.season === season;
-  const isReady =
-    !hasError && data?.league === league && data.season === season;
-
-  const isFinal = !isReady || data.isFinal;
-  const hasMatches = isReady && data.days.length > 0;
+  const isFinal = !data || data.isFinal;
+  const hasMatches = data !== null && data.days.length > 0;
 
   return (
     <SectionCard className="final-day-matches">
@@ -212,9 +172,9 @@ export default function FinalDayMatches({
         </div>
       ) : (
         <p className="final-day-matches__status">
-          {hasError
+          {isError
             ? "Couldn't load the matches."
-            : isReady
+            : data
               ? "No matches played yet."
               : "Loading…"}
         </p>

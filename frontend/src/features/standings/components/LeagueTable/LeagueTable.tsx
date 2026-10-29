@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
-import { fetchSeasonData } from "@/api/seasonData";
+import { useState } from "react";
+import { useSeasonData } from "@/api/seasonData";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl";
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
 import StandingsTable, {
-  type FormResult,
   type TableView,
 } from "@/features/standings/components/StandingsTable/StandingsTable";
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
 import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
 import { getClubForm } from "@/features/standings/utils/form";
-import type { Standing, StandingsResponse } from "@/types/api"; // Types for API responses
+import type { Standing } from "@/types/api"; // Types for API responses
 import "./LeagueTable.scss";
 
 // Which matches the table counts
@@ -30,34 +29,11 @@ const TABLE_VIEWS: { value: TableView; label: string }[] = [
   { value: "form", label: "Form" },
 ];
 
-// The standings and form for one league and season
-type LeagueTableData = {
-  league: LeagueCode;
-  season: number;
-  standings: StandingsResponse;
-  form: Record<MatchFilter, Record<number, FormResult[]>>;
-};
-
 // Props for the LeagueTable component: the selected league and season start year (2025 = 2025/26)
 type LeagueTableProps = {
   league: LeagueCode;
   season: number;
 };
-
-// Gets the standings and matches (for form) for a league's season
-async function fetchLeagueTableData(
-  league: LeagueCode,
-  season: number,
-): Promise<LeagueTableData> {
-  const { standings, matches } = await fetchSeasonData(league, season);
-
-  const form = {
-    overall: getClubForm(matches),
-    home: getClubForm(matches, 5, "home"),
-    away: getClubForm(matches, 5, "away"),
-  };
-  return { league, season, standings, form };
-}
 
 // Home or away table: each club's figures from those games only, ranked on
 // points, then goal difference, then goals scored
@@ -93,46 +69,14 @@ function sideTable(standings: Standing[], side: "home" | "away") {
 
 // Standings page "League table" section: the full table with GF/GA, places and form
 export default function LeagueTable({ league, season }: LeagueTableProps) {
-  const [data, setData] = useState<LeagueTableData | null>(null);
-  const [error, setError] = useState<{
-    league: LeagueCode;
-    season: number;
-  } | null>(null);
+  const { data, isError } = useSeasonData(league, season);
   const [matchFilter, setMatchFilter] = useState<MatchFilter>("overall");
   const [view, setView] = useState<TableView>("short");
-
-  // Refetch whenever the selected league or season changes
-  useEffect(() => {
-    // Ignores the result if the selection changes before it arrives
-    let ignore = false;
-
-    fetchLeagueTableData(league, season)
-      .then((result) => {
-        if (!ignore) {
-          setData(result);
-          setError(null);
-        }
-      })
-      .catch(() => {
-        if (!ignore) {
-          setError({ league, season });
-        }
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [league, season]);
-
-  // Old data or errors from a previous selection don't count for the current one
-  const hasError = error?.league === league && error.season === season;
-  const isReady =
-    !hasError && data?.league === league && data.season === season;
 
   const leagueName = LEAGUES.find((item) => item.code === league)?.name;
 
   // Overall, home or away rows; zones follow each table's own positions (as on FotMob)
-  const rows = !isReady
+  const rows = !data
     ? []
     : matchFilter === "overall"
       ? data.standings.standings
@@ -140,7 +84,7 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
 
   // "Final Premier League standings after 38 matchweeks." or "… home table after 19 home games."
   let description = `${leagueName} standings.`;
-  if (isReady) {
+  if (data) {
     const prefix =
       data.standings.championClubId !== null ? "Final" : "Current";
     const games = Math.max(0, ...rows.map((club) => club.gamesPlayed));
@@ -178,10 +122,14 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
           align="auto"
         />
       </div>
-      {isReady ? (
+      {data ? (
         <StandingsTable
           standings={rows}
-          form={data.form[matchFilter]}
+          form={getClubForm(
+            data.matches,
+            5,
+            matchFilter === "overall" ? undefined : matchFilter,
+          )}
           places={TABLE_PLACES[`${league}-${season}`]}
           showGoals
           view={view}
@@ -189,7 +137,7 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
         />
       ) : (
         <p className="league-table__status">
-          {hasError ? "Couldn't load the standings." : "Loading…"}
+          {isError ? "Couldn't load the standings." : "Loading…"}
         </p>
       )}
     </SectionCard>

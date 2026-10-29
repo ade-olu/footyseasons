@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { fetchSeasonData } from "@/api/seasonData";
+import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
 import type { LeagueCode } from "@/data/leagues";
@@ -7,8 +6,6 @@ import type { Standing } from "@/types/api"; // Types for API responses
 
 // Everything the cards need, worked out from the standings
 type StandingsHighlightsData = {
-  league: LeagueCode;
-  season: number;
   isFinal: boolean;
   leader: Standing;
   runnerUp: Standing | undefined;
@@ -26,14 +23,12 @@ type StandingsHighlightsProps = {
 // "West Ham, Burnley and Wolves"
 const listFormat = new Intl.ListFormat("en-GB", { type: "conjunction" });
 
-// Gets the standings and picks the leader, best attack, best defence and relegated clubs
-async function fetchStandingsHighlightsData(
+// Picks the leader, best attack, best defence and relegated clubs from the standings
+function getHighlights(
+  { standings: { standings, championClubId } }: SeasonData,
   league: LeagueCode,
   season: number,
-): Promise<StandingsHighlightsData> {
-  const {
-    standings: { standings, championClubId },
-  } = await fetchSeasonData(league, season);
+): StandingsHighlightsData {
 
   // Standings are in table order, so on a tie the higher-placed club wins
   const bestAttack = standings.reduce((best, club) =>
@@ -50,8 +45,6 @@ async function fetchStandingsHighlightsData(
   );
 
   return {
-    league,
-    season,
     isFinal: championClubId !== null,
     leader: standings[0],
     runnerUp: standings[1],
@@ -71,43 +64,11 @@ export default function StandingsHighlights({
   league,
   season,
 }: StandingsHighlightsProps) {
-  const [data, setData] = useState<StandingsHighlightsData | null>(null);
-  const [error, setError] = useState<{
-    league: LeagueCode;
-    season: number;
-  } | null>(null);
-
-  // Refetch whenever the selected league or season changes
-  useEffect(() => {
-    // Ignores the result if the selection changes before it arrives
-    let ignore = false;
-
-    fetchStandingsHighlightsData(league, season)
-      .then((result) => {
-        if (!ignore) {
-          setData(result);
-          setError(null);
-        }
-      })
-      .catch(() => {
-        if (!ignore) {
-          setError({ league, season });
-        }
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [league, season]);
-
-  // Old data or errors from a previous selection don't count for the current one
-  const hasError = error?.league === league && error.season === season;
-  const isReady =
-    !hasError && data?.league === league && data.season === season;
+  const { data, isError } = useSeasonData(league, season);
 
   // Loading and error states keep the cards in place with a dash
-  if (!isReady || !data) {
-    const placeholder = hasError ? "Couldn't load" : "Loading…";
+  if (!data) {
+    const placeholder = isError ? "Couldn't load" : "Loading…";
 
     return (
       <>
@@ -126,7 +87,7 @@ export default function StandingsHighlights({
   }
 
   const { isFinal, leader, runnerUp, bestAttack, bestDefence, relegated } =
-    data;
+    getHighlights(data, league, season);
   const margin = runnerUp ? leader.points - runnerUp.points : 0;
 
   // Returns a fragment so each card is a direct child of the page grid
