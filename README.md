@@ -172,7 +172,7 @@ frontend/
     components/       # shared layout and ui components
     api/              # API calls and caching
     data/             # leagues, short club names
-    styles/           # type scale, breakpoints, motion
+    styles/           # foundations: colours, type, effects, radii, breakpoints
 ```
 
 The frontend is organised by feature. Each feature folder holds the
