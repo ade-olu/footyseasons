@@ -2,9 +2,7 @@
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
 @use "@/styles/colors" as *;
-
-$highlight-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
-$highlight-card-shadow-hover: 0 8px 24px 0 rgba(11, 15, 14, 0.08);
+@use "@/styles/effects" as *;
 
 .highlight-card {
   width: auto;
@@ -15,7 +13,7 @@ $highlight-card-shadow-hover: 0 8px 24px 0 rgba(11, 15, 14, 0.08);
   gap: rem(32);
   background-color: $color-bg-surface;
   border: 1px solid $color-border-default;
-  box-shadow: $highlight-card-shadow;
+  box-shadow: $shadow-resting;
   color: $color-text-primary;
   padding: rem(24);
   border-radius: 16px;
@@ -32,7 +30,7 @@ $highlight-card-shadow-hover: 0 8px 24px 0 rgba(11, 15, 14, 0.08);
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     &:hover {
       transform: translateY(-2px);
-      box-shadow: $highlight-card-shadow-hover;
+      box-shadow: $shadow-card-hover;
     }
   }
 

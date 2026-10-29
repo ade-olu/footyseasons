@@ -1,21 +1,15 @@
 @use "@/styles/typography" as *;
 @use "@/styles/colors" as *;
 
-// Player Photo color variables
-$player-photo-image-bg: #cecfcf;
-$player-photo-text: rgb(
-  11,
-  15,
-  14,
-  0.6
-); // RGB(11, 15, 14) - same as MatchResult text color
+// Initials, softer than body text
+$player-photo-text: rgba($color-text-primary, 0.6);
 
 // Sized by the parent's className, like ClubCrest
 .player-photo {
   flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
-  background-color: $player-photo-image-bg;
+  background-color: $color-bg-photo;
 
   &--initials {
     display: inline-flex;

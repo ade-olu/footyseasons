@@ -1,8 +1,7 @@
 @use "@/styles/functions" as *;
 @use "@/styles/breakpoints" as *;
 @use "@/styles/colors" as *;
-
-$section-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
+@use "@/styles/effects" as *;
 
 // The gap varies in Figma (16-32px), so sections can override it via className
 .section-card {
@@ -14,7 +13,7 @@ $section-card-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   background-color: $color-bg-surface;
   border: 1px solid $color-border-default;
   border-radius: 16px;
-  box-shadow: $section-card-shadow;
+  box-shadow: $shadow-resting;
   overflow: hidden; // Keeps full-width content (e.g. the standings table) inside the rounded corners
 
   @include below-tablet {

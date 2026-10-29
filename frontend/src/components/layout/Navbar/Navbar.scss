@@ -3,8 +3,7 @@
 @use "@/styles/motion" as *;
 @use "@/styles/breakpoints" as *;
 @use "@/styles/colors" as *;
-
-$navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
+@use "@/styles/effects" as *;
 
 .navbar {
   position: sticky;
@@ -18,7 +17,7 @@ $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
   height: rem(88);
   background-color: $color-bg-navbar-blur;
   border-bottom: 1px solid $color-border-default;
-  backdrop-filter: blur(24px);
+  backdrop-filter: $blur-navbar;
   padding: 0 rem(32);
 
   @include below-tablet {
@@ -52,7 +51,7 @@ $navbar-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     border: 1px solid $color-border-default;
     border-radius: 12px;
     background-color: $color-bg-surface;
-    box-shadow: $navbar-shadow;
+    box-shadow: $shadow-resting;
     color: $color-text-primary;
     cursor: pointer;
     @include press(0.92, border-color 0.15s);

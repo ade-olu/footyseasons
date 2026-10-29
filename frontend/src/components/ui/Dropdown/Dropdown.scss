@@ -2,12 +2,7 @@
 @use "@/styles/typography" as *;
 @use "@/styles/motion" as *;
 @use "@/styles/colors" as *;
-
-$dropdown-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
-$dropdown-list-shadow:
-  0 1px 2px 0 rgba(11, 15, 14, 0.06),
-  0 4px 8px -2px rgba(11, 15, 14, 0.06),
-  0 12px 24px -4px rgba(11, 15, 14, 0.1);
+@use "@/styles/effects" as *;
 
 // Positions the option list under the button; its width (from className) sets the button's
 .dropdown {
@@ -24,7 +19,7 @@ $dropdown-list-shadow:
     border: 1px solid $color-border-default;
     border-radius: 12px;
     background-color: $color-bg-surface;
-    box-shadow: $dropdown-shadow;
+    box-shadow: $shadow-resting;
     @include text(16);
     color: $color-text-primary;
     cursor: pointer;
@@ -84,7 +79,7 @@ $dropdown-list-shadow:
     border: 1px solid $color-border-default;
     border-radius: 12px;
     background-color: $color-bg-surface;
-    box-shadow: $dropdown-list-shadow;
+    box-shadow: $shadow-popover;
     list-style: none;
 
     &--right {

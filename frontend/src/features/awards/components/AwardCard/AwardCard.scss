@@ -2,8 +2,7 @@
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
 @use "@/styles/colors" as *;
-
-$award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
+@use "@/styles/effects" as *;
 
 .award-card {
   display: flex;
@@ -27,7 +26,7 @@ $award-card-shadow-hover: 0 12px 32px 0 rgba(11, 15, 14, 0.16);
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     &:hover {
       transform: translateY(-2px);
-      box-shadow: $award-card-shadow-hover;
+      box-shadow: $shadow-award-hover;
     }
 
     &:hover &__photo-img,

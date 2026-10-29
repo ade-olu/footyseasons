@@ -2,6 +2,7 @@
 @use "@/styles/typography" as *;
 @use "@/styles/breakpoints" as *;
 @use "@/styles/colors" as *;
+@use "@/styles/effects" as *;
 
 .hero-banner {
   position: relative; // Anchors the photo and credit
@@ -45,9 +46,9 @@
     padding: rem(48);
     background: linear-gradient(
       to left,
-      rgba(11, 15, 14, 0.2),
-      rgba(11, 15, 14, 0.4) 50%,
-      rgba(11, 15, 14, 0.6)
+      rgba($color-bg-inverse, 0.2),
+      rgba($color-bg-inverse, 0.4) 50%,
+      rgba($color-bg-inverse, 0.6)
     );
 
     // Blur that fades out from left to right (on a pseudo-element so the text isn't masked)
@@ -60,12 +61,12 @@
       backdrop-filter: blur(2px);
       -webkit-mask-image: linear-gradient(
         to right,
-        rgba(11, 15, 14) 55%,
+        $color-bg-inverse 55%,
         transparent 65%
       );
       mask-image: linear-gradient(
         to right,
-        rgba(11, 15, 14) 55%,
+        $color-bg-inverse 55%,
         transparent 65%
       );
       pointer-events: none;
@@ -77,15 +78,15 @@
       row-gap: rem(32);
       background: linear-gradient(
         to top,
-        rgba(11, 15, 14, 0.2),
-        rgba(11, 15, 14, 0.4) 50%,
-        rgba(11, 15, 14, 0.6)
+        rgba($color-bg-inverse, 0.2),
+        rgba($color-bg-inverse, 0.4) 50%,
+        rgba($color-bg-inverse, 0.6)
       );
 
       // Tint goes from top to bottom, and the blur covers the whole banner
       &::before {
-        -webkit-mask-image: linear-gradient(to bottom, rgba(11, 15, 14) 100%);
-        mask-image: linear-gradient(to bottom, rgba(11, 15, 14) 100%);
+        -webkit-mask-image: linear-gradient(to bottom, $color-bg-inverse 100%);
+        mask-image: linear-gradient(to bottom, $color-bg-inverse 100%);
       }
     }
 
@@ -113,7 +114,7 @@
     border: 1px solid $color-border-glass;
     border-radius: 999px;
     background: $color-bg-glass;
-    backdrop-filter: blur(8px);
+    backdrop-filter: $blur-glass;
     @include text(14);
     font-weight: 500;
     color: $color-text-inverse-muted;
@@ -189,7 +190,7 @@
     border: 1px solid $color-border-glass;
     border-radius: 12px;
     background: $color-bg-glass-strong;
-    backdrop-filter: blur(8px);
+    backdrop-filter: $blur-glass;
 
     @container (max-width: #{rem(900)}) {
       justify-self: start;

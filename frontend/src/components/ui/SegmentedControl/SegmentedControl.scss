@@ -2,8 +2,7 @@
 @use "@/styles/typography" as *;
 @use "@/styles/motion" as *;
 @use "@/styles/colors" as *;
-
-$segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
+@use "@/styles/effects" as *;
 
 // Equal-width options, so the pill moves in equal steps.
 // --segmented-count and --segmented-index are set inline by the component
@@ -45,7 +44,7 @@ $segmented-control-shadow: 0 1px 0 0 rgba(11, 15, 14, 0.04);
     border: 1px solid $color-border-default;
     border-radius: 8px;
     background-color: $color-bg-surface;
-    box-shadow: $segmented-control-shadow;
+    box-shadow: $shadow-resting;
   }
 
   @media (prefers-reduced-motion: no-preference) {
