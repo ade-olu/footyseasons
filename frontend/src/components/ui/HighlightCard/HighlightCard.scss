@@ -1,8 +1,4 @@
-@use "@/styles/functions" as *;
-@use "@/styles/typography" as *;
-@use "@/styles/breakpoints" as *;
-@use "@/styles/colors" as *;
-@use "@/styles/effects" as *;
+@use "@/styles/foundations" as *;
 
 .highlight-card {
   width: auto;
@@ -16,7 +12,7 @@
   box-shadow: $shadow-resting;
   color: $color-text-primary;
   padding: rem(24);
-  border-radius: 16px;
+  border-radius: $radius-16;
 
   @include below-tablet {
     padding: rem(24) rem(16);

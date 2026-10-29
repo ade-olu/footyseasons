@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "@/styles/functions" as *;
-@use "@/styles/typography" as *;
-@use "@/styles/breakpoints" as *;
-@use "@/styles/colors" as *;
+@use "@/styles/foundations" as *;
 
 // Standings Table color variables
 $standings-table-relegation-row: color.mix(

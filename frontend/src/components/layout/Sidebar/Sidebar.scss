@@ -1,8 +1,4 @@
-@use "@/styles/functions" as *;
-@use "@/styles/typography" as *;
-@use "@/styles/motion" as *;
-@use "@/styles/breakpoints" as *;
-@use "@/styles/colors" as *;
+@use "@/styles/foundations" as *;
 
 // Sidebar styles using SCSS variables for colors
 $sidebar-drawer-duration: 0.25s;
@@ -99,7 +95,7 @@ $sidebar-drawer-duration: 0.25s;
       height: rem(32);
       padding: 0;
       border: 0;
-      border-radius: 8px;
+      border-radius: $radius-8;
       background: transparent;
       color: $color-text-inverse-secondary;
       cursor: pointer;
@@ -164,7 +160,7 @@ $sidebar-drawer-duration: 0.25s;
     gap: rem(12);
     width: 100%;
     padding: rem(16) rem(24);
-    border-radius: 12px;
+    border-radius: $radius-12;
     border: 0;
     background: transparent;
     @include text(14);

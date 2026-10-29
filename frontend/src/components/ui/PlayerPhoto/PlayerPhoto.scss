@@ -1,5 +1,4 @@
-@use "@/styles/typography" as *;
-@use "@/styles/colors" as *;
+@use "@/styles/foundations" as *;
 
 // Initials, softer than body text
 $player-photo-text: rgba($color-text-primary, 0.6);

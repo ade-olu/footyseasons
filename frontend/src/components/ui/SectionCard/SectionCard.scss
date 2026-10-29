@@ -1,7 +1,4 @@
-@use "@/styles/functions" as *;
-@use "@/styles/breakpoints" as *;
-@use "@/styles/colors" as *;
-@use "@/styles/effects" as *;
+@use "@/styles/foundations" as *;
 
 // The gap varies in Figma (16-32px), so sections can override it via className
 .section-card {
@@ -12,7 +9,7 @@
   padding: rem(24);
   background-color: $color-bg-surface;
   border: 1px solid $color-border-default;
-  border-radius: 16px;
+  border-radius: $radius-16;
   box-shadow: $shadow-resting;
   overflow: hidden; // Keeps full-width content (e.g. the standings table) inside the rounded corners
 

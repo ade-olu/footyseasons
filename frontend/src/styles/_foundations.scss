@@ -1,0 +1,9 @@
+// Every shared token, mixin and function, like Figma's Foundations page.
+// Components use this one file: @use "@/styles/foundations" as *;
+@forward "functions";
+@forward "breakpoints";
+@forward "typography";
+@forward "motion";
+@forward "colors";
+@forward "effects";
+@forward "radius";

@@ -1,8 +1,4 @@
-@use "@/styles/functions" as *;
-@use "@/styles/typography" as *;
-@use "@/styles/motion" as *;
-@use "@/styles/colors" as *;
-@use "@/styles/effects" as *;
+@use "@/styles/foundations" as *;
 
 // Positions the option list under the button; its width (from className) sets the button's
 .dropdown {
@@ -17,7 +13,7 @@
     width: 100%;
     padding: rem(8) rem(16);
     border: 1px solid $color-border-default;
-    border-radius: 12px;
+    border-radius: $radius-12;
     background-color: $color-bg-surface;
     box-shadow: $shadow-resting;
     @include text(16);
@@ -77,7 +73,7 @@
     margin: 0;
     padding: rem(8);
     border: 1px solid $color-border-default;
-    border-radius: 12px;
+    border-radius: $radius-12;
     background-color: $color-bg-surface;
     box-shadow: $shadow-popover;
     list-style: none;
@@ -101,7 +97,7 @@
     align-items: center;
     justify-content: space-between;
     padding: rem(8) rem(12);
-    border-radius: 8px;
+    border-radius: $radius-8;
     @include text(14);
     font-weight: 500;
     color: $color-text-secondary;

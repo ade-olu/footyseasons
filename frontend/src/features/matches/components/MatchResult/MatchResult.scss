@@ -1,7 +1,4 @@
-@use "@/styles/breakpoints" as *;
-@use "@/styles/functions" as *;
-@use "@/styles/typography" as *;
-@use "@/styles/colors" as *;
+@use "@/styles/foundations" as *;
 
 // Home club, score and away club, with the score in the middle
 .match-result {
@@ -16,7 +13,7 @@
   }
   background-color: $color-bg-subtle;
   border: 1px solid $color-border-default;
-  border-radius: 12px;
+  border-radius: $radius-12;
 
   &__club {
     display: flex;
@@ -81,7 +78,7 @@
     white-space: nowrap;
     background-color: $color-bg-surface;
     border: 1px solid $color-border-default;
-    border-radius: 8px;
+    border-radius: $radius-8;
 
     @include below-tablet {
       min-width: rem(48);

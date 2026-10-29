@@ -1,8 +1,4 @@
-@use "@/styles/functions" as *;
-@use "@/styles/typography" as *;
-@use "@/styles/motion" as *;
-@use "@/styles/colors" as *;
-@use "@/styles/effects" as *;
+@use "@/styles/foundations" as *;
 
 // Equal-width options, so the pill moves in equal steps.
 // --segmented-count and --segmented-index are set inline by the component
@@ -16,7 +12,7 @@
   grid-auto-flow: column;
   gap: var(--segmented-gap);
   padding: var(--segmented-padding);
-  border-radius: 12px;
+  border-radius: $radius-12;
   background-color: $color-bg-subtle;
 
   // Sits behind the selected option. Its edges move separately: the leading
@@ -42,7 +38,7 @@
         var(--segmented-step)
     );
     border: 1px solid $color-border-default;
-    border-radius: 8px;
+    border-radius: $radius-8;
     background-color: $color-bg-surface;
     box-shadow: $shadow-resting;
   }
@@ -65,7 +61,7 @@
     position: relative; // Above the indicator
     padding: rem(8) rem(16);
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: $radius-8;
     background: none;
     @include text(14);
     font-weight: 500;

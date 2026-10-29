@@ -1,6 +1,4 @@
-@use "@/styles/functions" as *;
-@use "@/styles/typography" as *;
-@use "@/styles/colors" as *;
+@use "@/styles/foundations" as *;
 
 // Full width when narrow, then one column each (2-column grid), then half (4-column grid)
 .top-players {
