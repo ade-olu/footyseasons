@@ -67,13 +67,15 @@ function getHeroData({
 
 // HeroBanner component that shows the season summary and champion over a stadium photo
 export default function HeroBanner({ league, season }: HeroBannerProps) {
-  const { data: seasonData, error } = useSeasonData(league, season);
+  const { data: seasonData, isError } = useSeasonData(league, season);
 
   // Error state
-  if (error) {
+  if (isError) {
     return (
       <section className="hero-banner hero-banner--empty" role="alert">
-        <p className="hero-banner__message">{error.message}</p>
+        <p className="hero-banner__message">
+          Couldn't load the season summary.
+        </p>
       </section>
     );
   }
