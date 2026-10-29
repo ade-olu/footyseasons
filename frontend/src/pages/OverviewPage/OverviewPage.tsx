@@ -4,7 +4,7 @@ import SeasonAwards from "@/components/overview/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "@/components/overview/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "@/data/leagues";
 import { pageTitle } from "@/utils/pageTitle";
-import TopPlayers from "@/components/overview/TopPlayers/TopPlayers";
+import TopPlayers from "@/features/players/components/TopPlayers/TopPlayers";
 import TopStandings from "@/features/standings/components/TopStandings/TopStandings";
 import "./OverviewPage.scss";
 
