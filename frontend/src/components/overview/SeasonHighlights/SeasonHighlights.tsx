@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "@/api/config";
 import { fetchSeasonData } from "@/api/seasonData";
-import HighlightCard from "@/components/cards/HighlightCard/HighlightCard";
+import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 
 import type { LeagueCode } from "@/data/leagues";
 import type { PlayersResponse, Standing } from "@/types/api"; // Types for API responses

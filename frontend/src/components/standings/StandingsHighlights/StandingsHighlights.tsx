@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchSeasonData } from "@/api/seasonData";
-import HighlightCard from "@/components/cards/HighlightCard/HighlightCard";
+import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 import { TABLE_PLACES } from "@/data/tablePlaces";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
