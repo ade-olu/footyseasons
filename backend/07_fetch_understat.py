@@ -9,11 +9,16 @@ are replaced. Run 02 and 05 first.
 """
 
 import html
-import re
 import time
 import sqlite3
-import unicodedata
-import requests
+
+from common.db import get_season_clubs, get_season_id
+from common.understat import (
+    SECONDS_BETWEEN_REQUESTS,
+    fetch_league_data,
+    fetch_player_matches,
+    match_club,
+)
 
 
 DB_FILE = "football.db"
@@ -29,22 +34,6 @@ LEAGUES = [
     {"id": 2002, "name": "Bundesliga",      "code": "BL1", "understat": "Bundesliga"},
     {"id": 2015, "name": "Ligue 1",         "code": "FL1", "understat": "Ligue_1"},
 ]
-
-# Understat name -> clubs.name, for names that don't match
-UNDERSTAT_CLUB_NAMES = {
-    "Bayern Munich": "FC Bayern München",
-    "FC Cologne": "1. FC Köln",
-    "Borussia M.Gladbach": "Borussia Mönchengladbach",
-    "RasenBallsport Leipzig": "RB Leipzig",
-    "Rennes": "Stade Rennais FC 1901",
-    # Not Chievo Verona
-    "Verona": "Hellas Verona FC",
-    "Hertha Berlin": "Hertha BSC",
-    "SPAL 2013": "SPAL",
-    "Fortuna Duesseldorf": "Fortuna Düsseldorf",
-    "Nuernberg": "1. FC Nürnberg",
-    "Greuther Fuerth": "SpVgg Greuther Fürth",
-}
 
 # clubs.display_name is Understat's team name, except these.
 # Understat name -> display name
@@ -95,56 +84,6 @@ DISPLAY_NAME_FIXES = {
     "Luton": "Luton Town",
     "Huddersfield": "Huddersfield Town",
 }
-
-# Understat only answers requests that look like they're from its pages
-HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-    "X-Requested-With": "XMLHttpRequest",
-}
-
-# Not rate limited, but I keep it gentle
-SECONDS_BETWEEN_REQUESTS = 3
-
-
-def fetch_league_data(understat_league, start_year):
-    # {"teams", "players", "dates"}; player values are strings ("27")
-    url = f"https://understat.com/getLeagueData/{understat_league}/{start_year}"
-    headers = {
-        **HEADERS,
-        "Referer": f"https://understat.com/league/{understat_league}/{start_year}",
-    }
-    response = requests.get(url, headers=headers, timeout=30)
-
-    if response.status_code != 200:
-        raise Exception(
-            f"Understat request failed for {understat_league} {start_year} "
-            f"with status {response.status_code}: {response.text[:200]}"
-        )
-
-    data = response.json()
-    print(
-        f"  Fetched {len(data['players'])} players and "
-        f"{len(data['teams'])} teams."
-    )
-    return data
-
-
-def fetch_player_matches(understat_player_id):
-    # Every league match of the player's career
-    url = f"https://understat.com/getPlayerData/{understat_player_id}"
-    headers = {
-        **HEADERS,
-        "Referer": f"https://understat.com/player/{understat_player_id}",
-    }
-    response = requests.get(url, headers=headers, timeout=30)
-
-    if response.status_code != 200:
-        raise Exception(
-            f"Understat request failed for player {understat_player_id} "
-            f"with status {response.status_code}: {response.text[:200]}"
-        )
-
-    return response.json()["matches"]
 
 
 def find_last_match_dates(matches, start_year, team_names):
@@ -205,75 +144,6 @@ def get_last_match_dates(cursor, players, club_lookup, season_id, start_year, ma
                 dates[key] = team_dates[team]
 
     return dates
-
-
-def get_season_id(cursor, league_id, start_year):
-    # Look-up only: 02 and 05 create the seasons
-    cursor.execute(
-        "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
-        (league_id, start_year),
-    )
-    row = cursor.fetchone()
-
-    if row is None:
-        raise Exception(
-            f"No season found for league_id {league_id}, start_year "
-            f"{start_year}. Run 02_fetch_matches.py for this "
-            "league first."
-        )
-
-    return row[0]
-
-
-def get_season_clubs(cursor, season_id):
-    # (club_id, name, short_name) of every club with a match this season
-    cursor.execute(
-        """SELECT club_id, name, short_name FROM clubs
-           WHERE club_id IN (
-               SELECT home_club_id FROM matches WHERE season_id = ?
-               UNION
-               SELECT away_club_id FROM matches WHERE season_id = ?
-           )""",
-        (season_id, season_id),
-    )
-    return cursor.fetchall()
-
-
-def name_words(name):
-    # "Club Atlético de Madrid" -> {"club", "atletico", "de", "madrid"}
-    plain = unicodedata.normalize("NFKD", name)
-    plain = plain.encode("ascii", "ignore").decode().lower()
-    return set(re.findall(r"[a-z0-9]+", plain))
-
-
-def match_club(understat_name, clubs):
-    # Raises unless exactly one of the season's clubs matches
-    if understat_name in UNDERSTAT_CLUB_NAMES:
-        wanted = UNDERSTAT_CLUB_NAMES[understat_name]
-        candidates = [club for club in clubs if club[1] == wanted]
-    else:
-        # Every word has to be in the club's name or short name
-        words = name_words(understat_name)
-        candidates = [
-            club for club in clubs
-            if words <= name_words(club[1]) | name_words(club[2] or "")
-        ]
-
-        # On a tie ("Barcelona" vs Espanyol), fewest extra words wins
-        if len(candidates) > 1:
-            extra = {club: len(name_words(club[1]) - words) for club in candidates}
-            fewest = min(extra.values())
-            candidates = [club for club in candidates if extra[club] == fewest]
-
-    if len(candidates) != 1:
-        season_names = ", ".join(sorted(club[1] for club in clubs))
-        raise Exception(
-            f'Could not match Understat team "{understat_name}" to a club '
-            f"({len(candidates)} matches). Add it to UNDERSTAT_CLUB_NAMES. "
-            f"Clubs this season: {season_names}"
-        )
-
-    return candidates[0][0]
 
 
 def build_club_lookup(data, clubs):
@@ -361,6 +231,10 @@ def main():
 
         season_id = get_season_id(cursor, league["id"], year)
         data = fetch_league_data(league["understat"], year)
+        print(
+            f"  Fetched {len(data['players'])} players and "
+            f"{len(data['teams'])} teams."
+        )
 
         # Match every team first, so a missing name wipes nothing
         club_lookup = build_club_lookup(data, get_season_clubs(cursor, season_id))

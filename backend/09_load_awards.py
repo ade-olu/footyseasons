@@ -13,7 +13,8 @@ import csv
 import time
 import sqlite3
 from datetime import date
-import requests
+
+from common.understat import SECONDS_BETWEEN_REQUESTS, fetch_player_matches
 
 
 DB_FILE = "football.db"
@@ -24,33 +25,6 @@ AWARDS = ["player", "manager", "goalkeeper", "young_player"]
 # Awards whose cards show starts or clean sheets from the match log
 # (also fetched for any goalkeeper who wins another award)
 MATCH_LOG_AWARDS = {"goalkeeper", "young_player"}
-
-# Understat only answers this endpoint for requests that look like
-# they come from its own pages
-HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-    "X-Requested-With": "XMLHttpRequest",
-}
-
-SECONDS_BETWEEN_REQUESTS = 3
-
-
-def fetch_player_matches(understat_player_id):
-    # Every league match of the player's career
-    url = f"https://understat.com/getPlayerData/{understat_player_id}"
-    headers = {
-        **HEADERS,
-        "Referer": f"https://understat.com/player/{understat_player_id}",
-    }
-    response = requests.get(url, headers=headers, timeout=30)
-
-    if response.status_code != 200:
-        raise Exception(
-            f"Understat request failed for player {understat_player_id} "
-            f"with status {response.status_code}: {response.text[:200]}"
-        )
-
-    return response.json()["matches"]
 
 
 def get_season(cursor, league_code, label):

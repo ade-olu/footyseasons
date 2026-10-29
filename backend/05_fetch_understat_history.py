@@ -7,12 +7,16 @@ Pre-2023 clubs and all matches here get negative ids (-Understat id).
 INSERT OR REPLACE wipes 06's columns, so re-run 06 after this.
 """
 
-import re
 import time
 import sqlite3
-import unicodedata
 from collections import defaultdict
-import requests
+
+from common.db import ensure_season, find_season_id, get_season_clubs
+from common.understat import (
+    SECONDS_BETWEEN_REQUESTS,
+    fetch_league_data,
+    match_club,
+)
 
 
 DB_FILE = "football.db"
@@ -31,22 +35,6 @@ LEAGUES = [
     {"id": 2002, "name": "Bundesliga",      "code": "BL1", "understat": "Bundesliga"},
     {"id": 2015, "name": "Ligue 1",         "code": "FL1", "understat": "Ligue_1"},
 ]
-
-# Copied from 07. Understat name -> clubs.name, for names that don't match
-UNDERSTAT_CLUB_NAMES = {
-    "Bayern Munich": "FC Bayern München",
-    "FC Cologne": "1. FC Köln",
-    "Borussia M.Gladbach": "Borussia Mönchengladbach",
-    "RasenBallsport Leipzig": "RB Leipzig",
-    "Rennes": "Stade Rennais FC 1901",
-    # Not Chievo Verona
-    "Verona": "Hellas Verona FC",
-    "Hertha Berlin": "Hertha BSC",
-    "SPAL 2013": "SPAL",
-    "Fortuna Duesseldorf": "Fortuna Düsseldorf",
-    "Nuernberg": "1. FC Nürnberg",
-    "Greuther Fuerth": "SpVgg Greuther Fürth",
-}
 
 # Older Understat teams that are the same club. Understat team id -> clubs.name
 # (pre-2015 Parma, refounded after going bankrupt)
@@ -145,110 +133,12 @@ HEAD_TO_HEAD_LEAGUES = {"PD", "SA"}
 # Stopped early (COVID): points per game, then head-to-head
 POINTS_PER_GAME_SEASONS = {("FL1", 2019)}
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-    "X-Requested-With": "XMLHttpRequest",
-}
-
-# Not rate limited, but I keep it gentle
-SECONDS_BETWEEN_REQUESTS = 3
-
-
-def fetch_league_data(understat_league, start_year):
-    # {"teams", "players", "dates"}; "dates" is every match
-    url = f"https://understat.com/getLeagueData/{understat_league}/{start_year}"
-    headers = {
-        **HEADERS,
-        "Referer": f"https://understat.com/league/{understat_league}/{start_year}",
-    }
-    response = requests.get(url, headers=headers, timeout=30)
-    time.sleep(SECONDS_BETWEEN_REQUESTS)
-
-    if response.status_code != 200:
-        raise Exception(
-            f"Understat request failed for {understat_league} {start_year} "
-            f"with status {response.status_code}: {response.text[:200]}"
-        )
-
-    return response.json()
-
-
-def get_season_id(cursor, league_id, start_year):
-    cursor.execute(
-        "SELECT season_id FROM seasons WHERE league_id = ? AND start_year = ?",
-        (league_id, start_year),
-    )
-    row = cursor.fetchone()
-    return row[0] if row else None
-
-
-def ensure_season(cursor, league_id, start_year):
-    # Label as in 02, e.g. "2014/15"
-    season_id = get_season_id(cursor, league_id, start_year)
-    if season_id is not None:
-        return season_id
-
-    label = f"{start_year}/{str(start_year + 1)[2:]}"
-    cursor.execute(
-        "INSERT INTO seasons (league_id, start_year, label) VALUES (?, ?, ?)",
-        (league_id, start_year, label),
-    )
-    return cursor.lastrowid
-
-
-def get_season_clubs(cursor, season_id):
-    # (club_id, name, short_name) of every club with a match this season
-    cursor.execute(
-        """SELECT club_id, name, short_name FROM clubs
-           WHERE club_id IN (
-               SELECT home_club_id FROM matches WHERE season_id = ?
-               UNION
-               SELECT away_club_id FROM matches WHERE season_id = ?
-           )""",
-        (season_id, season_id),
-    )
-    return cursor.fetchall()
-
-
-def name_words(name):
-    # Copied from 07. "Club Atlético de Madrid" -> {"club", "atletico", "de", "madrid"}
-    plain = unicodedata.normalize("NFKD", name)
-    plain = plain.encode("ascii", "ignore").decode().lower()
-    return set(re.findall(r"[a-z0-9]+", plain))
-
-
-def match_club(understat_name, clubs):
-    # Copied from 07
-    if understat_name in UNDERSTAT_CLUB_NAMES:
-        wanted = UNDERSTAT_CLUB_NAMES[understat_name]
-        candidates = [club for club in clubs if club[1] == wanted]
-    else:
-        words = name_words(understat_name)
-        candidates = [
-            club for club in clubs
-            if words <= name_words(club[1]) | name_words(club[2] or "")
-        ]
-        if len(candidates) > 1:
-            extra = {club: len(name_words(club[1]) - words) for club in candidates}
-            fewest = min(extra.values())
-            candidates = [club for club in candidates if extra[club] == fewest]
-
-    if len(candidates) != 1:
-        season_names = ", ".join(sorted(club[1] for club in clubs))
-        raise Exception(
-            f'Could not match Understat team "{understat_name}" to a club '
-            f"({len(candidates)} matches). Add it to UNDERSTAT_CLUB_NAMES. "
-            f"Clubs this season: {season_names}"
-        )
-
-    return candidates[0][0]
-
 
 def learn_known_clubs(cursor, league):
     # Understat team id -> club_id, from the 2023+ seasons
     known = {}
     for year in RECENT_SEASONS:
-        season_id = get_season_id(cursor, league["id"], year)
+        season_id = find_season_id(cursor, league["id"], year)
         if season_id is None:
             raise Exception(
                 f"No {year} season for {league['code']}. Run "
@@ -256,6 +146,7 @@ def learn_known_clubs(cursor, league):
             )
 
         data = fetch_league_data(league["understat"], year)
+        time.sleep(SECONDS_BETWEEN_REQUESTS)
         clubs = get_season_clubs(cursor, season_id)
         for team_id, team in data["teams"].items():
             known[int(team_id)] = match_club(team["title"], clubs)
@@ -481,6 +372,7 @@ def main():
 
         for year in SEASONS:
             data = fetch_league_data(league["understat"], year)
+            time.sleep(SECONDS_BETWEEN_REQUESTS)
 
             club_ids = {
                 int(team_id): resolve_club(cursor, int(team_id), team["title"], known)
