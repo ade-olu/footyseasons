@@ -1,0 +1,59 @@
+@use "@/styles/foundations" as *;
+
+// Buttons at the sides, the dropdown stretches between them
+.matchweek-picker {
+  display: flex;
+  align-items: stretch;
+  gap: rem(8);
+  width: rem(318);
+
+  @include below-tablet {
+    width: 100%;
+  }
+
+  // Square buttons as tall as the dropdown
+  &__step {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: rem(51);
+    border: 1px solid $color-border-default;
+    border-radius: $radius-12;
+    background-color: $color-bg-surface;
+    box-shadow: $shadow-resting;
+    color: $color-text-primary;
+    cursor: pointer;
+    @include press(0.92, border-color 0.15s);
+
+    &:hover:not(:disabled) {
+      border-color: $color-text-secondary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__icon {
+    width: auto;
+    height: rem(18);
+  }
+
+  &__dropdown {
+    flex: 1 1 0;
+    min-width: 0;
+
+    // 38 rounds: the list scrolls
+    .dropdown__list {
+      max-height: rem(320);
+      overflow-y: auto;
+    }
+  }
+}

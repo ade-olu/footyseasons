@@ -1,0 +1,68 @@
+@use "@/styles/foundations" as *;
+
+.matchweek-results {
+  // Title on the left, picker on the right; the picker wraps below when narrow
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(24);
+
+    > :first-child {
+      flex: 1 1 rem(240);
+    }
+  }
+
+  &__days {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+
+    @include motion-allowed {
+      animation: matchweek-results-fade 0.2s;
+    }
+  }
+
+  &__day {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+
+  &__date {
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-secondary;
+  }
+
+  // 1 column on smaller screens, 2 once both club names fit.
+  // The container is .app__content (in App.scss)
+  &__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: rem(24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include below-tablet {
+      gap: rem(16);
+    }
+
+    @include container-from($content-medium) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__status {
+    @include text(14);
+    color: $color-text-secondary;
+  }
+}
+
+@keyframes matchweek-results-fade {
+  from {
+    opacity: 0;
+  }
+}
