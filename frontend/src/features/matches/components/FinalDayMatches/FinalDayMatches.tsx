@@ -3,21 +3,16 @@ import MatchResult from "@/features/matches/components/MatchResult/MatchResult";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
-import type { Match, PlayedMatch } from "@/types/api"; // Types for API responses
+import { groupByDay, type MatchDay } from "@/features/matches/utils/matchDays";
+import type { PlayedMatch } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
 import "./FinalDayMatches.scss";
 
 // The last matchweek's results for one league and season
 type FinalDayData = {
   matchweek: number;
-  days: MatchDay[];
+  days: MatchDay<PlayedMatch>[];
   isFinal: boolean; // The season has a champion, so its last matchweek is the final one
-};
-
-// One day's matches (UTC date "2026-05-24")
-type MatchDay = {
-  date: string;
-  matches: PlayedMatch[];
 };
 
 // Props for the FinalDayMatches component: the selected league and season start year (2025 = 2025/26)
@@ -26,73 +21,14 @@ type FinalDayMatchesProps = {
   season: number;
 };
 
-// The last matchweek's played matches and its number. Before 2023/24 there's no matchday,
-// so it's every club's last match, and the number is the most games any club played
-function getLastMatchweek(matches: Match[]): {
-  matchweek: number;
-  matches: PlayedMatch[];
-} {
-  const played = matches.filter(isPlayed);
-  const matchdays = played.map((match) => match.matchday ?? 0);
-  const lastMatchday = Math.max(0, ...matchdays);
-
-  if (lastMatchday > 0) {
-    return {
-      matchweek: lastMatchday,
-      matches: played.filter((match) => match.matchday === lastMatchday),
-    };
-  }
-
-  // Each club's last match and number of games
-  const lastMatches = new Map<number, PlayedMatch>();
-  const gamesPlayed = new Map<number, number>();
-
-  for (const match of played) {
-    for (const clubId of [match.homeClubId, match.awayClubId]) {
-      const last = lastMatches.get(clubId);
-      if (!last || match.utcDate > last.utcDate) {
-        lastMatches.set(clubId, match);
-      }
-      gamesPlayed.set(clubId, (gamesPlayed.get(clubId) ?? 0) + 1);
-    }
-  }
-
-  return {
-    matchweek: Math.max(0, ...gamesPlayed.values()),
-    matches: [...new Set(lastMatches.values())],
-  };
-}
-
-// Groups matches by UTC date, oldest first, then by kick-off and home club
-function groupByDay(matches: PlayedMatch[]): MatchDay[] {
-  const sorted = [...matches].sort(
-    (a, b) =>
-      a.utcDate.localeCompare(b.utcDate) ||
-      a.homeClubDisplayName.localeCompare(b.homeClubDisplayName),
-  );
-  const days: MatchDay[] = [];
-
-  for (const match of sorted) {
-    const date = match.utcDate.slice(0, 10);
-    const day = days[days.length - 1];
-
-    if (day?.date === date) {
-      day.matches.push(match);
-    } else {
-      days.push({ date, matches: [match] });
-    }
-  }
-
-  return days;
-}
-
-// The last matchweek and whether the season is over, from its standings and matches
+// The last matchweek with a result, its played matches and whether the season is over
 function getFinalDayData({ standings, matches }: SeasonData): FinalDayData {
-  const lastMatchweek = getLastMatchweek(matches);
+  const played = matches.filter(isPlayed);
+  const matchweek = Math.max(0, ...played.map((match) => match.matchday));
 
   return {
-    matchweek: lastMatchweek.matchweek,
-    days: groupByDay(lastMatchweek.matches),
+    matchweek,
+    days: groupByDay(played.filter((match) => match.matchday === matchweek)),
     isFinal: standings.championClubId !== null,
   };
 }

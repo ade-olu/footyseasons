@@ -90,7 +90,7 @@ export type UnplayedMatch = MatchDetails & {
 
 type MatchDetails = {
   matchId: number;
-  matchday: number | null; // Null for 2014-2022 matches
+  matchday: number; // Round; FotMob's for 2014-2022 matches
   utcDate: string;
   homeClubName: string;
   homeClubDisplayName: string;
