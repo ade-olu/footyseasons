@@ -73,6 +73,20 @@ export default function Dropdown<Value extends string | number>({
     if (isOpen) listRef.current?.focus();
   }, [isOpen]);
 
+  // Keep the highlighted option in view in a list that scrolls (only the list moves)
+  useEffect(() => {
+    const list = listRef.current;
+    const option = list?.children[activeIndex] as HTMLElement | undefined;
+    if (!list || !option) return;
+
+    const bottom = option.offsetTop + option.offsetHeight;
+    if (option.offsetTop < list.scrollTop) {
+      list.scrollTop = option.offsetTop;
+    } else if (bottom > list.scrollTop + list.clientHeight) {
+      list.scrollTop = bottom - list.clientHeight;
+    }
+  }, [isOpen, activeIndex]);
+
   function openList() {
     const selectedIndex = options.findIndex((option) => option.value === value);
     setActiveIndex(Math.max(selectedIndex, 0));

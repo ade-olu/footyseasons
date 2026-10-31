@@ -14,7 +14,25 @@ type HighlightCardProps = {
   description: string;
   club?: HighlightClub; // When set, the card shows the club's crest and uses `value` as the club name
   crests?: HighlightClub[]; // Crests shown before the value (e.g. the relegated clubs)
+  crestsAfter?: HighlightClub[]; // Crests shown after the value (e.g. a match's away club)
 };
+
+// A row of small crests beside the value
+function CrestList({ crests }: { crests: HighlightClub[] }) {
+  return (
+    <span className="highlight-card__crests">
+      {crests.map((crest) => (
+        <ClubCrest
+          key={crest.name}
+          className="highlight-card__crests-item"
+          src={crest.crestUrl}
+          name={crest.name}
+          showName
+        />
+      ))}
+    </span>
+  );
+}
 
 // Small stat card for the season highlights row
 export default function HighlightCard({
@@ -23,6 +41,7 @@ export default function HighlightCard({
   description,
   club,
   crests,
+  crestsAfter,
 }: HighlightCardProps) {
   return (
     <article className="highlight-card">
@@ -32,19 +51,7 @@ export default function HighlightCard({
         <p
           className={`highlight-card__value${club ? " highlight-card__value--club" : ""}`}
         >
-          {crests && crests.length > 0 && (
-            <span className="highlight-card__crests">
-              {crests.map((crest) => (
-                <ClubCrest
-                  key={crest.name}
-                  className="highlight-card__crests-item"
-                  src={crest.crestUrl}
-                  name={crest.name}
-                  showName
-                />
-              ))}
-            </span>
-          )}
+          {crests && crests.length > 0 && <CrestList crests={crests} />}
           {club && (
             <ClubCrest
               className="highlight-card__crest"
@@ -55,6 +62,9 @@ export default function HighlightCard({
           <span className="highlight-card__value-text" title={club?.name}>
             {value}
           </span>
+          {crestsAfter && crestsAfter.length > 0 && (
+            <CrestList crests={crestsAfter} />
+          )}
         </p>
         <p className="highlight-card__description">{description}</p>
       </div>
