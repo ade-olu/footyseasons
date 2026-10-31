@@ -5,9 +5,6 @@ Matches Understat players to FotMob (photo) and Transfermarkt (date of
 birth, from the CC0 transfermarkt-datasets export) and saves them in
 player_profiles. Photos are loaded from FotMob's image server.
 
-FotMob has no official API: this uses the JSON its own site loads, which
-could change without warning.
-
 Safe to re-run: the table is rebuilt each time. I cache downloads in
 cache/; delete it to refetch everything. Run 06_fetch_understat.py first.
 """
@@ -23,13 +20,18 @@ import unicodedata
 from collections import Counter, defaultdict
 import requests
 
+from common.fotmob import (
+    FOTMOB_URL,
+    SECONDS_BETWEEN_REQUESTS,
+    fetch,
+    fetch_league_season,
+)
 from common.leagues import LATEST_SEASON, LEAGUES
 
 
 DB_FILE = "football.db"
 CACHE_DIR = "cache"
 TRANSFERMARKT_URL = "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data"
-FOTMOB_URL = "https://www.fotmob.com/api/data"
 PHOTO_URL = "https://images.fotmob.com/image_resources/playerimages/{}.png"
 
 # FotMob has no player stats before 2016/17
@@ -50,14 +52,6 @@ FOTMOB_IDS = {
     7947: 459658,  # Ruslan Malinovskiy -> Ruslan Malinovsky
     8807: 959404,  # Silas Wamangituka -> Silas Katompa Mvumpa
 }
-
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/130.0 Safari/537.36"
-    ),
-}
-SECONDS_BETWEEN_REQUESTS = 2
 
 # Letters that don't split into a plain letter + accent
 EXTRA_LETTERS = str.maketrans(
@@ -178,12 +172,7 @@ def load_transfermarkt():
 
 def fotmob_get(url, params=None):
     time.sleep(SECONDS_BETWEEN_REQUESTS)
-    response = requests.get(url, params=params, headers=HEADERS, timeout=30)
-    response.raise_for_status()
-    # Stat lists can arrive still gzipped
-    if response.content[:2] == b"\x1f\x8b":
-        return json.loads(gzip.decompress(response.content))
-    return response.json()
+    return fetch(url, params)
 
 
 def load_fotmob_season(league, year):
@@ -195,10 +184,8 @@ def load_fotmob_season(league, year):
             return json.load(file)
 
     print(f"  FotMob {code} {year}")
-    league_page = fotmob_get(
-        f"{FOTMOB_URL}/leagues",
-        {"id": league["fotmob"], "season": f"{year}/{year + 1}"},
-    )
+    time.sleep(SECONDS_BETWEEN_REQUESTS)
+    league_page = fetch_league_season(league, year)
     url = next(
         stat["fetchAllUrl"]
         for stat in league_page["stats"]["players"]
