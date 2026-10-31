@@ -84,5 +84,11 @@
       min-width: rem(48);
       padding: rem(8);
     }
+
+    // Kick-off time or status instead of a score
+    &--unplayed {
+      font-weight: 400;
+      color: $color-text-secondary;
+    }
   }
 }
