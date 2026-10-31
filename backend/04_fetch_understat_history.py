@@ -3,14 +3,16 @@
 
 Loads 2014/15-2022/23 from understat.com: seasons, missing clubs, matches,
 and tables I calculate myself (they match Wikipedia's for all 45 seasons).
+Rounds (matchday) come from FotMob's fixtures.
 Pre-2023 clubs and all matches here get negative ids (-Understat id).
 INSERT OR REPLACE wipes 05's columns, so re-run 05 after this.
 """
 
 import time
 import sqlite3
-from collections import defaultdict
+from collections import Counter, defaultdict
 
+from common import fotmob
 from common.db import ensure_season, find_season_id, get_season_clubs
 from common.leagues import API_SEASONS, LEAGUES, UNDERSTAT_ONLY_SEASONS
 from common.understat import (
@@ -204,6 +206,51 @@ def build_matches(data, club_ids):
     return matches
 
 
+def fotmob_rounds(fixtures, matches):
+    # FotMob's official round for each (home, away) pair. FotMob team ids are
+    # learned from games on the same day with the same score (majority vote)
+    by_day = defaultdict(list)
+    for match in matches:
+        by_day[match["utc_date"][:10]].append(match)
+
+    votes = defaultdict(Counter)
+    for fixture in fixtures:
+        score = fixture["status"].get("scoreStr")
+        if not score:
+            continue
+        home_goals, away_goals = (int(goals) for goals in score.split(" - "))
+        for match in by_day[fixture["status"]["utcTime"][:10]]:
+            if (match["home_goals"], match["away_goals"]) == (home_goals, away_goals):
+                votes[fixture["home"]["id"]][match["home_club_id"]] += 1
+                votes[fixture["away"]["id"]][match["away_club_id"]] += 1
+
+    club_ids = {team_id: count.most_common(1)[0][0] for team_id, count in votes.items()}
+    return {
+        (club_ids[fixture["home"]["id"]], club_ids[fixture["away"]["id"]]): int(fixture["round"])
+        for fixture in fixtures
+        # Play-offs (round "final", e.g. Serie A 2022/23) aren't league rounds
+        if fixture["round"].isdigit()
+        and fixture["home"]["id"] in club_ids
+        and fixture["away"]["id"] in club_ids
+    }
+
+
+def assign_matchdays(matches, rounds):
+    # FotMob's round where the pair is found; otherwise the later of the two
+    # clubs' game numbers, counted in kick-off order
+    games = defaultdict(int)
+    missing = 0
+    for match in sorted(matches, key=lambda match: (match["utc_date"], match["match_id"])):
+        home, away = match["home_club_id"], match["away_club_id"]
+        games[home] += 1
+        games[away] += 1
+        match["matchday"] = rounds.get((home, away))
+        if match["matchday"] is None:
+            match["matchday"] = max(games[home], games[away])
+            missing += 1
+    return missing
+
+
 def empty_row():
     row = {"games_played": 0, "wins": 0, "draws": 0, "losses": 0,
            "points": 0, "goals_for": 0, "goals_against": 0}
@@ -309,10 +356,11 @@ def save_matches(cursor, matches, season_id):
             """INSERT OR REPLACE INTO matches
                (match_id, season_id, matchday, utc_date, status,
                 home_club_id, away_club_id, home_goals, away_goals)
-               VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 match["match_id"],
                 season_id,
+                match["matchday"],
                 match["utc_date"],
                 match["status"],
                 match["home_club_id"],
@@ -373,6 +421,9 @@ def main():
 
             season_id = ensure_season(cursor, league["id"], year)
             matches = build_matches(data, club_ids)
+            fixtures = fotmob.fetch_league_season(league, year)["fixtures"]["allMatches"]
+            time.sleep(fotmob.SECONDS_BETWEEN_REQUESTS)
+            without_round = assign_matchdays(matches, fotmob_rounds(fixtures, matches))
             table, champion_club_id = calculate_standings(
                 matches, league["code"], year, corrections
             )
@@ -387,6 +438,8 @@ def main():
                 f"{len(table)} clubs, champion {cursor.fetchone()[0]} "
                 f"(season_id = {season_id})"
             )
+            if without_round:
+                print(f"    {without_round} matches not on FotMob, round worked out instead")
 
     connection.close()
 
