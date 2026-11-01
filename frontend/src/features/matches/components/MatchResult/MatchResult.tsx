@@ -1,6 +1,7 @@
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import { getTableName } from "@/data/tableNames";
-import type { Match, UnplayedMatch } from "@/types/api"; // Types for API responses
+import { statusLabel } from "@/features/matches/utils/matchStatus";
+import type { Match } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
 import "./MatchResult.scss";
 
@@ -8,31 +9,6 @@ import "./MatchResult.scss";
 type MatchResultProps = {
   match: Match;
 };
-
-// "15:00" in the visitor's time zone
-const kickOffFormat = new Intl.DateTimeFormat("en-GB", {
-  hour: "2-digit",
-  minute: "2-digit",
-});
-
-// What the pill shows for a match without a result
-function unplayedLabel(match: UnplayedMatch): string {
-  switch (match.status) {
-    case "SCHEDULED":
-    case "TIMED":
-      return kickOffFormat.format(new Date(match.utcDate));
-    case "POSTPONED":
-      return "Postponed";
-    case "CANCELLED":
-      return "Cancelled";
-    case "SUSPENDED":
-      return "Suspended";
-    default:
-      return match.homeGoals !== null && match.awayGoals !== null
-        ? `${match.homeGoals} – ${match.awayGoals}`
-        : "Live";
-  }
-}
 
 // One match: home club, score (or kick-off), away club. The losing club's name is muted.
 // Names are the table's short names, or three-letter codes on phones
@@ -68,7 +44,7 @@ export default function MatchResult({ match }: MatchResultProps) {
       >
         {played
           ? `${match.homeGoals} – ${match.awayGoals}`
-          : unplayedLabel(match)}
+          : statusLabel(match)}
       </p>
       <p
         className={`match-result__club${awayLost ? " match-result__club--lost" : ""}`}
