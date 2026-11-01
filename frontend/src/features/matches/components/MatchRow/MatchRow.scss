@@ -111,8 +111,10 @@
     border: 1px solid $color-border-default;
     border-radius: $radius-8;
 
+    // 16px from the clubs, like the Overview's results
     @include below-tablet {
       min-width: rem(48);
+      margin-inline: rem(8);
       padding: rem(8);
     }
 
