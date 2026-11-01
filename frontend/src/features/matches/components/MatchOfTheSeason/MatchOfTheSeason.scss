@@ -1,7 +1,6 @@
 @use "@/styles/foundations" as *;
 
 .match-of-the-season {
-  position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -9,25 +8,9 @@
   border-radius: $radius-16;
   box-shadow: $shadow-resting;
   color: $color-text-inverse;
-  overflow: hidden;
+  overflow: hidden; // Keeps the footer inside the rounded corners
 
-  // Pitch-line circle, cut off at the top right corner
-  &::before {
-    content: "";
-    position: absolute;
-    top: rem(-60);
-    right: rem(-60);
-    width: rem(160);
-    height: rem(160);
-    border: 1px solid $color-accent;
-    border-radius: 50%;
-    opacity: 0.15;
-    pointer-events: none;
-  }
-
-  // Positioned so it sits above the circle
   &__body {
-    position: relative;
     display: flex;
     flex-direction: column;
     gap: rem(24);
