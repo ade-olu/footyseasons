@@ -1,6 +1,14 @@
 @use "@/styles/foundations" as *;
 
+// The list runs edge to edge, so only the header and status are padded
 .matchweek-results {
+  gap: 0;
+  padding: 0;
+
+  @include below-tablet {
+    padding: 0;
+  }
+
   // Title on the left, picker on the right; the picker wraps below when narrow
   &__header {
     display: flex;
@@ -8,6 +16,11 @@
     align-items: center;
     justify-content: space-between;
     gap: rem(24);
+    padding: rem(24);
+
+    @include below-tablet {
+      padding: rem(24) rem(16);
+    }
 
     > :first-child {
       flex: 1 1 rem(240);
@@ -15,49 +28,50 @@
   }
 
   &__days {
-    display: flex;
-    flex-direction: column;
-    gap: rem(32);
-
     @include motion-allowed {
       animation: matchweek-results-fade 0.2s;
     }
   }
 
-  &__day {
-    display: flex;
-    flex-direction: column;
-    gap: rem(16);
-  }
-
+  // Grey strip above each day's matches
   &__date {
+    padding: rem(16) rem(24);
     @include text(14);
     font-weight: 500;
     color: $color-text-secondary;
+    background-color: $color-bg-subtle;
+    border-top: 1px solid $color-border-default;
+    border-bottom: 1px solid $color-border-default;
+
+    @include below-tablet {
+      padding: rem(16);
+    }
   }
 
-  // 1 column on smaller screens, 2 once both club names fit.
-  // The container is .app__content (in App.scss)
   &__list {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: rem(24);
     margin: 0;
     padding: 0;
     list-style: none;
+  }
 
-    @include below-tablet {
-      gap: rem(16);
-    }
+  // A divider under each match except a day's last, which the next strip's
+  // border or the card's border closes
+  &__item {
+    border-bottom: 1px solid $color-border-default;
 
-    @include container-from($content-medium) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    &:last-child {
+      border-bottom: none;
     }
   }
 
   &__status {
+    padding: 0 rem(24) rem(24);
     @include text(14);
     color: $color-text-secondary;
+
+    @include below-tablet {
+      padding: 0 rem(16) rem(24);
+    }
   }
 }
 
