@@ -65,6 +65,7 @@ $standings-table-relegation-row-hover: color.mix(
     font-weight: 500;
     color: $color-text-secondary;
     background-color: $color-bg-subtle;
+    border-top: 1px solid $color-border-default;
   }
 
   abbr {
