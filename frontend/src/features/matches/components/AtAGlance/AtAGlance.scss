@@ -1,0 +1,42 @@
+@use "@/styles/foundations" as *;
+
+.at-a-glance {
+  // Two by two, with 1px dividers from the border colour showing through the gaps
+  &__tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background-color: $color-border-default;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-12;
+    overflow: hidden;
+  }
+
+  // Value above the label, though the label comes first for screen readers
+  &__tile {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: rem(4);
+    padding: rem(16);
+    background-color: $color-bg-subtle;
+  }
+
+  &__value {
+    margin: 0;
+    @include text(28);
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+
+  &__label {
+    @include text(12);
+    color: $color-text-secondary;
+  }
+
+  &__comparison {
+    @include text(14, $wrap: true);
+    color: $color-text-secondary;
+  }
+}
