@@ -2,13 +2,13 @@
 
 FootySeasons is a football stats web app for the Premier League, La Liga, Serie A,
 Bundesliga and Ligue 1, covering every season from 2014/15 to 2025/26. Pick a
-league and a season and see how it played out: the table, the top scorers, the
-award winners and the final day.
+league and a season and see how it played out: the table, every result, the top
+scorers, the award winners and the final day.
 
 **Live:** [footyseasons.vercel.app](https://footyseasons.vercel.app)
 
-> Still in development. The Overview and Standings pages are done, with
-> Matches, Player Stats and Clubs next.
+> Still in development. The Overview, Standings and Matches pages are done, with
+> Player Stats and Clubs next.
 
 ## Why
 
@@ -23,6 +23,8 @@ the same clean dashboard feel as the apps I use every week.
   scorers and assist providers, and the final day's results
 - **Full league table:** Overall, home and away views, last-5 form, and
   European and relegation places for every season
+- **Every result:** Each matchweek's results by day, a summary of the round,
+  the season's home win, draw and away win split, and the match of the season
 - **Season awards:** Player, manager, goalkeeper and young player of the
   season, with each winner's stats
 - **Shareable URLs:** The league and season live in the URL
@@ -182,8 +184,7 @@ and features only import shared code, never each other.
 
 ## Roadmap
 
-- Matches, Player Stats (goals, assists, xG and xA for every player) and Clubs
-  pages
+- Player Stats (goals, assists, xG and xA for every player) and Clubs pages
 - Charts for player and club stats
 
 ## Credits
