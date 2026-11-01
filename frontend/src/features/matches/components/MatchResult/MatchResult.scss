@@ -6,10 +6,10 @@
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: rem(16);
-  padding: rem(14) rem(32);
+  padding: rem(16) rem(32);
 
   @include below-tablet {
-    padding: rem(14) rem(16);
+    padding: rem(16);
   }
   background-color: $color-bg-subtle;
   border: 1px solid $color-border-default;
