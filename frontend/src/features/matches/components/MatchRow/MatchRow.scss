@@ -1,0 +1,114 @@
+@use "@/styles/foundations" as *;
+
+// Time, home club, score, away club and an empty column as wide as the time,
+// so the score sits in the middle
+.match-row {
+  display: grid;
+  grid-template-columns: rem(48) minmax(0, 1fr) auto minmax(0, 1fr) rem(48);
+  align-items: center;
+  gap: rem(16);
+  padding: rem(16) rem(24);
+
+  @include below-tablet {
+    grid-template-columns: rem(40) minmax(0, 1fr) auto minmax(0, 1fr) rem(40);
+    padding: rem(16);
+  }
+
+  // Shades on hover like the standings rows; not a link, so no pointer
+  @include can-hover {
+    &:hover {
+      background-color: $color-bg-surface-hover;
+    }
+  }
+
+  @include motion-allowed {
+    transition: background-color 0.2s;
+  }
+
+  &__time {
+    @include text(12);
+    color: $color-text-secondary;
+  }
+
+  &__club {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+    min-width: 0;
+    @include text(14);
+    color: $color-text-primary;
+
+    @include below-tablet {
+      gap: rem(8);
+    }
+
+    // Crest next to the score on both sides
+    &--home {
+      justify-content: flex-end;
+    }
+
+    &--away {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    &--lost {
+      color: $color-text-tertiary;
+    }
+  }
+
+  // Own element with min-width: 0 so the ellipsis works inside the flex row
+  &__club-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Short name, swapped for the three-letter code on phones
+  &__name-tla {
+    display: none;
+  }
+
+  @include below-tablet {
+    &__name-short {
+      display: none;
+    }
+
+    &__name-tla {
+      display: inline;
+    }
+  }
+
+  &__crest-slot {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: rem(32);
+  }
+
+  &__crest {
+    width: rem(24);
+    height: rem(24);
+  }
+
+  &__score {
+    min-width: rem(64);
+    padding: rem(8) rem(12);
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-primary;
+    text-align: center;
+    white-space: nowrap;
+    background-color: $color-bg-subtle;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-8;
+
+    // "vs", or a status such as "Postponed"
+    &--unplayed {
+      font-weight: 400;
+      color: $color-text-secondary;
+    }
+  }
+}
