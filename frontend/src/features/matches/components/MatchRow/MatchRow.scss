@@ -9,8 +9,10 @@
   gap: rem(16);
   padding: rem(16) rem(24);
 
+  // Narrower columns and gaps on phones, so the codes fit at 360px
   @include below-tablet {
-    grid-template-columns: rem(40) minmax(0, 1fr) auto minmax(0, 1fr) rem(40);
+    grid-template-columns: rem(32) minmax(0, 1fr) auto minmax(0, 1fr) rem(32);
+    gap: rem(8);
     padding: rem(16);
   }
 
@@ -86,6 +88,10 @@
     align-items: center;
     justify-content: center;
     width: rem(32);
+
+    @include below-tablet {
+      width: rem(24);
+    }
   }
 
   &__crest {
@@ -104,6 +110,11 @@
     background-color: $color-bg-subtle;
     border: 1px solid $color-border-default;
     border-radius: $radius-8;
+
+    @include below-tablet {
+      min-width: rem(48);
+      padding: rem(8);
+    }
 
     // "vs", or a status such as "Postponed"
     &--unplayed {
