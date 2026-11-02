@@ -1,7 +1,7 @@
 @use "@/styles/foundations" as *;
 
 // One column (Match of the Season, At a glance, results), then the results beside a
-// rem(320) column, rem(360) once there's room. The container is .app__content (in App.scss)
+// rem(320) column, then rem(360) or wider. The container is .app__content (in App.scss)
 .matchweek-browser {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -25,8 +25,11 @@
     gap: rem(32) rem(24);
   }
 
+  // At least rem(360), or a highlight card's width (a quarter of the row less its 3 gaps)
   @include container-from($content-grid-four) {
-    grid-template-columns: minmax(0, 1fr) rem(360);
+    grid-template-columns:
+      minmax(0, 1fr)
+      max(rem(360), calc((100% - 3 * rem(24)) / 4));
   }
 
   > * {
