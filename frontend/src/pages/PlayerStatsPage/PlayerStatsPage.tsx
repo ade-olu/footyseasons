@@ -1,3 +1,4 @@
+import PlayersBanner from "@/features/players/components/PlayersBanner/PlayersBanner";
 import type { LeagueCode } from "@/data/leagues";
 import { pageTitle } from "@/utils/pageTitle";
 
@@ -7,8 +8,7 @@ type PlayerStatsPageProps = {
   season: number;
 };
 
-// Player Stats page ("/player-stats")
-// Placeholder until the page is designed and built
+// Player Stats page ("/<league>/player-stats"): banner with the podium
 export default function PlayerStatsPage({
   league,
   season,
@@ -16,7 +16,8 @@ export default function PlayerStatsPage({
   return (
     <>
       <title>{pageTitle("Player Stats", league, season)}</title>
-      <h1>Player Stats</h1>
+      {/* Title and top 3 goal contributors */}
+      <PlayersBanner league={league} season={season} />
     </>
   );
 }
