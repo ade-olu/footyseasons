@@ -102,12 +102,16 @@ def match_players(understat_players, season_players, by_name):
     unmatched = []
     club_votes = Counter()
 
+    # Ids already matched per league-season, so a fallback can't reuse them
+    taken = defaultdict(set)
+
     for key, players in understat_players.items():
         candidates = {pid: name for pid, (name, _) in season_players[key].items()}
         for understat_id, name, clubs in players:
             found = find_candidates(name, candidates)
             if len(found) == 1:
                 matches[understat_id][found[0]] += 1
+                taken[key].add(found[0])
                 other_clubs = season_players[key][found[0]][1]
                 if len(clubs) == 1 and len(other_clubs) == 1:
                     club_votes[(next(iter(clubs)), next(iter(other_clubs)))] += 1
@@ -119,7 +123,7 @@ def match_players(understat_players, season_players, by_name):
         club_map.setdefault(club, other_club)
 
     # Retry within the player's club, then by a name unique in the source
-    misses = []
+    retries = []
     for key, understat_id, name, clubs in unmatched:
         other_clubs = {club_map.get(club) for club in clubs}
         club_candidates = {
@@ -131,6 +135,32 @@ def match_players(understat_players, season_players, by_name):
         pid = found[0] if len(found) == 1 else unique(by_name.get(name_words(name), ()))
         if pid:
             matches[understat_id][pid] += 1
+            taken[key].add(pid)
+        else:
+            retries.append((key, understat_id, name, club_candidates))
+
+    # Then the one unclaimed clubmate with the same surname ("Dan Burn" and
+    # "Daniel Burn"), or else the same first name ("Evan Ndicka", "Evan N'Dicka")
+    misses = []
+    for key, understat_id, name, club_candidates in retries:
+        words = name_words(name)
+        free = {
+            pid: name_words(other_name)
+            for pid, other_name in club_candidates.items()
+            if pid not in taken[key]
+        }
+        pid = None
+        for index in (-1, 0):
+            pid = pid or unique(
+                {
+                    p
+                    for p, other in free.items()
+                    if words and other and other[index] == words[index]
+                }
+            )
+        if pid:
+            matches[understat_id][pid] += 1
+            taken[key].add(pid)
         else:
             misses.append((understat_id, name))
 
