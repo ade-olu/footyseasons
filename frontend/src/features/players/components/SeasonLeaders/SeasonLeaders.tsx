@@ -242,7 +242,7 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
       <div className="season-leaders__header">
         <SectionHeader
           title="Season leaders"
-          description={`The top five in each stat across the ${seasonLabel(season)} ${leagueName}.`}
+          description={`The top 5 in each stat across the ${seasonLabel(season)} ${leagueName}.`}
         />
         <SegmentedControl
           className="season-leaders__toggle"
