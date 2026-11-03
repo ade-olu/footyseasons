@@ -30,11 +30,13 @@ export default function FittedName({
     const measures = measureRef.current;
     if (!element || !measures) return;
 
+    // Exact widths, since offsetWidth rounds and a name 0.1px too wide gets cut
     const check = () => {
+      const room = element.getBoundingClientRect().width;
       const widths = [...measures.children].map(
-        (option) => (option as HTMLElement).offsetWidth,
+        (option) => option.getBoundingClientRect().width,
       );
-      const fitting = widths.findIndex((width) => width <= element.clientWidth);
+      const fitting = widths.findIndex((width) => width <= room);
       setShown(fitting === -1 ? widths.length - 1 : fitting);
     };
     check();
