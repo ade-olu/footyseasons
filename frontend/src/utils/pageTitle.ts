@@ -1,4 +1,5 @@
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { seasonLabel } from "@/utils/season";
 
 // Browser tab title, e.g. "Standings - Premier League 2016/17 | FootySeasons"
 export function pageTitle(page: string, league?: LeagueCode, season?: number) {
@@ -7,6 +8,5 @@ export function pageTitle(page: string, league?: LeagueCode, season?: number) {
   }
 
   const leagueName = LEAGUES.find((item) => item.code === league)?.name;
-  const seasonLabel = `${season}/${String(season + 1).slice(-2)}`;
-  return `${page} - ${leagueName} ${seasonLabel} | FootySeasons`;
+  return `${page} - ${leagueName} ${seasonLabel(season)} | FootySeasons`;
 }
