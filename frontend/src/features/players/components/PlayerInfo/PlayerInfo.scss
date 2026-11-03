@@ -39,7 +39,7 @@
   &__club {
     display: flex;
     align-items: center;
-    gap: rem(4);
+    gap: rem(8);
     @include text(12);
     color: $color-text-secondary;
   }
