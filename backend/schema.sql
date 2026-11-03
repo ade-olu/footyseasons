@@ -255,5 +255,6 @@ CREATE TABLE player_profiles (
     fotmob_id            INTEGER,
     photo_url            TEXT,
     transfermarkt_id     INTEGER,
-    date_of_birth        TEXT                -- "YYYY-MM-DD"
+    date_of_birth        TEXT,               -- "YYYY-MM-DD"
+    position             TEXT                -- Transfermarkt's main position: FW, MF, DF or GK
 );

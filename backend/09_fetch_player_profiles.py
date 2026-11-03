@@ -2,8 +2,8 @@
 09_fetch_player_profiles.py
 
 Matches Understat players to FotMob (photo) and Transfermarkt (date of
-birth, from the CC0 transfermarkt-datasets export) and saves them in
-player_profiles. Photos are loaded from FotMob's image server.
+birth and main position, from the CC0 transfermarkt-datasets export) and
+saves them in player_profiles. Photos are loaded from FotMob's image server.
 
 Safe to re-run: the table is rebuilt each time. I cache downloads in
 cache/; delete it to refetch everything. Run 06_fetch_understat.py first.
@@ -46,6 +46,13 @@ TRANSFERMARKT_IDS = {
     11866: 193082,  # Álex Grimaldo -> Alejandro Grimaldo
     12030: 523318,  # Tasos Douvikas -> Anastasios Douvikas
 }
+
+# Transfermarkt's position groups -> the app's codes
+POSITIONS = {"Attack": "FW", "Midfield": "MF", "Defender": "DF", "Goalkeeper": "GK"}
+
+# Players whose Transfermarkt position (their current one) is wrong for their
+# Understat years: understat_player_id -> FW, MF, DF or GK
+POSITION_OVERRIDES = {}
 
 # Names that don't match: understat_player_id -> FotMob player id
 FOTMOB_IDS = {
@@ -311,14 +318,16 @@ def main():
         tm_player = tm_players.get(tm_ids.get(uid), {})
         cursor.execute(
             """INSERT INTO player_profiles
-               (understat_player_id, fotmob_id, photo_url, transfermarkt_id, date_of_birth)
-               VALUES (?, ?, ?, ?, ?)""",
+               (understat_player_id, fotmob_id, photo_url, transfermarkt_id,
+                date_of_birth, position)
+               VALUES (?, ?, ?, ?, ?, ?)""",
             (
                 uid,
                 fm_ids.get(uid),
                 PHOTO_URL.format(fm_ids[uid]) if uid in fm_ids else None,
                 tm_ids.get(uid),
                 tm_player.get("date_of_birth", "")[:10] or None,
+                POSITION_OVERRIDES.get(uid, POSITIONS.get(tm_player.get("position"))),
             ),
         )
 
