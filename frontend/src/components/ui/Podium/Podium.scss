@@ -64,7 +64,7 @@
   &__stat {
     display: flex;
     align-items: center;
-    gap: rem(4);
+    gap: rem(8);
     margin-top: rem(2);
     @include text(12);
     color: $color-text-inverse-secondary;
