@@ -13,7 +13,9 @@ import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl"
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
 import PlayersTable from "@/features/players/components/PlayersTable/PlayersTable";
 import {
+  PHONE_VIEWS,
   PLAYER_COLUMNS,
+  type PhoneView,
   type PlayerColumn,
 } from "@/features/players/utils/playerColumns";
 import {
@@ -80,6 +82,7 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
   const [position, setPosition] = useState<Position | "all">("all");
   const [club, setClub] = useState<number | "all">("all");
   const [sort, setSort] = useState<PlayerColumn>("goals");
+  const [phoneView, setPhoneView] = useState<PhoneView>("general");
   const [page, setPage] = useState(1);
 
   // Another league or season has other clubs: clear the club and go back to page 1
@@ -124,6 +127,14 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
     };
   }
 
+  // A new view keeps the sort if its column is shown, otherwise uses the view's
+  const view = PHONE_VIEWS.find((item) => item.value === phoneView)!;
+  function changePhoneView(value: PhoneView) {
+    const next = PHONE_VIEWS.find((item) => item.value === value)!;
+    setPhoneView(value);
+    if (!next.columns.includes(sort)) update(setSort)(next.sort);
+  }
+
   const clubs = clubOptions(data?.players ?? []);
 
   return (
@@ -162,7 +173,8 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
         </div>
       </div>
 
-      {/* Position toggle and club dropdown; two dropdowns on phones */}
+      {/* Position toggle and club dropdown; on phones two dropdowns, then the
+          stats view */}
       <div className="all-players__controls">
         <SegmentedControl
           className="all-players__position-toggle"
@@ -188,11 +200,24 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
           ariaLabel="Club"
           label="Club"
         />
+        <SegmentedControl
+          className="all-players__view-toggle"
+          options={PHONE_VIEWS}
+          value={phoneView}
+          onChange={changePhoneView}
+          label="Stats shown"
+          fit="content"
+        />
       </div>
 
       {data ? (
         <div className="all-players__results">
-          <PlayersTable rows={pageRows} sort={sort} onSort={update(setSort)} />
+          <PlayersTable
+            rows={pageRows}
+            sort={sort}
+            onSort={update(setSort)}
+            phoneColumns={view.columns}
+          />
           {rows.length === 0 && (
             <p className="all-players__status">No players match.</p>
           )}

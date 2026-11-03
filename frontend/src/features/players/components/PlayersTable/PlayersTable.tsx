@@ -13,18 +13,29 @@ export type PlayersTableRow = {
   rank: number;
 };
 
-// Props for the PlayersTable component: the rows to show, the sorted column and a
-// handler for sorting by another
+// Props for the PlayersTable component: the rows to show, the sorted column, a
+// handler for sorting by another and the columns shown on phones
 type PlayersTableProps = {
   rows: PlayersTableRow[];
   sort: PlayerColumn;
   onSort: (column: PlayerColumn) => void;
+  phoneColumns: PlayerColumn[];
 };
 
-// The column's classes: hidden on narrower tables, always shown when sorted
-function columnClass(column: (typeof PLAYER_COLUMNS)[number], sort: string) {
+// The column's classes: hidden on narrower tables and on phones outside the
+// view, always shown when sorted
+function columnClass(
+  column: (typeof PLAYER_COLUMNS)[number],
+  sort: PlayerColumn,
+  phoneColumns: PlayerColumn[],
+) {
   if (column.key === sort) return " players-table__cell--sorted";
-  return column.hide ? ` players-table__cell--hide-${column.hide}` : "";
+  return [
+    column.hide && ` players-table__cell--hide-${column.hide}`,
+    !phoneColumns.includes(column.key) && " players-table__cell--off-phone",
+  ]
+    .filter(Boolean)
+    .join("");
 }
 
 // Player stats table: rank, player, position and stat columns, sorted by one of them
@@ -32,6 +43,7 @@ export default function PlayersTable({
   rows,
   sort,
   onSort,
+  phoneColumns,
 }: PlayersTableProps) {
   return (
     <div className="players-table">
@@ -40,11 +52,11 @@ export default function PlayersTable({
         <colgroup>
           <col className="players-table__col-rank" />
           <col />
-          <col className="players-table__col-stat players-table__cell--hide-wide" />
+          <col className="players-table__col-stat players-table__cell--hide-wide players-table__cell--off-phone" />
           {PLAYER_COLUMNS.map((column) => (
             <col
               key={column.key}
-              className={`players-table__col-stat${columnClass(column, sort)}`}
+              className={`players-table__col-stat players-table__col-${column.key}${columnClass(column, sort, phoneColumns)}`}
             />
           ))}
           <col className="players-table__col-end" />
@@ -59,7 +71,7 @@ export default function PlayersTable({
             </th>
             <th
               scope="col"
-              className="players-table__stat players-table__cell--hide-wide"
+              className="players-table__stat players-table__cell--hide-wide players-table__cell--off-phone"
             >
               <abbr title="Position">Pos</abbr>
             </th>
@@ -67,7 +79,7 @@ export default function PlayersTable({
               <th
                 key={column.key}
                 scope="col"
-                className={`players-table__stat${columnClass(column, sort)}`}
+                className={`players-table__stat${columnClass(column, sort, phoneColumns)}`}
                 aria-sort={column.key === sort ? "descending" : undefined}
               >
                 <button
@@ -99,13 +111,13 @@ export default function PlayersTable({
               <td className="players-table__player">
                 <PlayerInfo player={player} />
               </td>
-              <td className="players-table__stat players-table__position players-table__cell--hide-wide">
+              <td className="players-table__stat players-table__position players-table__cell--hide-wide players-table__cell--off-phone">
                 {playerPosition(player)?.code ?? "–"}
               </td>
               {PLAYER_COLUMNS.map((column) => (
                 <td
                   key={column.key}
-                  className={`players-table__stat${columnClass(column, sort)}`}
+                  className={`players-table__stat${columnClass(column, sort, phoneColumns)}`}
                 >
                   {column.format(column.value(player))}
                 </td>

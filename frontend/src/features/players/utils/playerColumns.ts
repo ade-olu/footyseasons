@@ -18,7 +18,8 @@ export type PlayerColumn =
   | "yellowCards";
 
 // Label, full name, value (rounded as shown, so ties match the screen), tie-breakers,
-// format and the table width it's hidden below ("wide" 940px, "medium" 760px, "phone")
+// format and the table width it's hidden below on wider screens ("wide" 940px,
+// "medium" 760px); phones show a view instead (PHONE_VIEWS)
 export const PLAYER_COLUMNS: {
   key: PlayerColumn;
   label: string;
@@ -26,7 +27,7 @@ export const PLAYER_COLUMNS: {
   value: (player: Player) => number;
   tieBreakers: ((player: Player) => number)[];
   format: (value: number) => string;
-  hide?: "wide" | "medium" | "phone";
+  hide?: "wide" | "medium";
 }[] = [
   {
     key: "games",
@@ -68,7 +69,6 @@ export const PLAYER_COLUMNS: {
     value: (player) => oneDecimal(player.xG),
     tieBreakers: [(player) => player.goals],
     format: formatDecimal,
-    hide: "phone",
   },
   {
     key: "xA",
@@ -77,7 +77,6 @@ export const PLAYER_COLUMNS: {
     value: (player) => oneDecimal(player.xA),
     tieBreakers: [(player) => player.assists],
     format: formatDecimal,
-    hide: "phone",
   },
   {
     key: "shots",
@@ -105,5 +104,41 @@ export const PLAYER_COLUMNS: {
     tieBreakers: [],
     format: formatWhole,
     hide: "wide",
+  },
+];
+
+// Phones show three columns at a time: a view picks them, and its sort is used
+// when the sorted column isn't in it
+export type PhoneView = "general" | "shooting" | "creating" | "more";
+
+export const PHONE_VIEWS: {
+  value: PhoneView;
+  label: string;
+  columns: PlayerColumn[];
+  sort: PlayerColumn;
+}[] = [
+  {
+    value: "general",
+    label: "General",
+    columns: ["games", "goals", "assists"],
+    sort: "goals",
+  },
+  {
+    value: "shooting",
+    label: "Shooting",
+    columns: ["goals", "xG", "shots"],
+    sort: "goals",
+  },
+  {
+    value: "creating",
+    label: "Creating",
+    columns: ["assists", "xA", "keyPasses"],
+    sort: "assists",
+  },
+  {
+    value: "more",
+    label: "More",
+    columns: ["games", "minutes", "yellowCards"],
+    sort: "minutes",
   },
 ];

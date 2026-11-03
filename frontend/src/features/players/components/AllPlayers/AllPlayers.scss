@@ -120,10 +120,19 @@
     gap: rem(16);
     padding: 0 rem(24);
 
-    // Two dropdowns side by side
+    // Two dropdowns side by side, the stats view below them
     @include below-tablet {
-      flex-wrap: nowrap;
       padding: 0 rem(16);
+    }
+  }
+
+  // Phones only: picks the table's three stats
+  &__view-toggle {
+    display: none;
+
+    @include below-tablet {
+      display: grid;
+      flex: 1 1 100%;
     }
   }
 
