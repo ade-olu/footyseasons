@@ -158,14 +158,15 @@
     }
   }
 
-  // Narrow phones: slimmer stats, so the name keeps its room; minutes need
-  // more for "3,420" and the sort triangle
+  // Narrow phones: slimmer stats, so the name keeps its room; minutes and save
+  // percentage need more for "3,420" and "69.8%"
   @include container-up-to(rem(399)) {
     &__col-stat {
       width: rem(40);
     }
 
-    &__col-minutes {
+    &__col-minutes,
+    &__col-savePercentage {
       width: rem(52);
     }
   }

@@ -116,7 +116,7 @@
     }
   }
 
-  // Position toggle on the left, club dropdown on the right
+  // Stats toggle on the left, position and club dropdowns on the right
   &__controls {
     display: flex;
     flex-wrap: wrap;
@@ -125,29 +125,35 @@
     gap: rem(16);
     padding: 0 rem(24);
 
-    // Two dropdowns side by side, the stats view below them
+    // Two dropdowns side by side, the stats dropdown below the first
     @include below-tablet {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       padding: 0 rem(16);
     }
   }
 
-  // Phones only: picks the table's three stats
   &__view-toggle {
-    display: none;
+    width: rem(360);
 
-    @include below-tablet {
-      display: grid;
-      flex: 1 1 100%;
-    }
-  }
-
-  &__position-toggle {
     @include below-tablet {
       display: none;
     }
   }
 
-  &__position-dropdown {
+  // Stays on the right when it wraps below the toggle
+  &__filters {
+    display: flex;
+    gap: rem(16);
+    margin-left: auto;
+
+    @include below-tablet {
+      display: contents;
+    }
+  }
+
+  // Phones only: picks the table's three stats
+  &__view-dropdown {
     display: none;
 
     @include below-tablet {
@@ -159,27 +165,23 @@
     width: rem(200);
 
     @include below-tablet {
-      flex: 1 1 0;
       width: auto;
       min-width: 0;
     }
   }
 
-  // Stays on the right when it wraps below the toggle
-  &__club-dropdown {
-    margin-left: auto;
-
-    // 20 clubs: the list scrolls
-    .dropdown__list {
-      max-height: rem(320);
-      overflow-y: auto;
-    }
+  // 20 clubs: the list scrolls
+  &__club-dropdown .dropdown__list {
+    max-height: rem(320);
+    overflow-y: auto;
   }
 
-  // Still 24px below the controls on phones
+  // Still 24px below the controls on phones. The stat key hides with the
+  // table's columns, so it needs the same container width
   &__results {
     display: flex;
     flex-direction: column;
+    container-type: inline-size;
 
     @include below-tablet {
       margin-top: rem(8);

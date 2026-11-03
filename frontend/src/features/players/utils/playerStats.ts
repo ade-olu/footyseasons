@@ -121,3 +121,8 @@ export function formatDecimal(value: number) {
     maximumFractionDigits: 1,
   });
 }
+
+// "+4.2", "-1.3"
+export function formatSigned(value: number) {
+  return `${value > 0 ? "+" : ""}${formatDecimal(value)}`;
+}

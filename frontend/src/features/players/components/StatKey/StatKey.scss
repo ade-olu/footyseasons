@@ -1,0 +1,34 @@
+@use "@/styles/foundations" as *;
+
+// Wraps like the standings legend, under a line
+.stat-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(12) rem(24);
+  margin: 0;
+  padding: rem(24);
+  border-top: 1px solid $color-border-default;
+  list-style: none;
+
+  @include below-tablet {
+    column-gap: rem(16);
+    padding: rem(24) rem(16);
+  }
+
+  // No display of its own, so the table's column classes can hide it
+  &__item {
+    @include text(12);
+    color: $color-text-secondary;
+
+    // "– Not recorded" starts its own line
+    &--new-line {
+      flex-basis: 100%;
+    }
+  }
+
+  &__abbreviation {
+    margin-right: rem(8);
+    font-weight: 500;
+    color: $color-text-primary;
+  }
+}

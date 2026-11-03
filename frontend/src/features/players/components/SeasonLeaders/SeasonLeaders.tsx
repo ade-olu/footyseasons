@@ -7,6 +7,7 @@ import { LEAGUES, type LeagueCode } from "@/data/leagues";
 import LeaderCard from "@/features/players/components/LeaderCard/LeaderCard";
 import {
   formatDecimal,
+  formatSigned,
   formatWhole,
   oneDecimal,
   playerPosition,
@@ -19,11 +20,6 @@ import "./SeasonLeaders.scss";
 
 // Players per card: the leader and four runners-up
 const LEADERS_SHOWN = 5;
-
-// "+4.2", "-1.3"
-function formatSigned(value: number) {
-  return `${value > 0 ? "+" : ""}${formatDecimal(value)}`;
-}
 
 // "0.70"
 function formatTwoDecimals(value: number) {

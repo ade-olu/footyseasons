@@ -1,46 +1,40 @@
 import PlayerInfo from "@/features/players/components/PlayerInfo/PlayerInfo";
 import {
-  PLAYER_COLUMNS,
+  columnClass,
   type PlayerColumn,
+  type PlayerColumnDefinition,
 } from "@/features/players/utils/playerColumns";
 import { playerPosition } from "@/features/players/utils/playerStats";
 import type { Player } from "@/types/api"; // Types for API responses
 import "./PlayersTable.scss";
 
-// One row: the player and their rank in the sorted list
+// One row: the player and their rank in the sorted list (null when the sorted
+// stat isn't recorded)
 export type PlayersTableRow = {
   player: Player;
-  rank: number;
+  rank: number | null;
 };
 
-// Props for the PlayersTable component: the rows to show, the sorted column, a
-// handler for sorting by another and the columns shown on phones
+// Props for the PlayersTable component: the rows to show, the stat columns, the
+// sorted one, a handler for sorting by another and the columns shown on phones
 type PlayersTableProps = {
   rows: PlayersTableRow[];
+  columns: PlayerColumnDefinition[];
   sort: PlayerColumn;
   onSort: (column: PlayerColumn) => void;
   phoneColumns: PlayerColumn[];
 };
 
-// The column's classes: hidden on narrower tables and on phones outside the
-// view, always shown when sorted
-function columnClass(
-  column: (typeof PLAYER_COLUMNS)[number],
-  sort: PlayerColumn,
-  phoneColumns: PlayerColumn[],
-) {
-  if (column.key === sort) return " players-table__cell--sorted";
-  return [
-    column.hide && ` players-table__cell--hide-${column.hide}`,
-    !phoneColumns.includes(column.key) && " players-table__cell--off-phone",
-  ]
-    .filter(Boolean)
-    .join("");
+// The player's value as shown, "–" when not recorded
+function formatValue(column: PlayerColumnDefinition, player: Player) {
+  const value = column.value(player);
+  return value === null ? "–" : column.format(value);
 }
 
 // Player stats table: rank, player, position and stat columns, sorted by one of them
 export default function PlayersTable({
   rows,
+  columns,
   sort,
   onSort,
   phoneColumns,
@@ -53,7 +47,7 @@ export default function PlayersTable({
           <col className="players-table__col-rank" />
           <col />
           <col className="players-table__col-stat players-table__cell--hide-wide players-table__cell--off-phone" />
-          {PLAYER_COLUMNS.map((column) => (
+          {columns.map((column) => (
             <col
               key={column.key}
               className={`players-table__col-stat players-table__col-${column.key}${columnClass(column, sort, phoneColumns)}`}
@@ -75,7 +69,7 @@ export default function PlayersTable({
             >
               <abbr title="Position">Pos</abbr>
             </th>
-            {PLAYER_COLUMNS.map((column) => (
+            {columns.map((column) => (
               <th
                 key={column.key}
                 scope="col"
@@ -85,7 +79,8 @@ export default function PlayersTable({
                 <button
                   type="button"
                   className="players-table__sort"
-                  title={`Sort by ${column.name}`}
+                  title={`Sort by ${column.name.toLowerCase()}`}
+                  aria-label={`Sort by ${column.name.toLowerCase()}`}
                   onClick={() => onSort(column.key)}
                 >
                   <abbr title={column.name}>{column.label}</abbr>
@@ -107,19 +102,19 @@ export default function PlayersTable({
         <tbody>
           {rows.map(({ player, rank }) => (
             <tr key={player.understatId}>
-              <td className="players-table__rank">{rank}</td>
+              <td className="players-table__rank">{rank ?? "–"}</td>
               <td className="players-table__player">
                 <PlayerInfo player={player} />
               </td>
               <td className="players-table__stat players-table__position players-table__cell--hide-wide players-table__cell--off-phone">
                 {playerPosition(player)?.code ?? "–"}
               </td>
-              {PLAYER_COLUMNS.map((column) => (
+              {columns.map((column) => (
                 <td
                   key={column.key}
                   className={`players-table__stat${columnClass(column, sort, phoneColumns)}`}
                 >
-                  {column.format(column.value(player))}
+                  {formatValue(column, player)}
                 </td>
               ))}
               <td aria-hidden />
