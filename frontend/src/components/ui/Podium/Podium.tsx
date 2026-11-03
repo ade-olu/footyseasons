@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import FittedName from "@/components/ui/FittedName/FittedName";
 import "./Podium.scss";
 
 // One step: a crest or photo (sized by the caller), a name, and the stat under it
@@ -19,60 +20,6 @@ type PodiumProps = {
   className?: string;
 };
 
-// The name on one line: the full name when it fits the step, otherwise the first
-// short name that does, or the last one with an ellipsis
-function PodiumName({
-  name,
-  shortNames = [],
-  title,
-}: Pick<PodiumStep, "name" | "shortNames" | "title">) {
-  const nameRef = useRef<HTMLParagraphElement>(null);
-  const measureRef = useRef<HTMLSpanElement>(null);
-  const [shown, setShown] = useState(0);
-  const options = [name, ...shortNames];
-
-  // Compares each option's width with the step's, again on resize or font load
-  useLayoutEffect(() => {
-    const element = nameRef.current;
-    const measures = measureRef.current;
-    if (!element || !measures) return;
-
-    const check = () => {
-      const widths = [...measures.children].map(
-        (option) => (option as HTMLElement).offsetWidth,
-      );
-      const fitting = widths.findIndex((width) => width <= element.clientWidth);
-      setShown(fitting === -1 ? widths.length - 1 : fitting);
-    };
-    check();
-    const observer = new ResizeObserver(check);
-    observer.observe(element);
-    observer.observe(measures);
-    return () => observer.disconnect();
-  }, [name, shortNames]);
-
-  return (
-    <p className="podium__name" ref={nameRef} title={title ?? name}>
-      {shortNames.length > 0 && (
-        <span className="podium__name-measure" ref={measureRef} aria-hidden>
-          {options.map((option, index) => (
-            <span key={index}>{option}</span>
-          ))}
-        </span>
-      )}
-      {shown === 0 || !options[shown] ? (
-        name
-      ) : (
-        <>
-          <span aria-hidden>{options[shown]}</span>
-          {/* Screen readers get the full name */}
-          <span className="podium__name-full">{name}</span>
-        </>
-      )}
-    </p>
-  );
-}
-
 // Top 3 on a podium, shown 2, 1, 3, with bars sitting on the parent's bottom edge
 export default function Podium({ steps, label, className }: PodiumProps) {
   // Steps in table order; CSS shows them as 2, 1, 3
@@ -87,7 +34,8 @@ export default function Podium({ steps, label, className }: PodiumProps) {
           className={`podium__step podium__step--${index + 1}`}
         >
           <div className="podium__media">{step.media}</div>
-          <PodiumName
+          <FittedName
+            className="podium__name"
             name={step.name}
             shortNames={step.shortNames}
             title={step.title}

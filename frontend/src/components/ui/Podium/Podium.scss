@@ -52,7 +52,6 @@
 
   // As wide as the step, so the fit check measures the step; ellipsis as a last resort
   &__name {
-    position: relative;
     align-self: stretch;
     overflow: hidden;
     @include text(14);
@@ -60,24 +59,6 @@
     text-align: center;
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
-
-  // Full name at its natural width, out of sight
-  &__name-measure {
-    position: absolute;
-    top: 0;
-    left: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  // Read out, not shown
-  &__name-full {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
   }
 
   &__stat {
