@@ -258,3 +258,33 @@ CREATE TABLE player_profiles (
     date_of_birth        TEXT,               -- "YYYY-MM-DD"
     position             TEXT                -- Transfermarkt's main position: FW, MF, DF or GK
 );
+
+
+-- ------------------------------------------------------------
+-- TABLE: fotmob_player_stats
+-- Defending and goalkeeping season totals from FotMob (2016/17
+-- onwards), per Understat player through player_profiles.fotmob_id.
+-- FotMob only lists players above a minutes threshold in each stat,
+-- so a missing stat is NULL. Filled in by 10_fetch_fotmob_stats.py.
+-- ------------------------------------------------------------
+CREATE TABLE fotmob_player_stats (
+    season_id            INTEGER NOT NULL,
+    understat_player_id  INTEGER NOT NULL,
+    fotmob_id            INTEGER NOT NULL,
+    minutes              INTEGER,            -- FotMob's count, can differ slightly from Understat's
+    defensive_actions    INTEGER,            -- FotMob's "defensive contributions": tackles, interceptions, clearances, blocks, recoveries
+    tackles              INTEGER,
+    interceptions        INTEGER,
+    clearances           INTEGER,
+    blocks               INTEGER,            -- outfield players' blocked shots
+    recoveries           INTEGER,
+    clean_sheets         INTEGER,
+    saves                INTEGER,
+    goals_conceded       INTEGER,
+    goals_prevented      REAL,               -- xGOT faced minus goals conceded; 2018/19 onwards
+    save_percentage      REAL,               -- 0-100
+
+    FOREIGN KEY (season_id) REFERENCES seasons(season_id),
+
+    PRIMARY KEY (season_id, understat_player_id)
+);

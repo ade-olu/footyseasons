@@ -362,8 +362,6 @@ def main():
         )
 
     connection.commit()
-    # Last script in the pipeline: reclaim the space left by the re-inserts
-    connection.execute("VACUUM")
     connection.close()
 
     print(
