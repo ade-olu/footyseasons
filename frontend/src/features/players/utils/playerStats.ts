@@ -1,3 +1,4 @@
+import { SHORT_NAMES } from "@/features/players/data/shortNames";
 import type { Player, PlayerClub } from "@/types/api"; // Types for API responses
 
 // Positions grouped by the first letter of Understat's codes ("F S", "D M S", "GK")
@@ -25,11 +26,44 @@ export function currentClub(player: Player): PlayerClub | undefined {
   return player.clubs[player.clubs.length - 1];
 }
 
-// "Bruno Fernandes" -> "Bruno F."; one-word names have no short form
-export function shortPlayerName(name: string): string | undefined {
-  const words = name.trim().split(/\s+/);
-  if (words.length < 2) return undefined;
-  return `${words[0]} ${words[words.length - 1][0]}.`;
+// Words that start a surname ("De Bruyne", "van Dijk", "Mac Allister")
+const SURNAME_PARTICLES = new Set([
+  "al",
+  "ben",
+  "da",
+  "das",
+  "de",
+  "del",
+  "della",
+  "der",
+  "di",
+  "do",
+  "dos",
+  "du",
+  "el",
+  "la",
+  "le",
+  "mac",
+  "ten",
+  "ter",
+  "van",
+  "von",
+]);
+
+// "Bruno Fernandes" -> ["B. Fernandes", "Fernandes"], tried in order when the
+// full name doesn't fit; one-word names have no short form
+export function shortPlayerNames(player: Player) {
+  const override = SHORT_NAMES[player.understatId];
+  if (override) return override;
+
+  const words = player.playerName.trim().split(/\s+/);
+  if (words.length < 2) return [];
+  // From the first particle, otherwise the last word
+  const particle = words.findIndex(
+    (word, index) => index > 0 && SURNAME_PARTICLES.has(word.toLowerCase()),
+  );
+  const surname = words.slice(particle === -1 ? -1 : particle).join(" ");
+  return [`${words[0][0]}. ${surname}`, surname];
 }
 
 // Goals plus assists

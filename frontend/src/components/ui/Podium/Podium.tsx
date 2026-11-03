@@ -6,7 +6,7 @@ export type PodiumStep = {
   id: string | number;
   media: ReactNode;
   name: string;
-  shortName?: string; // Shown instead of name when name doesn't fit
+  shortNames?: string[]; // Tried in order when name doesn't fit
   title?: string; // Hover text, name by default
   stat: ReactNode;
 };
@@ -19,42 +19,52 @@ type PodiumProps = {
   className?: string;
 };
 
-// The name on one line: the full name when it fits the step, otherwise the short one
+// The name on one line: the full name when it fits the step, otherwise the first
+// short name that does, or the last one with an ellipsis
 function PodiumName({
   name,
-  shortName,
+  shortNames = [],
   title,
-}: Pick<PodiumStep, "name" | "shortName" | "title">) {
+}: Pick<PodiumStep, "name" | "shortNames" | "title">) {
   const nameRef = useRef<HTMLParagraphElement>(null);
   const measureRef = useRef<HTMLSpanElement>(null);
-  const [fits, setFits] = useState(true);
+  const [shown, setShown] = useState(0);
+  const options = [name, ...shortNames];
 
-  // Compares the full name's width with the step's, again on resize or font load
+  // Compares each option's width with the step's, again on resize or font load
   useLayoutEffect(() => {
     const element = nameRef.current;
-    const measure = measureRef.current;
-    if (!shortName || !element || !measure) return;
+    const measures = measureRef.current;
+    if (!element || !measures) return;
 
-    const check = () => setFits(measure.offsetWidth <= element.clientWidth);
+    const check = () => {
+      const widths = [...measures.children].map(
+        (option) => (option as HTMLElement).offsetWidth,
+      );
+      const fitting = widths.findIndex((width) => width <= element.clientWidth);
+      setShown(fitting === -1 ? widths.length - 1 : fitting);
+    };
     check();
     const observer = new ResizeObserver(check);
     observer.observe(element);
-    observer.observe(measure);
+    observer.observe(measures);
     return () => observer.disconnect();
-  }, [name, shortName]);
+  }, [name, shortNames]);
 
   return (
     <p className="podium__name" ref={nameRef} title={title ?? name}>
-      {shortName && (
+      {shortNames.length > 0 && (
         <span className="podium__name-measure" ref={measureRef} aria-hidden>
-          {name}
+          {options.map((option, index) => (
+            <span key={index}>{option}</span>
+          ))}
         </span>
       )}
-      {fits || !shortName ? (
+      {shown === 0 || !options[shown] ? (
         name
       ) : (
         <>
-          <span aria-hidden>{shortName}</span>
+          <span aria-hidden>{options[shown]}</span>
           {/* Screen readers get the full name */}
           <span className="podium__name-full">{name}</span>
         </>
@@ -79,7 +89,7 @@ export default function Podium({ steps, label, className }: PodiumProps) {
           <div className="podium__media">{step.media}</div>
           <PodiumName
             name={step.name}
-            shortName={step.shortName}
+            shortNames={step.shortNames}
             title={step.title}
           />
           <div className="podium__stat">{step.stat}</div>

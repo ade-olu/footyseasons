@@ -6,7 +6,7 @@ import { LEAGUES, type LeagueCode } from "@/data/leagues";
 import {
   currentClub,
   goalContributions,
-  shortPlayerName,
+  shortPlayerNames,
   sortPlayers,
 } from "@/features/players/utils/playerStats";
 import { seasonLabel } from "@/utils/season";
@@ -39,7 +39,7 @@ export default function PlayersBanner({ league, season }: PlayersBannerProps) {
               />
             ),
             name: player.playerName,
-            shortName: shortPlayerName(player.playerName),
+            shortNames: shortPlayerNames(player),
             stat: (
               <>
                 {club && (
