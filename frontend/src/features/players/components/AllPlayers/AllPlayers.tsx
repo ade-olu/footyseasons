@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ChevronLeft as ArrowLeftIcon,
   ChevronRight as ArrowRightIcon,
   Search as SearchIcon,
+  X as ClearIcon,
 } from "reicon-react";
 import { usePlayers } from "@/api/players";
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
@@ -75,6 +76,7 @@ type AllPlayersProps = {
 export default function AllPlayers({ league, season }: AllPlayersProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
   const [search, setSearch] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
   const [position, setPosition] = useState<Position | "all">("all");
   const [club, setClub] = useState<number | "all">("all");
   const [sort, setSort] = useState<PlayerColumn>("goals");
@@ -131,17 +133,33 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
           title="All players"
           description={`Every player who played in the ${seasonLabel(season)} ${leagueName}, sorted by ${column.name}.`}
         />
-        <label className="all-players__search">
-          <SearchIcon className="all-players__search-icon" aria-hidden />
-          <input
-            className="all-players__search-input"
-            type="search"
-            placeholder="Search players"
-            aria-label="Search players"
-            value={search}
-            onChange={(event) => update(setSearch)(event.target.value)}
-          />
-        </label>
+        <div className="all-players__search">
+          <label className="all-players__search-field">
+            <SearchIcon className="all-players__search-icon" aria-hidden />
+            <input
+              ref={searchRef}
+              className="all-players__search-input"
+              type="search"
+              placeholder="Search players"
+              aria-label="Search players"
+              value={search}
+              onChange={(event) => update(setSearch)(event.target.value)}
+            />
+          </label>
+          {search && (
+            <button
+              type="button"
+              className="all-players__search-clear"
+              aria-label="Clear search"
+              onClick={() => {
+                update(setSearch)("");
+                searchRef.current?.focus();
+              }}
+            >
+              <ClearIcon className="all-players__search-icon" aria-hidden />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Position toggle and club dropdown; two dropdowns on phones */}
