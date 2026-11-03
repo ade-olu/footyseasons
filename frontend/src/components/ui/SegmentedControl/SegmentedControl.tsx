@@ -6,7 +6,8 @@ import {
 } from "react";
 import "./SegmentedControl.scss";
 
-// Side padding of content-sized options: 16px when it fits, never under 4px
+// Side padding of content-sized options: 16px when it fits (or maxPadding),
+// never under 4px; always a whole, even number
 const MAX_PADDING = 16;
 const MIN_PADDING = 4;
 
@@ -19,7 +20,7 @@ type SegmentedControlOption<Value extends string> = {
 
 // Props for the SegmentedControl component: its options, the selected value, a
 // label for screen readers, and "content" to size each option to its label
-// instead of giving them equal widths
+// instead of giving them equal widths, with up to maxPadding at the sides
 type SegmentedControlProps<Value extends string> = {
   options: SegmentedControlOption<Value>[];
   value: Value;
@@ -27,6 +28,7 @@ type SegmentedControlProps<Value extends string> = {
   label: string;
   className?: string;
   fit?: "equal" | "content";
+  maxPadding?: number;
 };
 
 // Row of toggle buttons where one is selected (e.g. Overall / Home / Away)
@@ -37,6 +39,7 @@ export default function SegmentedControl<Value extends string>({
   label,
   className,
   fit = "equal",
+  maxPadding = MAX_PADDING,
 }: SegmentedControlProps<Value>) {
   const selectedIndex = Math.max(
     options.findIndex((option) => option.value === value),
@@ -55,7 +58,7 @@ export default function SegmentedControl<Value extends string>({
   // overflow, and the pill's edges from the selected button
   const controlRef = useRef<HTMLDivElement>(null);
   const [edges, setEdges] = useState<{ left: number; right: number }>();
-  const [padding, setPadding] = useState(MAX_PADDING);
+  const [padding, setPadding] = useState(maxPadding);
   useLayoutEffect(() => {
     const control = controlRef.current;
     if (fit !== "content" || !control) return;
@@ -73,8 +76,9 @@ export default function SegmentedControl<Value extends string>({
         range.selectNodeContents(button);
         return total + range.getBoundingClientRect().width + 2;
       }, 0);
-      const fitting = (room - labels) / (2 * buttons.length);
-      setPadding(Math.max(MIN_PADDING, Math.min(MAX_PADDING, fitting)));
+      // Rounded down to an even number of pixels
+      const fitting = Math.floor((room - labels) / (4 * buttons.length)) * 2;
+      setPadding(Math.max(MIN_PADDING, Math.min(maxPadding, fitting)));
 
       const button = buttons[selectedIndex];
       if (!button) return;
@@ -92,7 +96,7 @@ export default function SegmentedControl<Value extends string>({
       observer.observe(button, { box: "border-box" });
     });
     return () => observer.disconnect();
-  }, [fit, selectedIndex, options.length]);
+  }, [fit, maxPadding, selectedIndex, options.length]);
 
   return (
     <div

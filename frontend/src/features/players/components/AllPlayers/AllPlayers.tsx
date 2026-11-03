@@ -231,6 +231,7 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
           onChange={changeGroup}
           label="Stats shown"
           fit="content"
+          maxPadding={24}
         />
         <div className="all-players__filters">
           <Dropdown
