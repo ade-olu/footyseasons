@@ -216,7 +216,7 @@ router.get("/:code/players", (req, res) => {
       ps.games, ps.minutes, ps.goals, ps.assists,
       ps.xg AS xG, ps.xa AS xA, ps.shots, ps.key_passes AS keyPasses,
       ps.yellow_cards AS yellowCards,
-      pp.photo_url AS photoUrl
+      pp.photo_url AS photoUrl, pp.position AS mainPosition
     FROM understat_player_stats ps
     LEFT JOIN player_profiles pp
       ON pp.understat_player_id = ps.understat_player_id
