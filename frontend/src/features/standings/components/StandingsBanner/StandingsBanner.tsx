@@ -1,5 +1,6 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
+import Podium from "@/components/ui/Podium/Podium";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
@@ -63,30 +64,24 @@ export default function StandingsBanner({
         )}
       </div>
 
-      {/* Top 3 in table order; CSS shows them as 2, 1, 3 */}
       {content && (
-        <ol className="standings-banner__podium" aria-label="Top 3">
-          {content.podium.map((club, index) => (
-            <li
-              key={club.clubId}
-              className={`standings-banner__step standings-banner__step--${index + 1}`}
-            >
+        <Podium
+          label="Top 3"
+          steps={content.podium.map((club) => ({
+            id: club.clubId,
+            media: (
               <ClubCrest
                 className="standings-banner__crest"
                 src={club.crestUrl}
                 name={club.shortName}
                 onDark
               />
-              <p className="standings-banner__club" title={club.displayName}>
-                {club.shortName}
-              </p>
-              <p className="standings-banner__points">{club.points} pts</p>
-              <span className="standings-banner__bar" aria-hidden="true">
-                {index + 1}
-              </span>
-            </li>
-          ))}
-        </ol>
+            ),
+            name: club.shortName,
+            title: club.displayName,
+            stat: `${club.points} pts`,
+          }))}
+        />
       )}
     </section>
   );
