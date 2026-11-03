@@ -1,5 +1,5 @@
-// Shorter club names for the standings table on phones, where the full ones
-// don't fit. clubId -> name; FotMob's table names, plus ESPN's (or our
+// Shorter club names for the standings table on phones and under player names,
+// where the full ones don't fit. clubId -> name; FotMob's table names, plus ESPN's (or our
 // shortName) for long ones FotMob keeps. Clubs not listed use their displayName
 export const TABLE_NAMES: Record<number, string> = {
   // Premier League
