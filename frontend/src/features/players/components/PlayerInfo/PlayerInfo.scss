@@ -74,7 +74,7 @@
 
   &--on-dark {
     .player-info__photo:is(img) {
-      background-color: $color-bg-inverse-raised;
+      background-color: $color-bg-photo-inverse;
     }
 
     .player-info__name {

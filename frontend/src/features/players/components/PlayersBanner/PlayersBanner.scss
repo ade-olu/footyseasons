@@ -63,7 +63,7 @@
 
     &:is(img) {
       padding: 0 rem(2);
-      background-color: $color-bg-inverse-raised;
+      background-color: $color-bg-photo-inverse;
       object-fit: contain;
       object-position: bottom;
     }
