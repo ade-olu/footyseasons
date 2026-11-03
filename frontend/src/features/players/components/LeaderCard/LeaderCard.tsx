@@ -29,7 +29,7 @@ export default function LeaderCard({
   return (
     <SectionCard className="leader-card">
       <header className="leader-card__header">
-        <h2 className="leader-card__title">{title}</h2>
+        <h3 className="leader-card__title">{title}</h3>
         <p className="leader-card__description">{description}</p>
       </header>
       {leaders ? (

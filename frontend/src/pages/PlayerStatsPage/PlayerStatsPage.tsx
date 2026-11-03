@@ -10,8 +10,8 @@ type PlayerStatsPageProps = {
   season: number;
 };
 
-// Player Stats page ("/<league>/player-stats"): banner with the podium, six leader cards
-// and every player in a table
+// Player Stats page ("/<league>/player-stats"): banner with the podium, leader cards
+// for attack, defence or goalkeeping, and every player in a table
 export default function PlayerStatsPage({
   league,
   season,
@@ -21,7 +21,7 @@ export default function PlayerStatsPage({
       <title>{pageTitle("Player Stats", league, season)}</title>
       {/* Title and top 3 goal contributors */}
       <PlayersBanner league={league} season={season} />
-      {/* Goals, assists, xG, xA, chances created and finishing leaders */}
+      {/* Six leader cards per stat group */}
       <SeasonLeaders league={league} season={season} />
       {/* Every player, sortable and filterable */}
       <AllPlayers league={league} season={season} />

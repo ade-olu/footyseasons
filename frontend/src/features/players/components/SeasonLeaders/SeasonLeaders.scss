@@ -1,19 +1,62 @@
 @use "@/styles/foundations" as *;
 
-// 1 column on phones, then 2, and 3 when the room is there and no name is cut off.
-// The container is .app__content (in App.scss)
 .season-leaders {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: rem(24);
 
-  @include container-from($content-grid-two) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  // Title on the left, toggle on the right; the toggle wraps below when narrow
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(16) rem(24);
+
+    > :first-child {
+      flex: 1 1 rem(240);
+    }
   }
 
-  @include container-from($content-medium) {
-    &--three {
+  // Full width under the title on phones
+  &__toggle {
+    @include below-tablet {
+      width: 100%;
+    }
+  }
+
+  // 1 column on phones, then 2, then 3 from a 1440px window with the sidebar;
+  // long names shorten to fit. The container is .app__content (in App.scss)
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: rem(24);
+
+    @include container-from($content-grid-two) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include container-from(rem(1120)) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+  }
+
+  // Seasons before FotMob's stats
+  &__unavailable {
+    align-items: center;
+    gap: rem(8);
+    padding: rem(48) rem(24);
+    text-align: center;
+  }
+
+  &__unavailable-title {
+    @include text(20);
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+
+  &__unavailable-text {
+    @include text(14, $wrap: true);
+    color: $color-text-secondary;
   }
 }

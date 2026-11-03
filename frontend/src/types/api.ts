@@ -131,6 +131,18 @@ export type Player = {
   yellowCards: number;
   photoUrl: string | null; // Null when there's no photo
   mainPosition: "FW" | "MF" | "DF" | "GK" | null; // Transfermarkt's; null without a match
+  // FotMob's season totals from 2016/17, null when FotMob doesn't list the player
+  defensiveActions: number | null; // Tackles, interceptions, clearances, blocks and recoveries
+  tackles: number | null;
+  interceptions: number | null;
+  clearances: number | null;
+  blocks: number | null; // Shots blocked by outfield players
+  recoveries: number | null;
+  cleanSheets: number | null;
+  saves: number | null;
+  goalsConceded: number | null;
+  goalsPrevented: number | null; // xGOT faced minus goals conceded; 2018/19 onwards
+  savePercentage: number | null; // 0-100
   clubs: PlayerClub[]; // Oldest first; two or more for a mid-season transfer
 };
 
@@ -143,6 +155,7 @@ export type PlayersResponse = {
     xG: number;
     xA: number;
   }; // Covers every player in the league, whatever ?limit= is
+  hasDefensiveStats: boolean; // False before 2016/17
   players: Player[];
 };
 
