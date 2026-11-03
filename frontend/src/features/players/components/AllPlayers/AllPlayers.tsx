@@ -230,6 +230,7 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
           value={group.value}
           onChange={changeGroup}
           label="Stats shown"
+          fit="content"
         />
         <div className="all-players__filters">
           <Dropdown

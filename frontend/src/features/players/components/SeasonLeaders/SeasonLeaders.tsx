@@ -250,6 +250,7 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
           value={group}
           onChange={setGroup}
           label="Stats shown"
+          fit="content"
         />
       </div>
       {unavailable ? (

@@ -135,6 +135,7 @@
 
   &__view-toggle {
     width: rem(360);
+    min-width: 0;
 
     @include below-tablet {
       display: none;
