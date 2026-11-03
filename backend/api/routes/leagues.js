@@ -172,7 +172,7 @@ const PLAYER_SORTS = {
 };
 
 // Get every player's stats for a league from Understat, plus league-wide totals.
-// ?sort= one of PLAYER_SORTS (default goals), ?limit= how many players (default 20, 0 for totals only).
+// ?sort= one of PLAYER_SORTS (default goals), ?limit= how many players (default 20, 0 for totals only, "all" for every player).
 router.get("/:code/players", (req, res) => {
   const season = resolveSeason(req, res);
   if (!season) return;
@@ -185,10 +185,12 @@ router.get("/:code/players", (req, res) => {
     return;
   }
 
-  const limit =
-    req.query.limit === undefined
-      ? 20
-      : parseInteger(req.query.limit, "limit", res, 0);
+  // SQLite treats a negative LIMIT as no limit
+  let limit = -1;
+  if (req.query.limit === undefined) limit = 20;
+  else if (req.query.limit !== "all") {
+    limit = parseInteger(req.query.limit, "limit", res, 0);
+  }
   if (limit === undefined) return;
 
   // Totals cover every player in the league, not just the ones returned below.
@@ -213,6 +215,7 @@ router.get("/:code/players", (req, res) => {
       ps.player_name AS playerName, ps.position,
       ps.games, ps.minutes, ps.goals, ps.assists,
       ps.xg AS xG, ps.xa AS xA, ps.shots, ps.key_passes AS keyPasses,
+      ps.yellow_cards AS yellowCards,
       pp.photo_url AS photoUrl
     FROM understat_player_stats ps
     LEFT JOIN player_profiles pp

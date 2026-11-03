@@ -7,12 +7,13 @@ import type { PlayersResponse } from "@/types/api"; // Types for API responses
 export type PlayerSort = "goals" | "assists" | "xg" | "xa" | "minutes";
 
 // A league season's player stats: the top `limit` players by `sort` (0 for the
-// league-wide totals only), cached per league, season, sort and limit
+// league-wide totals only, "all" for every player), cached per league, season,
+// sort and limit
 export function usePlayers(
   league: LeagueCode,
   season: number,
   sort: PlayerSort,
-  limit: number,
+  limit: number | "all",
 ) {
   return useQuery({
     queryKey: ["players", league, season, sort, limit],

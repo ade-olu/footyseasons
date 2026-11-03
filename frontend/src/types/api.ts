@@ -128,6 +128,7 @@ export type Player = {
   xA: number;
   shots: number;
   keyPasses: number;
+  yellowCards: number;
   photoUrl: string | null; // Null when there's no photo
   clubs: PlayerClub[]; // Oldest first; two or more for a mid-season transfer
 };
