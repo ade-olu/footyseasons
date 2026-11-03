@@ -108,7 +108,6 @@ export const PLAYER_COLUMNS: PlayerColumnDefinition[] = [
     value: (player) => player.keyPasses,
     tieBreakers: [(player) => player.assists],
     format: formatWhole,
-    hide: "medium",
   },
   {
     key: "yellowCards",
@@ -167,7 +166,6 @@ export const PLAYER_COLUMNS: PlayerColumnDefinition[] = [
     value: (player) => player.recoveries,
     tieBreakers: [(player) => player.tackles ?? 0],
     format: formatWhole,
-    hide: "medium",
   },
   {
     key: "cleanSheets",
@@ -201,7 +199,6 @@ export const PLAYER_COLUMNS: PlayerColumnDefinition[] = [
     value: (player) => player.goalsConceded,
     tieBreakers: [(player) => player.minutes],
     format: formatWhole,
-    hide: "medium",
   },
   {
     key: "goalsPrevented",
