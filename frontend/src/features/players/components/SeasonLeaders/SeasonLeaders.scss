@@ -1,0 +1,19 @@
+@use "@/styles/foundations" as *;
+
+// 1 column on phones, then 2, and 3 when the room is there and no name is cut off.
+// The container is .app__content (in App.scss)
+.season-leaders {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: rem(24);
+
+  @include container-from($content-grid-two) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include container-from($content-medium) {
+    &--three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}

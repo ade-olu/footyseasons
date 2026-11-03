@@ -1,0 +1,73 @@
+@use "@/styles/foundations" as *;
+
+.leader-card {
+  gap: rem(16);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
+  }
+
+  &__title {
+    @include text(16);
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+
+  &__description {
+    @include text(12);
+    color: $color-text-secondary;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  // Player and stat on a dark panel
+  &__leader {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: rem(16);
+    margin-bottom: rem(16);
+    padding: rem(16);
+    border-radius: $radius-12;
+    background-color: $color-bg-inverse;
+  }
+
+  &__leader-value {
+    @include text(32);
+    font-weight: 600;
+    color: $color-text-inverse;
+  }
+
+  // Rank, player, stat
+  &__row {
+    display: grid;
+    grid-template-columns: rem(16) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: rem(12);
+    padding: rem(16) 0;
+  }
+
+  &__rank {
+    @include text(14);
+    color: $color-text-secondary;
+  }
+
+  &__value {
+    @include text(16);
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+
+  &__status {
+    @include text(14);
+    color: $color-text-secondary;
+  }
+}
