@@ -130,6 +130,7 @@ export type Player = {
   keyPasses: number;
   yellowCards: number;
   photoUrl: string | null; // Null when there's no photo
+  mainPosition: "FW" | "MF" | "DF" | "GK" | null; // Transfermarkt's; null without a match
   clubs: PlayerClub[]; // Oldest first; two or more for a mid-season transfer
 };
 

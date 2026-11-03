@@ -1,7 +1,8 @@
 import { SHORT_NAMES } from "@/features/players/data/shortNames";
 import type { Player, PlayerClub } from "@/types/api"; // Types for API responses
 
-// Positions grouped by the first letter of Understat's codes ("F S", "D M S", "GK")
+// Position groups: Transfermarkt's main position (code), or the first letter of
+// Understat's codes ("F S", "D M S", "GK") without one
 export type Position = "forwards" | "midfielders" | "defenders" | "goalkeepers";
 
 export const POSITIONS: {
@@ -16,8 +17,12 @@ export const POSITIONS: {
   { value: "goalkeepers", label: "Goalkeepers", code: "GK", letter: "G" },
 ];
 
-// The player's position group, or undefined for players only listed as a sub ("S")
+// The player's position group; Understat lists every position played in
+// alphabetical order ("D F M" for a winger), so its letter is only a fallback
 export function playerPosition(player: Player) {
+  if (player.mainPosition) {
+    return POSITIONS.find((item) => item.code === player.mainPosition);
+  }
   return POSITIONS.find((item) => player.position.startsWith(item.letter));
 }
 
