@@ -1,0 +1,215 @@
+@use "@/styles/foundations" as *;
+
+// The table runs edge to edge, so only the header, controls and footer get side padding
+.all-players {
+  padding: rem(24) 0 0;
+
+  // Title on the left, search on the right; the search wraps below when narrow
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(24);
+    padding: 0 rem(24);
+
+    @include below-tablet {
+      padding: 0 rem(16);
+    }
+
+    > :first-child {
+      flex: 1 1 rem(240);
+    }
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    width: rem(280);
+    padding: rem(16);
+    border: 1px solid $color-border-default;
+    border-radius: $radius-12;
+    background-color: $color-bg-surface;
+    box-shadow: $shadow-resting;
+    cursor: text;
+
+    @include motion-allowed {
+      transition: border-color 0.15s;
+    }
+
+    &:hover,
+    &:focus-within {
+      border-color: $color-text-secondary;
+    }
+
+    @include below-tablet {
+      width: 100%;
+    }
+  }
+
+  &__search-icon {
+    flex-shrink: 0;
+    width: rem(17);
+    height: rem(17);
+    color: $color-text-tertiary;
+  }
+
+  &__search-input {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font: inherit;
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-primary;
+
+    &::placeholder {
+      color: $color-text-tertiary;
+      opacity: 1;
+    }
+  }
+
+  // Position toggle on the left, club dropdown on the right
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(16);
+    padding: 0 rem(24);
+
+    // Two dropdowns side by side
+    @include below-tablet {
+      flex-wrap: nowrap;
+      padding: 0 rem(16);
+    }
+  }
+
+  &__position-toggle {
+    @include below-tablet {
+      display: none;
+    }
+  }
+
+  &__position-dropdown {
+    display: none;
+
+    @include below-tablet {
+      display: block;
+    }
+  }
+
+  &__dropdown {
+    width: rem(200);
+
+    @include below-tablet {
+      flex: 1 1 0;
+      width: auto;
+      min-width: 0;
+    }
+  }
+
+  // Stays on the right when it wraps below the toggle
+  &__club-dropdown {
+    margin-left: auto;
+
+    // 20 clubs: the list scrolls
+    .dropdown__list {
+      max-height: rem(320);
+      overflow-y: auto;
+    }
+  }
+
+  &__results {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Count on the left, pager on the right
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(16);
+    padding: rem(16) rem(24);
+
+    @include below-tablet {
+      padding: rem(16);
+    }
+  }
+
+  &__count {
+    @include text(14);
+    color: $color-text-secondary;
+  }
+
+  // "1–10 of 537" on phones
+  &__count-long {
+    @include below-tablet {
+      display: none;
+    }
+  }
+
+  &__pager {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__page {
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-primary;
+    white-space: nowrap;
+  }
+
+  // Square buttons, as the matchweek picker's
+  &__page-step {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: rem(40);
+    height: rem(40);
+    border: 1px solid $color-border-default;
+    border-radius: $radius-12;
+    background-color: $color-bg-surface;
+    box-shadow: $shadow-resting;
+    color: $color-text-primary;
+    cursor: pointer;
+    @include press(0.92, border-color 0.15s);
+
+    &:hover:not(:disabled) {
+      border-color: $color-text-secondary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__page-icon {
+    width: auto;
+    height: rem(17);
+  }
+
+  &__status {
+    padding: rem(24);
+    @include text(14);
+    color: $color-text-secondary;
+
+    @include below-tablet {
+      padding: rem(24) rem(16);
+    }
+  }
+}

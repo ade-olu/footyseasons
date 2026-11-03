@@ -1,3 +1,4 @@
+import AllPlayers from "@/features/players/components/AllPlayers/AllPlayers";
 import PlayersBanner from "@/features/players/components/PlayersBanner/PlayersBanner";
 import SeasonLeaders from "@/features/players/components/SeasonLeaders/SeasonLeaders";
 import type { LeagueCode } from "@/data/leagues";
@@ -9,8 +10,8 @@ type PlayerStatsPageProps = {
   season: number;
 };
 
-// Player Stats page ("/<league>/player-stats"): banner with the podium and six
-// leader cards
+// Player Stats page ("/<league>/player-stats"): banner with the podium, six leader cards
+// and every player in a table
 export default function PlayerStatsPage({
   league,
   season,
@@ -22,6 +23,8 @@ export default function PlayerStatsPage({
       <PlayersBanner league={league} season={season} />
       {/* Goals, assists, xG, xA, chances created and finishing leaders */}
       <SeasonLeaders league={league} season={season} />
+      {/* Every player, sortable and filterable */}
+      <AllPlayers league={league} season={season} />
     </>
   );
 }

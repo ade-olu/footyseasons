@@ -1,0 +1,167 @@
+@use "@/styles/foundations" as *;
+
+// Fills its parent edge to edge. It's also the container for the queries below,
+// so columns hide based on the table's own width
+.players-table {
+  min-width: 0;
+  overflow-x: auto;
+  container-type: inline-size;
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  // Fixed column widths so every row lines up; a stat is 48px plus a 16px gap
+  &__col-rank {
+    width: rem(58);
+  }
+
+  &__col-stat {
+    width: rem(64);
+  }
+
+  &__col-end {
+    width: rem(16);
+  }
+
+  th,
+  td {
+    padding: 0;
+    border-bottom: 1px solid $color-border-default;
+    @include text(14);
+    font-weight: 400;
+    color: $color-text-primary;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  thead th {
+    height: rem(60);
+    font-weight: 500;
+    color: $color-text-secondary;
+    background-color: $color-bg-subtle;
+    border-top: 1px solid $color-border-default;
+  }
+
+  abbr {
+    text-decoration: none;
+  }
+
+  td#{&}__rank,
+  td#{&}__position {
+    color: $color-text-secondary;
+  }
+
+  // Element + class, so it outweighs the "th, td" rule above
+  th#{&}__player,
+  td#{&}__player {
+    padding: rem(16) 0 rem(16) rem(16);
+    text-align: left;
+  }
+
+  th#{&}__stat,
+  td#{&}__stat {
+    padding-left: rem(16);
+  }
+
+  // The sorted column's values are medium, like points in the standings
+  td#{&}__cell--sorted {
+    font-weight: 500;
+  }
+
+  // Header label as a button: darker on hover and when sorted
+  &__sort {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(4);
+    width: 100%;
+    padding: rem(8) 0;
+    border: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    @include press(0.96, color 0.15s);
+
+    &:hover {
+      color: $color-text-primary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: -2px;
+      border-radius: $radius-8;
+    }
+  }
+
+  th#{&}__cell--sorted {
+    color: $color-text-primary;
+  }
+
+  &__sort-icon {
+    flex-shrink: 0;
+    width: rem(12);
+    height: rem(12);
+  }
+
+  // Rows shade on hover
+  @include can-hover {
+    &__table tbody tr:hover > * {
+      background-color: $color-bg-surface-hover;
+    }
+  }
+
+  @include motion-allowed {
+    &__table tbody tr > * {
+      transition: background-color 0.2s;
+    }
+  }
+
+  // Columns drop as the table narrows; the sorted one always stays
+  @include container-up-to(rem(939)) {
+    &__cell--hide-wide {
+      display: none;
+    }
+  }
+
+  @include container-up-to(rem(759)) {
+    &__cell--hide-medium {
+      display: none;
+    }
+  }
+
+  // Phones: #, player, Apps, G, A, with 8px gaps
+  @include below-tablet {
+    &__cell--hide-wide,
+    &__cell--hide-medium,
+    &__cell--hide-phone {
+      display: none;
+    }
+
+    &__col-rank {
+      width: rem(40);
+    }
+
+    &__col-stat {
+      width: rem(56);
+    }
+
+    th#{&}__player,
+    td#{&}__player,
+    th#{&}__stat,
+    td#{&}__stat {
+      padding-left: rem(8);
+    }
+  }
+
+  // Narrow phones: slimmer stats, so the name keeps its room
+  @include container-up-to(rem(399)) {
+    &__col-stat {
+      width: rem(40);
+    }
+  }
+}
