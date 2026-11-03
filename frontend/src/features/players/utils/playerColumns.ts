@@ -340,7 +340,7 @@ export const PHONE_VIEWS: {
     value: "more",
     label: "More",
     group: "general",
-    columns: ["games", "minutes", "yellowCards"],
+    columns: ["minutes", "yellowCards"],
     sort: "minutes",
   },
 ];

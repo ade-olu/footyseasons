@@ -136,14 +136,14 @@
     }
   }
 
-  // Phones: #, player and the view's three stats, with 8px gaps
+  // Phones: #, player and the view's stats, with 8px gaps
   @include below-tablet {
     &__cell--off-phone {
       display: none;
     }
 
     &__col-rank {
-      width: rem(40);
+      width: rem(32);
     }
 
     &__col-stat {
