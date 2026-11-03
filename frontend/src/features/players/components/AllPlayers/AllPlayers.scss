@@ -4,6 +4,11 @@
 .all-players {
   padding: rem(24) 0 0;
 
+  // Phones: search, dropdowns and stats view 16px apart, as one group
+  @include below-tablet {
+    gap: rem(16);
+  }
+
   // Title on the left, search on the right; the search wraps below when narrow
   &__header {
     display: flex;
@@ -171,9 +176,14 @@
     }
   }
 
+  // Still 24px below the controls on phones
   &__results {
     display: flex;
     flex-direction: column;
+
+    @include below-tablet {
+      margin-top: rem(8);
+    }
   }
 
   // Count on the left, pager on the right
