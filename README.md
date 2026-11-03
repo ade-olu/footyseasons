@@ -198,5 +198,5 @@ and features only import shared code, never each other.
 
 A personal, non-commercial project. Data from football-data.org, Understat and
 FotMob, player photos from FotMob, birth dates and positions from
-transfermarkt-datasets and crests from footylogos.com. Club names and crests
-belong to their clubs.
+transfermarkt-datasets, season awards and European places from Wikipedia and
+crests from footylogos.com. Club names and crests belong to their clubs.
