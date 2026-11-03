@@ -74,6 +74,14 @@ DISPLAY_NAME_FIXES = {
     "Huddersfield": "Huddersfield Town",
 }
 
+# player_name is Understat's, except these (missing accents, extra surnames).
+# Understat player id -> name
+PLAYER_NAME_FIXES = {
+    3423: "Kylian Mbappé",  # Kylian Mbappe-Lottin
+    9965: "Matías Soulé",  # Matìas Soulè Malvano
+    7142: "Moussa Dembélé",  # Moussa Dembele
+}
+
 
 def find_last_match_dates(matches, start_year, team_names):
     # Understat team name -> player's last match date for it this season
@@ -175,7 +183,9 @@ def replace_players(cursor, players, club_lookup, match_dates, season_id):
             (
                 season_id,
                 int(player["id"]),
-                html.unescape(player["player_name"]),
+                PLAYER_NAME_FIXES.get(
+                    int(player["id"]), html.unescape(player["player_name"])
+                ),
                 player["position"],
                 int(player["games"]),
                 int(player["time"]),
