@@ -10,9 +10,9 @@
     width: rem(40);
     height: rem(40);
 
-    // Cut-out 4px smaller than the circle, shoulders on the bottom edge
+    // Shrinks the cut-out so the whole head fits, shoulders on the bottom edge
     &:is(img) {
-      padding: rem(4) rem(2) 0;
+      padding: 0 rem(2);
       object-fit: contain;
       object-position: bottom;
     }
