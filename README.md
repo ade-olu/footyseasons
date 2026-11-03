@@ -54,7 +54,7 @@ Transfermarkt ─────┤
 footylogos.com ────┘
 ```
 
-Nine Python scripts in `backend/` pull data from five sources into one SQLite
+Ten Python scripts in `backend/` pull data from five sources into one SQLite
 file. The Express API serves it as JSON, and the React app fetches from the API.
 
 | Source                                                                       | Used for                                       |
@@ -162,7 +162,7 @@ stay within rate limits.
 
 ```
 backend/
-  01_ … 09_*.py       # data pipeline, run in number order
+  01_ … 10_*.py       # data pipeline, run in number order
   common/             # helpers shared by the pipeline scripts
   schema.sql          # database tables
   awards.csv          # season awards, compiled by hand
@@ -198,4 +198,5 @@ and features only import shared code, never each other.
 
 A personal, non-commercial project. Data from football-data.org, Understat and
 FotMob, player photos from FotMob, birth dates and positions from
-transfermarkt-datasets and crests from footylogos.com. Club names and crests belong to their clubs.
+transfermarkt-datasets and crests from footylogos.com. Club names and crests
+belong to their clubs.
