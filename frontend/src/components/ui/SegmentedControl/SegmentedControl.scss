@@ -1,6 +1,6 @@
 @use "@/styles/foundations" as *;
 
-// Equal-width options, so the pill moves in equal steps.
+// Equal-width options by default, so the pill moves in equal steps.
 // --segmented-count and --segmented-index are set inline by the component
 .segmented-control {
   --segmented-gap: #{rem(4)};
@@ -55,6 +55,21 @@
         left 0.3s $ease-out-back,
         right 0.3s $ease-out-back 0.1s;
     }
+  }
+
+  // Each option as wide as its label, spread with equal space between them;
+  // the pill's left and right are measured and set inline
+  // min-width: 0 keeps it at its parent's width, so the padding fits that
+  &--content {
+    --segmented-gap: 0;
+
+    min-width: 0;
+    grid-auto-columns: auto;
+    justify-content: space-between;
+  }
+
+  &--content &__option {
+    padding: rem(8) var(--segmented-option-padding, #{rem(16)});
   }
 
   &__option {
