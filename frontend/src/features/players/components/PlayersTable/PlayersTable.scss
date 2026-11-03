@@ -170,4 +170,11 @@
       width: rem(52);
     }
   }
+
+  // Phones under 375px: photo closer to the name, so the club has more room
+  @include container-up-to(rem(340)) {
+    .player-info {
+      gap: rem(8);
+    }
+  }
 }
