@@ -62,7 +62,7 @@ file. The Express API serves it as JSON, and the React app fetches from the API.
 | [football-data.org](https://www.football-data.org/)                          | Clubs, matches and tables from 2023/24 onwards |
 | [Understat](https://understat.com/)                                          | Older match results and all player stats       |
 | [FotMob](https://www.fotmob.com/)                                            | Player photos                                  |
-| [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) | Player birth dates                             |
+| [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) | Player birth dates and positions               |
 | [footylogos.com](https://footylogos.com/)                                    | Club crests                                    |
 
 ### Rebuilding old league tables
@@ -80,10 +80,14 @@ and all 45 match.
 
 ### Matching players across sources
 
-Each source has its own player IDs and spellings, so photos and birth dates are
-matched to Understat's players by name within each league and season, then by
-club, then by searching each site. That gets photos for over 95% of the 9,500
-players, including everyone shown on the Overview page.
+Each source has its own player IDs and spellings, so photos, birth dates and
+positions are matched to Understat's players by name within each league and
+season, then by club, then by searching each site. That gets photos for over 95%
+of the 9,500 players, including everyone shown on the Overview page.
+
+Positions come from Transfermarkt rather than Understat, because Understat lists
+every position a player covered in a season in alphabetical order, which would
+put a winger like Bryan Mbeumo ("D F M") among the defenders.
 
 ## API
 
@@ -193,5 +197,5 @@ and features only import shared code, never each other.
 ## Credits
 
 A personal, non-commercial project. Data from football-data.org and Understat,
-player photos from FotMob, birth dates from transfermarkt-datasets and crests
-from footylogos.com. Club names and crests belong to their clubs.
+player photos from FotMob, birth dates and positions from transfermarkt-datasets
+and crests from footylogos.com. Club names and crests belong to their clubs.
