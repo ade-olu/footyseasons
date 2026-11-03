@@ -323,13 +323,6 @@ export const PHONE_VIEWS: {
     sort: "assists",
   },
   {
-    value: "more",
-    label: "More",
-    group: "general",
-    columns: ["games", "minutes", "yellowCards"],
-    sort: "minutes",
-  },
-  {
     value: "defence",
     label: "Defence",
     group: "defence",
@@ -342,5 +335,12 @@ export const PHONE_VIEWS: {
     group: "goalkeeping",
     columns: ["cleanSheets", "saves", "savePercentage"],
     sort: "cleanSheets",
+  },
+  {
+    value: "more",
+    label: "More",
+    group: "general",
+    columns: ["games", "minutes", "yellowCards"],
+    sort: "minutes",
   },
 ];
