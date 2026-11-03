@@ -216,10 +216,19 @@ router.get("/:code/players", (req, res) => {
       ps.games, ps.minutes, ps.goals, ps.assists,
       ps.xg AS xG, ps.xa AS xA, ps.shots, ps.key_passes AS keyPasses,
       ps.yellow_cards AS yellowCards,
-      pp.photo_url AS photoUrl, pp.position AS mainPosition
+      pp.photo_url AS photoUrl, pp.position AS mainPosition,
+      fs.defensive_actions AS defensiveActions, fs.tackles,
+      fs.interceptions, fs.clearances, fs.blocks, fs.recoveries,
+      fs.clean_sheets AS cleanSheets, fs.saves,
+      fs.goals_conceded AS goalsConceded,
+      fs.goals_prevented AS goalsPrevented,
+      fs.save_percentage AS savePercentage
     FROM understat_player_stats ps
     LEFT JOIN player_profiles pp
       ON pp.understat_player_id = ps.understat_player_id
+    LEFT JOIN fotmob_player_stats fs
+      ON fs.season_id = ps.season_id
+      AND fs.understat_player_id = ps.understat_player_id
     WHERE ps.season_id = ?
     ORDER BY ${PLAYER_SORTS[sort]}, ps.player_name
     LIMIT ?
@@ -245,8 +254,16 @@ router.get("/:code/players", (req, res) => {
     )
     .all(season.seasonId);
 
+  // FotMob's defending and goalkeeping stats start in 2016/17
+  const hasDefensiveStats = Boolean(
+    db
+      .prepare("SELECT 1 FROM fotmob_player_stats WHERE season_id = ? LIMIT 1")
+      .get(season.seasonId),
+  );
+
   res.json({
     totals,
+    hasDefensiveStats,
     players: players.map(({ id, ...player }) => ({
       ...player,
       clubs: clubs
