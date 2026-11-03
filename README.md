@@ -25,9 +25,9 @@ the same clean dashboard feel as the apps I use every week.
   European and relegation places for every season
 - **Every result:** Each matchweek's results by day, a summary of the round,
   the season's home win, draw and away win split, and the match of the season
-- **Player stats:** The top goal contributors, leaders for goals, assists, xG,
-  xA, chances created and finishing, and every player in a sortable table you
-  can search and filter by position and club
+- **Player stats:** The top goal contributors, season leaders in attack,
+  defence and goalkeeping, and every player in a sortable table of general,
+  defending or goalkeeping stats you can search and filter by position and club
 - **Season awards:** Player, manager, goalkeeper and young player of the
   season, with each winner's stats
 - **Shareable URLs:** The league and season live in the URL
@@ -61,7 +61,7 @@ file. The Express API serves it as JSON, and the React app fetches from the API.
 | ---------------------------------------------------------------------------- | ---------------------------------------------- |
 | [football-data.org](https://www.football-data.org/)                          | Clubs, matches and tables from 2023/24 onwards |
 | [Understat](https://understat.com/)                                          | Older match results and all player stats       |
-| [FotMob](https://www.fotmob.com/)                                            | Player photos                                  |
+| [FotMob](https://www.fotmob.com/)                                            | Player photos, defending and goalkeeping stats |
 | [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) | Player birth dates and positions               |
 | [footylogos.com](https://footylogos.com/)                                    | Club crests                                    |
 
@@ -152,7 +152,7 @@ pip install -r requirements.txt
 python 01_create_database.py   # deletes and recreates football.db
 python 02_fetch_matches.py
 # ...
-python 09_fetch_player_profiles.py
+python 10_fetch_fotmob_stats.py
 ```
 
 A full rebuild takes a few hours, since the scripts wait between requests to
@@ -196,6 +196,6 @@ and features only import shared code, never each other.
 
 ## Credits
 
-A personal, non-commercial project. Data from football-data.org and Understat,
-player photos from FotMob, birth dates and positions from transfermarkt-datasets
-and crests from footylogos.com. Club names and crests belong to their clubs.
+A personal, non-commercial project. Data from football-data.org, Understat and
+FotMob, player photos from FotMob, birth dates and positions from
+transfermarkt-datasets and crests from footylogos.com. Club names and crests belong to their clubs.
