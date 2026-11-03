@@ -1,4 +1,3 @@
-import { ChevronDown as SortIcon } from "reicon-react";
 import PlayerInfo from "@/features/players/components/PlayerInfo/PlayerInfo";
 import {
   PLAYER_COLUMNS,
@@ -79,10 +78,13 @@ export default function PlayersTable({
                 >
                   <abbr title={column.name}>{column.label}</abbr>
                   {column.key === sort && (
-                    <SortIcon
+                    <svg
                       className="players-table__sort-icon"
+                      viewBox="0 0 12 12"
                       aria-hidden
-                    />
+                    >
+                      <path d="M2 4h8l-4 5z" fill="currentColor" />
+                    </svg>
                   )}
                 </button>
               </th>
