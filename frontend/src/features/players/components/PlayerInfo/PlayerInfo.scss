@@ -3,7 +3,7 @@
 .player-info {
   display: flex;
   align-items: center;
-  gap: rem(12);
+  gap: rem(16);
   min-width: 0;
 
   &__photo {
@@ -61,8 +61,6 @@
 
   // A leader: bigger photo and name
   &--large {
-    gap: rem(16);
-
     .player-info__photo {
       width: rem(56);
       height: rem(56);
