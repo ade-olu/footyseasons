@@ -1,128 +1,75 @@
--- ============================================================
--- Season Recap — Database Schema
--- ============================================================
--- This file describes the SHAPE of the database: what tables
--- exist, what columns each one has, and how tables relate to
--- each other. It does NOT contain any actual data — running
--- this file just builds empty tables, ready to be filled in
--- by the Python scripts.
---
--- 9 tables total: leagues, seasons, clubs, matches,
--- club_season_stats, understat_player_stats,
--- understat_player_clubs, season_awards, player_profiles
--- ============================================================
+-- FootySeasons database schema: empty tables, filled by the pipeline scripts.
 
--- PRAGMA = a SQLite-specific settings command (not standard SQL).
--- This one turns ON foreign key enforcement. Without it, SQLite
--- will silently let you insert a match that points to a club_id
--- that doesn't exist. With it on, that insert will fail loudly,
--- which is what we want — better to catch a bad insert early.
+-- Reject rows that point at a missing parent row.
 PRAGMA foreign_keys = ON;
 
 
--- ------------------------------------------------------------
--- TABLE: leagues
--- One row per competition (e.g. Premier League). Starting with
--- just PL, but the table is built to hold more later.
--- ------------------------------------------------------------
+-- One row per competition.
 CREATE TABLE leagues (
-    league_id   INTEGER PRIMARY KEY,   -- we reuse the API's own competition id (2021 for PL) instead of letting SQLite invent one, so it always matches what the API sends us
+    league_id   INTEGER PRIMARY KEY,   -- football-data.org's id, e.g. 2021
     name        TEXT NOT NULL,         -- e.g. "Premier League"
-    code        TEXT NOT NULL          -- e.g. "PL" — short code, useful for building API URLs later
+    code        TEXT NOT NULL          -- e.g. "PL"
 );
 
 
--- ------------------------------------------------------------
--- TABLE: seasons
--- One row per league PER YEAR (e.g. Premier League 2025/26).
--- Also holds league-wide season stats that only make sense
--- once the whole season is loaded (champion, total goals, etc.)
--- — these start out NULL and get filled in by a later script.
--- ------------------------------------------------------------
+-- One row per league per year.
 CREATE TABLE seasons (
-    season_id           INTEGER PRIMARY KEY AUTOINCREMENT,  -- AUTOINCREMENT = SQLite assigns 1, 2, 3... automatically each time a row is added. We use this (instead of reusing an API id) because seasons don't have one natural id of their own.
+    season_id           INTEGER PRIMARY KEY AUTOINCREMENT,
     league_id            INTEGER NOT NULL,
-    start_year           INTEGER NOT NULL,   -- e.g. 2025 (the API's "season" filter value)
-    label                 TEXT,               -- human-readable, e.g. "2025/26"
-    champion_club_id      INTEGER,            -- filled in later, once /standings is fetched
-    total_goals           INTEGER,            -- filled in later, by the aggregate-calculation script
-    biggest_win_match_id  INTEGER,            -- filled in later; points at a row in the matches table
+    start_year           INTEGER NOT NULL,   -- e.g. 2025 for 2025/26
+    label                 TEXT,               -- e.g. "2025/26"
+    champion_club_id      INTEGER,            -- set by 03 or 04
+    total_goals           INTEGER,            -- no script fills this yet
+    biggest_win_match_id  INTEGER,            -- no script fills this yet
 
-    -- FOREIGN KEY = "this column's value must exist as a primary key
-    -- somewhere in the table named after REFERENCES." It's how SQLite
-    -- keeps tables honest and connected to each other.
     FOREIGN KEY (league_id)           REFERENCES leagues(league_id),
     FOREIGN KEY (champion_club_id)    REFERENCES clubs(club_id),
     FOREIGN KEY (biggest_win_match_id) REFERENCES matches(match_id),
 
-    -- UNIQUE across two columns together = you can't have two rows
-    -- with the same (league_id, start_year) pair. This is what lets
-    -- 02_fetch_matches.py check "does this season already exist?"
-    -- before inserting a duplicate.
     UNIQUE (league_id, start_year)
 );
 
 
--- ------------------------------------------------------------
--- TABLE: clubs
--- One row per club. Shared across all leagues/seasons — a club
--- doesn't get a new row just because a new season starts.
--- ------------------------------------------------------------
+-- One row per club, shared across leagues and seasons.
 CREATE TABLE clubs (
-    club_id     INTEGER PRIMARY KEY,   -- reuses the API's own team id, same reasoning as leagues.league_id. Clubs that only played before 2023 (added by 04_fetch_understat_history.py) use minus their Understat team id instead
+    club_id     INTEGER PRIMARY KEY,   -- football-data.org's id; minus the Understat id for pre-2023 clubs
     name        TEXT NOT NULL,         -- e.g. "Arsenal FC"
     short_name  TEXT,                  -- e.g. "Arsenal"
-    tla         TEXT,                  -- three-letter code, e.g. "ARS"
-    crest_url   TEXT,                  -- link to the club's badge image
-    display_name TEXT                  -- name shown in the app, e.g. "Manchester City"; set by 07
+    tla         TEXT,                  -- e.g. "ARS"
+    crest_url   TEXT,                  -- e.g. "/crests/arsenal.svg"; set by 07
+    display_name TEXT                  -- name shown in the app; set by 06
 );
 
 
--- ------------------------------------------------------------
--- TABLE: matches
--- One row per match played. This is the biggest table —
--- 380 rows for a full Premier League season.
--- ------------------------------------------------------------
+-- One row per match.
 CREATE TABLE matches (
-    match_id      INTEGER PRIMARY KEY,  -- reuses the API's own match id; minus the Understat match id for 2014-2022 matches (04_fetch_understat_history.py)
+    match_id      INTEGER PRIMARY KEY,  -- football-data.org's id; minus the Understat id before 2023/24
     season_id     INTEGER NOT NULL,
-    matchday      INTEGER,              -- NULL for 2014-2022 matches, since Understat doesn't give one
-    utc_date      TEXT,                 -- stored as ISO text, e.g. "2025-08-16T14:00:00Z" — SQLite has no dedicated date type, so text in this sortable format is the standard approach
+    matchday      INTEGER,              -- FotMob's round before 2023/24
+    utc_date      TEXT,                 -- ISO text, e.g. "2025-08-16T14:00:00Z"
     status        TEXT,                 -- e.g. "FINISHED"
     home_club_id  INTEGER NOT NULL,
     away_club_id  INTEGER NOT NULL,
     home_goals    INTEGER,
     away_goals    INTEGER,
-    attendance    INTEGER,              -- currently NULL for every row — see the open "attendance gap" item in the project outline
+    attendance    INTEGER,              -- always NULL: not in my sources
 
     FOREIGN KEY (season_id)    REFERENCES seasons(season_id),
     FOREIGN KEY (home_club_id) REFERENCES clubs(club_id),
     FOREIGN KEY (away_club_id) REFERENCES clubs(club_id)
 );
 
--- An INDEX doesn't change what data you can store — it just makes
--- certain lookups much faster, by giving SQLite a pre-sorted shortcut
--- instead of scanning every row. Worth adding on any column you'll
--- filter or sort by often.
-CREATE INDEX idx_matches_season   ON matches(season_id);   -- "give me all matches for this season" — used constantly
-CREATE INDEX idx_matches_utc_date ON matches(utc_date);    -- needed for anything sorted chronologically (e.g. form trend), since match order isn't guaranteed by the API
+CREATE INDEX idx_matches_season   ON matches(season_id);
+CREATE INDEX idx_matches_utc_date ON matches(utc_date);
 
 
--- ------------------------------------------------------------
--- TABLE: club_season_stats
--- One row per club PER SEASON. This is the "everything about
--- how this club's season went" table — mostly filled in by the
--- aggregate-calculation script (Phase 5), not the raw fetch
--- scripts, since most of these values require looping through
--- that club's matches and doing math rather than being handed
--- to us directly by the API.
--- ------------------------------------------------------------
+-- One row per club per season. 03 and 04 fill the tables, 05 the computed stats.
 CREATE TABLE club_season_stats (
     id                     INTEGER PRIMARY KEY AUTOINCREMENT,
     season_id              INTEGER NOT NULL,
     club_id                INTEGER NOT NULL,
 
-    position               INTEGER,   -- official league position, tie-breakers included (1 = top). The API sorts tables by this
+    position               INTEGER,   -- after tie-breakers (1 = top)
     games_played           INTEGER,
     wins                   INTEGER,
     draws                  INTEGER,
@@ -131,9 +78,7 @@ CREATE TABLE club_season_stats (
     goals_for              INTEGER,
     goals_against          INTEGER,
 
-    -- These six can come straight from the /standings endpoint's
-    -- HOME and AWAY tables (FETCHED), rather than being calculated —
-    -- see the note in the project outline.
+    -- Home and away tables
     home_points             INTEGER,
     away_points              INTEGER,
     home_wins INTEGER, home_draws INTEGER, home_losses INTEGER,
@@ -141,44 +86,36 @@ CREATE TABLE club_season_stats (
     home_goals_for INTEGER, home_goals_against INTEGER,
     away_goals_for INTEGER, away_goals_against INTEGER,
 
-    -- These require real game logic (COMPUTED) — filled in later
+    -- Computed by 05
     clean_sheets            INTEGER,
     biggest_win_match_id     INTEGER,
     biggest_loss_match_id    INTEGER,
     longest_win_streak       INTEGER,
     longest_winless_streak   INTEGER,
-    avg_home_attendance      REAL,     -- REAL = SQLite's decimal-number type, since this is an average, not a whole number. Currently unfillable — see the attendance gap.
+    avg_home_attendance      REAL,     -- always NULL: not in my sources
 
     FOREIGN KEY (season_id)             REFERENCES seasons(season_id),
     FOREIGN KEY (club_id)                REFERENCES clubs(club_id),
     FOREIGN KEY (biggest_win_match_id)   REFERENCES matches(match_id),
     FOREIGN KEY (biggest_loss_match_id)  REFERENCES matches(match_id),
 
-    UNIQUE (season_id, club_id)   -- one stats row per club per season, no duplicates
+    UNIQUE (season_id, club_id)
 );
 
 CREATE INDEX idx_club_season_stats_season ON club_season_stats(season_id);
 
 
--- ------------------------------------------------------------
--- TABLE: understat_player_stats
--- One row per player PER SEASON, for EVERY player who played in
--- the league. Filled in by 06_fetch_understat.py from
--- understat.com, which also gives minutes, xG and xA.
---
--- A player who moved clubs mid-season gets ONE row with their
--- combined totals - Understat doesn't split them per club. Which
--- clubs they played for lives in understat_player_clubs below.
--- ------------------------------------------------------------
+-- One row per player per season, filled by 06. A mid-season transfer within a
+-- league gets one combined row, since Understat doesn't split it by club.
 CREATE TABLE understat_player_stats (
     id                   INTEGER PRIMARY KEY AUTOINCREMENT,
     season_id            INTEGER NOT NULL,
-    understat_player_id  INTEGER NOT NULL,   -- Understat's own player id, the same across seasons
+    understat_player_id  INTEGER NOT NULL,   -- the same across seasons
     player_name          TEXT NOT NULL,
-    position             TEXT,               -- Understat's position codes, e.g. "F S" or "D M"
+    position             TEXT,               -- e.g. "F S" or "D M"
     games                INTEGER,
     minutes              INTEGER,
-    goals                INTEGER,            -- doesn't include own goals, so this sums to a bit less than the matches table
+    goals                INTEGER,            -- no own goals, so less than the matches table
     non_penalty_goals    INTEGER,
     assists              INTEGER,
     shots                INTEGER,
@@ -193,22 +130,17 @@ CREATE TABLE understat_player_stats (
 
     FOREIGN KEY (season_id) REFERENCES seasons(season_id),
 
-    UNIQUE (season_id, understat_player_id)   -- one row per player per season
+    UNIQUE (season_id, understat_player_id)
 );
 
 CREATE INDEX idx_understat_player_stats_season ON understat_player_stats(season_id);
 
 
--- ------------------------------------------------------------
--- TABLE: understat_player_clubs
--- Links each understat_player_stats row to the club(s) the player
--- played for that season. Usually one row, two or more for a
--- mid-season transfer within the same league.
--- ------------------------------------------------------------
+-- The club(s) behind each understat_player_stats row; two or more after a transfer.
 CREATE TABLE understat_player_clubs (
     player_stats_id  INTEGER NOT NULL,
     club_id          INTEGER NOT NULL,
-    last_match_date  TEXT,               -- Player's last match for this club; transfers only
+    last_match_date  TEXT,               -- player's last match for this club; transfers only
 
     FOREIGN KEY (player_stats_id) REFERENCES understat_player_stats(id) ON DELETE CASCADE,
     FOREIGN KEY (club_id)         REFERENCES clubs(club_id),
@@ -219,24 +151,18 @@ CREATE TABLE understat_player_clubs (
 CREATE INDEX idx_understat_player_clubs_club ON understat_player_clubs(club_id);
 
 
--- ------------------------------------------------------------
--- TABLE: season_awards
--- One row per winner of a season award (player, manager,
--- goalkeeper, young_player). A shared award gets one row per
--- winner. Loaded from the hand-written awards.csv by
--- 08_load_awards.py.
--- ------------------------------------------------------------
+-- One row per award winner, so a shared award has several. Loaded by 08 from awards.csv.
 CREATE TABLE season_awards (
     id                   INTEGER PRIMARY KEY AUTOINCREMENT,
     season_id            INTEGER NOT NULL,
     award                TEXT NOT NULL,      -- "player", "manager", "goalkeeper" or "young_player"
     winner_name          TEXT NOT NULL,      -- e.g. "Bruno Fernandes"
     understat_player_id  INTEGER,            -- NULL for managers
-    club_id              INTEGER NOT NULL,   -- club the winner played for (or managed)
+    club_id              INTEGER NOT NULL,   -- club the winner played for or managed
     awarding_body        TEXT NOT NULL,      -- e.g. "Premier League", "PFA", "Marca"
     source_url           TEXT,
-    starts               INTEGER,            -- league starts, from Understat's match log; goalkeeper and young player awards, and goalkeepers who win another award
-    clean_sheets         INTEGER,            -- league starts without conceding; same rows as starts
+    starts               INTEGER,            -- league starts; goalkeepers and young players only
+    clean_sheets         INTEGER,            -- starts without conceding; same rows as starts
 
     FOREIGN KEY (season_id) REFERENCES seasons(season_id),
     FOREIGN KEY (club_id)   REFERENCES clubs(club_id),
@@ -245,34 +171,25 @@ CREATE TABLE season_awards (
 );
 
 
--- ------------------------------------------------------------
--- TABLE: player_profiles
--- Photo (FotMob) and date of birth (Transfermarkt) per Understat
--- player. Filled in by 09_fetch_player_profiles.py.
--- ------------------------------------------------------------
+-- Photo (FotMob) and birth date (Transfermarkt) per Understat player, filled by 09.
 CREATE TABLE player_profiles (
     understat_player_id  INTEGER PRIMARY KEY,
     fotmob_id            INTEGER,
     photo_url            TEXT,
     transfermarkt_id     INTEGER,
     date_of_birth        TEXT,               -- "YYYY-MM-DD"
-    position             TEXT                -- Transfermarkt's main position: FW, MF, DF or GK
+    position             TEXT                -- main position: FW, MF, DF or GK
 );
 
 
--- ------------------------------------------------------------
--- TABLE: fotmob_player_stats
--- Defending and goalkeeping season totals from FotMob (2016/17
--- onwards), per Understat player through player_profiles.fotmob_id.
--- FotMob only lists players above a minutes threshold in each stat,
--- so a missing stat is NULL. Filled in by 10_fetch_fotmob_stats.py.
--- ------------------------------------------------------------
+-- FotMob's defending and goalkeeping totals from 2016/17, filled by 10. FotMob
+-- only lists players above a minutes threshold, so a missing stat is NULL.
 CREATE TABLE fotmob_player_stats (
     season_id            INTEGER NOT NULL,
     understat_player_id  INTEGER NOT NULL,
     fotmob_id            INTEGER NOT NULL,
-    minutes              INTEGER,            -- FotMob's count, can differ slightly from Understat's
-    defensive_actions    INTEGER,            -- FotMob's "defensive contributions": tackles, interceptions, clearances, blocks, recoveries
+    minutes              INTEGER,            -- can differ slightly from Understat's
+    defensive_actions    INTEGER,            -- FotMob's "defensive contributions"
     tackles              INTEGER,
     interceptions        INTEGER,
     clearances           INTEGER,
@@ -281,7 +198,7 @@ CREATE TABLE fotmob_player_stats (
     clean_sheets         INTEGER,
     saves                INTEGER,
     goals_conceded       INTEGER,
-    goals_prevented      REAL,               -- xGOT faced minus goals conceded; 2018/19 onwards
+    goals_prevented      REAL,               -- xGOT faced minus goals conceded; from 2018/19
     save_percentage      REAL,               -- 0-100
 
     FOREIGN KEY (season_id) REFERENCES seasons(season_id),
