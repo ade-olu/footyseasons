@@ -83,8 +83,8 @@ def insert_matches(cursor, matches, season_id):
         cursor.execute(
             """INSERT INTO matches
                (match_id, season_id, matchday, utc_date, status,
-                home_club_id, away_club_id, home_goals, away_goals, attendance)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                home_club_id, away_club_id, home_goals, away_goals)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                ON CONFLICT (match_id) DO UPDATE SET
                  matchday = excluded.matchday,
                  utc_date = excluded.utc_date,
@@ -101,7 +101,6 @@ def insert_matches(cursor, matches, season_id):
                 match["awayTeam"]["id"],
                 score.get("home"),
                 score.get("away"),
-                None,  # Attendance isn't on the free tier
             ),
         )
         inserted += 1

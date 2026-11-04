@@ -19,12 +19,9 @@ CREATE TABLE seasons (
     start_year           INTEGER NOT NULL,   -- e.g. 2025 for 2025/26
     label                 TEXT,               -- e.g. "2025/26"
     champion_club_id      INTEGER,            -- set by 03 or 04
-    total_goals           INTEGER,            -- no script fills this yet
-    biggest_win_match_id  INTEGER,            -- no script fills this yet
 
     FOREIGN KEY (league_id)           REFERENCES leagues(league_id),
     FOREIGN KEY (champion_club_id)    REFERENCES clubs(club_id),
-    FOREIGN KEY (biggest_win_match_id) REFERENCES matches(match_id),
 
     UNIQUE (league_id, start_year)
 );
@@ -52,7 +49,6 @@ CREATE TABLE matches (
     away_club_id  INTEGER NOT NULL,
     home_goals    INTEGER,
     away_goals    INTEGER,
-    attendance    INTEGER,              -- always NULL: not in my sources
 
     FOREIGN KEY (season_id)    REFERENCES seasons(season_id),
     FOREIGN KEY (home_club_id) REFERENCES clubs(club_id),
@@ -92,7 +88,6 @@ CREATE TABLE club_season_stats (
     biggest_loss_match_id    INTEGER,
     longest_win_streak       INTEGER,
     longest_winless_streak   INTEGER,
-    avg_home_attendance      REAL,     -- always NULL: not in my sources
 
     FOREIGN KEY (season_id)             REFERENCES seasons(season_id),
     FOREIGN KEY (club_id)                REFERENCES clubs(club_id),
