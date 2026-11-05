@@ -44,16 +44,16 @@ type LeaderStat = {
   ascending?: boolean;
 };
 
-type StatGroup = "attack" | "defence" | "goalkeeping";
+type LeaderGroup = "attack" | "defence" | "goalkeeping";
 
-const STAT_GROUPS: { value: StatGroup; label: string }[] = [
+const LEADER_GROUPS: { value: LeaderGroup; label: string }[] = [
   { value: "attack", label: "Attack" },
   { value: "defence", label: "Defence" },
   { value: "goalkeeping", label: "Goalkeeping" },
 ];
 
 // Six cards per group; defence and goalkeeping come from FotMob (2016/17 onwards)
-const LEADER_STATS: Record<StatGroup, LeaderStat[]> = {
+const LEADER_STATS: Record<LeaderGroup, LeaderStat[]> = {
   attack: [
     {
       title: "Goals",
@@ -231,7 +231,7 @@ type SeasonLeadersProps = {
 // Six leaderboards for attack, defence or goalkeeping, picked with a toggle
 export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
-  const [group, setGroup] = useState<StatGroup>("attack");
+  const [group, setGroup] = useState<LeaderGroup>("attack");
 
   const leagueName = getLeagueName(league);
   const unavailable =
@@ -246,7 +246,7 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
         />
         <SegmentedControl
           className="season-leaders__toggle"
-          options={STAT_GROUPS}
+          options={LEADER_GROUPS}
           value={group}
           onChange={setGroup}
           label="Stats shown"
