@@ -79,6 +79,7 @@ DISPLAY_NAME_FIXES = {
 PLAYER_NAME_FIXES = {
     3423: "Kylian Mbappé",  # Kylian Mbappe-Lottin
     9965: "Matías Soulé",  # Matìas Soulè Malvano
+    10576: "Álvaro Carreras",  # Álvaro Fernández
     7142: "Moussa Dembélé",  # Moussa Dembele
 }
 
