@@ -43,6 +43,7 @@ export default function ClubCrest({
       className={`club-crest ${className}`}
       src={src}
       alt={`${name} crest`}
+      loading="lazy"
       title={showName ? name : undefined}
       onError={() => setFailedSrc(src)}
     />

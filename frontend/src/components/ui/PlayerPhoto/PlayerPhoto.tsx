@@ -44,6 +44,7 @@ export default function PlayerPhoto({
       className={`player-photo ${className}`}
       src={src}
       alt={name}
+      loading="lazy"
       onError={() => setFailedSrc(src)}
     />
   );

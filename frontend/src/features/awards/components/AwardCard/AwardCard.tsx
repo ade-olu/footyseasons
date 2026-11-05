@@ -62,6 +62,7 @@ export default function AwardCard({
               className="award-card__photo-img"
               src={photoUrl}
               alt={winner}
+              loading="lazy"
               onError={() => setFailedUrl(photoUrl)}
             />
           ) : (
