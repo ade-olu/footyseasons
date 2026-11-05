@@ -57,13 +57,13 @@ footylogos.com ────┘
 Ten Python scripts in `backend/` pull data from five sources into one SQLite
 file. The Express API serves it as JSON, and the React app fetches from the API.
 
-| Source                                                                       | Used for                                       |
-| ---------------------------------------------------------------------------- | ---------------------------------------------- |
-| [football-data.org](https://www.football-data.org/)                          | Clubs, matches and tables from 2023/24 onwards |
-| [Understat](https://understat.com/)                                          | Older match results and all player stats       |
-| [FotMob](https://www.fotmob.com/)                                            | Player photos, defending and goalkeeping stats |
-| [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) | Player birth dates and positions               |
-| [footylogos.com](https://footylogos.com/)                                    | Club crests                                    |
+| Source                                                                       | Used for                                                 |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------- |
+| [football-data.org](https://www.football-data.org/)                          | Clubs, matches and tables from 2023/24 onwards           |
+| [Understat](https://understat.com/)                                          | Older match results and all player stats                 |
+| [FotMob](https://www.fotmob.com/)                                            | Player photos and names, defending and goalkeeping stats |
+| [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) | Player birth dates and positions                         |
+| [footylogos.com](https://footylogos.com/)                                    | Club crests                                              |
 
 ### Rebuilding old league tables
 
@@ -80,8 +80,8 @@ and all 45 match.
 
 ### Matching players across sources
 
-Each source has its own player IDs and spellings, so photos, birth dates and
-positions are matched to Understat's players by name within each league and
+Each source has its own player IDs and spellings, so photos, names, birth dates
+and positions are matched to Understat's players by name within each league and
 season, then by club, then by searching each site. That gets photos for over 95%
 of the 9,500 players, including everyone shown on the Overview page.
 
@@ -197,6 +197,6 @@ and features only import shared code, never each other.
 ## Credits
 
 A personal, non-commercial project. Data from football-data.org, Understat and
-FotMob, player photos from FotMob, birth dates and positions from
+FotMob, player photos and names from FotMob, birth dates and positions from
 transfermarkt-datasets, season awards and European places from Wikipedia and
 crests from footylogos.com. Club names and crests belong to their clubs.
