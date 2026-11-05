@@ -166,14 +166,15 @@ CREATE TABLE season_awards (
 );
 
 
--- Photo (FotMob) and birth date (Transfermarkt) per Understat player, filled by 09.
+-- Photo and display name (FotMob), birth date (Transfermarkt) per Understat player, filled by 09.
 CREATE TABLE player_profiles (
     understat_player_id  INTEGER PRIMARY KEY,
     fotmob_id            INTEGER,
     photo_url            TEXT,
     transfermarkt_id     INTEGER,
     date_of_birth        TEXT,               -- "YYYY-MM-DD"
-    position             TEXT                -- main position: FW, MF, DF or GK
+    position             TEXT,               -- main position: FW, MF, DF or GK
+    display_name         TEXT                -- NULL when it's the same as Understat's
 );
 
 

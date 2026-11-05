@@ -226,6 +226,64 @@ NOT_ON_FOTMOB = {
     4435,  # Nenê (West Ham United)
 }
 
+# Names FotMob gets wrong: understat_player_id -> name to show
+DISPLAY_NAMES = {
+    281: "Lukáš Hrádecký",
+    453: "Son Heung-min",
+    491: "Petr Čech",
+    723: "Ki Sung-yueng",
+    813: "Salomón Rondón",
+    1246: "Kostas Manolas",
+    1257: "Alisson",
+    1505: "Samir Handanović",
+    1534: "Giancarlo González",
+    1663: "Jóhann Berg Gudmundsson",
+    1720: "Didier Ndong",
+    1741: "Zlatan Ibrahimović",
+    2090: "Marc-André ter Stegen",
+    2197: "Pedro León",
+    2233: "Xabi Prieto",
+    2266: "Saúl Ñíguez",
+    2303: "Samu Castillejo",
+    2385: "Mat Ryan",
+    2392: "Gorka Iraizoz",
+    2397: "Beñat",
+    3294: "Edinson Cavani",
+    3416: "Danijel Subašić",
+    3526: "Ronny Rodelin",
+    3600: "Serge Aurier",
+    3848: "Carlos Tevez",
+    4070: "Borja García",
+    4136: "Ángel Rodríguez",
+    5043: "Kiko Femenía",
+    5136: "Pervis Estupiñán",
+    5622: "Júlio Tavares",
+    5706: "Dodi Lukebakio",
+    5769: "Habib Diallo",
+    5803: "Fodé Ballo-Touré",
+    6082: "Jiří Pavlenka",
+    6292: "Tomáš Koubek",
+    6630: "Joe Willock",
+    6766: "Dani Vivian",
+    6986: "Hamed Traorè",
+    7265: "Khéphren Thuram",
+    7313: "Lee Kang-in",
+    7382: "Dan Burn",
+    7700: "Che Adams",
+    7810: "Ruben Vargas",
+    7829: "Éder Militão",
+    7947: "Ruslan Malinovskyi",
+    8056: "Arnaud Kalimuendo",
+    8288: "Tomáš Souček",
+    8665: "Loïc Badé",
+    8777: "Vitinha",
+    8807: "Silas",
+    9674: "Joe Scally",
+    9755: "Íñigo Ruiz de Galarreta",
+    10974: "Samú Costa",
+    11486: "Illia Zabarnyi",
+}
+
 # Letters that don't split into a plain letter + accent
 EXTRA_LETTERS = str.maketrans(
     {"ø": "o", "Ø": "O", "ı": "i", "ł": "l", "Ł": "L", "ß": "ss", "æ": "ae", "đ": "d"}
@@ -430,6 +488,54 @@ def search_fotmob(name, cache):
     return {s["id"] for s in cache[name] if name_words(s["name"]) == name_words(name)}
 
 
+def load_fotmob_names(fm_seasons, search_cache, ids):
+    # FotMob id -> name: latest season first, then search, then the player's page
+    names = {}
+    for key in sorted(fm_seasons, key=lambda key: key[1]):
+        names.update({pid: name for pid, (name, _) in fm_seasons[key].items()})
+    for results in search_cache.values():
+        for result in results:
+            names.setdefault(result["id"], result["name"])
+
+    path = os.path.join(CACHE_DIR, "fotmob", "names.json")
+    saved = {}
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as file:
+            saved = json.load(file)
+    for pid in ids:
+        if pid not in names and str(pid) not in saved:
+            player = fotmob_get(f"{FOTMOB_URL}/playerData", {"id": pid})
+            saved[str(pid)] = player["name"] if player else None
+    with open(path, "w", encoding="utf-8") as file:
+        json.dump(saved, file)
+
+    return names | {int(pid): name for pid, name in saved.items() if name}
+
+
+def accents(name):
+    return sum(not char.isascii() for char in name)
+
+
+def pick_display_name(uid, understat_names, fotmob_name):
+    # None means showing Understat's name
+    name = DISPLAY_NAMES.get(uid)
+    if not name:
+        name = fotmob_name
+        if not name:
+            return None
+        # Keep Understat's spelling if it has more accents, or FotMob only adds middle names
+        for other in understat_names:
+            words, other_words = name_words(name), name_words(other)
+            more_accents = words == other_words and accents(other) > accents(name)
+            middle_names = (
+                len(words) > len(other_words) > 1
+                and (words[0], words[-1]) == (other_words[0], other_words[-1])
+            )
+            if more_accents or middle_names:
+                name = other
+    return None if {name} == understat_names else name
+
+
 def load_understat_players(cursor):
     cursor.execute(
         """SELECT l.code, s.start_year, ps.understat_player_id, ps.player_name,
@@ -453,6 +559,10 @@ def main():
     cursor = connection.cursor()
     understat_players = load_understat_players(cursor)
     names = {uid: name for ps in understat_players.values() for uid, name, _ in ps}
+    season_names = defaultdict(set)
+    for ps in understat_players.values():
+        for uid, name, _ in ps:
+            season_names[uid].add(name)
 
     print("Matching Transfermarkt...")
     tm_seasons, tm_players = load_transfermarkt()
@@ -510,16 +620,18 @@ def main():
     for uid in NOT_ON_FOTMOB:
         fm_ids.pop(uid, None)
 
+    fm_names = load_fotmob_names(fm_seasons, search_cache, set(fm_ids.values()))
+
     cursor.execute("DELETE FROM player_profiles")
     for uid in names:
-        if uid not in fm_ids and uid not in tm_ids:
+        if uid not in fm_ids and uid not in tm_ids and uid not in DISPLAY_NAMES:
             continue
         tm_player = tm_players.get(tm_ids.get(uid), {})
         cursor.execute(
             """INSERT INTO player_profiles
                (understat_player_id, fotmob_id, photo_url, transfermarkt_id,
-                date_of_birth, position)
-               VALUES (?, ?, ?, ?, ?, ?)""",
+                date_of_birth, position, display_name)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
             (
                 uid,
                 fm_ids.get(uid),
@@ -527,6 +639,7 @@ def main():
                 tm_ids.get(uid),
                 tm_player.get("date_of_birth", "")[:10] or None,
                 POSITION_OVERRIDES.get(uid, POSITIONS.get(tm_player.get("position"))),
+                pick_display_name(uid, season_names[uid], fm_names.get(fm_ids.get(uid))),
             ),
         )
 

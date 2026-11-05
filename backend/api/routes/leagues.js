@@ -212,7 +212,7 @@ router.get("/:code/players", (req, res) => {
       `
     SELECT
       ps.id, ps.understat_player_id AS understatId,
-      ps.player_name AS playerName, ps.position,
+      COALESCE(pp.display_name, ps.player_name) AS playerName, ps.position,
       ps.games, ps.minutes, ps.goals, ps.assists,
       ps.xg AS xG, ps.xa AS xA, ps.shots, ps.key_passes AS keyPasses,
       ps.yellow_cards AS yellowCards,
@@ -230,7 +230,7 @@ router.get("/:code/players", (req, res) => {
       ON fs.season_id = ps.season_id
       AND fs.understat_player_id = ps.understat_player_id
     WHERE ps.season_id = ?
-    ORDER BY ${PLAYER_SORTS[sort]}, ps.player_name
+    ORDER BY ${PLAYER_SORTS[sort]}, playerName
     LIMIT ?
   `,
     )
