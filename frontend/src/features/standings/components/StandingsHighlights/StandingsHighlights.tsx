@@ -1,5 +1,6 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
+import HighlightCardPlaceholders from "@/components/ui/HighlightCardPlaceholders/HighlightCardPlaceholders";
 import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
@@ -66,23 +67,12 @@ export default function StandingsHighlights({
 }: StandingsHighlightsProps) {
   const { data, isError } = useSeasonData(league, season);
 
-  // Loading and error states keep the cards in place with a dash
   if (!data) {
-    const placeholder = isError ? "Couldn't load" : "Loading…";
-
     return (
-      <>
-        {["Title Margin", "Best Attack", "Best Defence", "Relegated"].map(
-          (title) => (
-            <HighlightCard
-              key={title}
-              title={title}
-              value="–"
-              description={placeholder}
-            />
-          ),
-        )}
-      </>
+      <HighlightCardPlaceholders
+        titles={["Title Margin", "Best Attack", "Best Defence", "Relegated"]}
+        isError={isError}
+      />
     );
   }
 

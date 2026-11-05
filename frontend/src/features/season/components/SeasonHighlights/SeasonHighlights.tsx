@@ -1,6 +1,7 @@
 import { usePlayers } from "@/api/players";
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
+import HighlightCardPlaceholders from "@/components/ui/HighlightCardPlaceholders/HighlightCardPlaceholders";
 
 import type { LeagueCode } from "@/data/leagues";
 import type { PlayersResponse, Standing } from "@/types/api"; // Types for API responses
@@ -78,24 +79,17 @@ export default function SeasonHighlights({
   const seasonQuery = useSeasonData(league, season);
   const playersQuery = usePlayers(league, season, "goals", 0);
 
-  // Loading and error states keep the cards in place with a dash, so the grid doesn't jump
   if (!seasonQuery.data || !playersQuery.data) {
-    const placeholder =
-      seasonQuery.isError || playersQuery.isError ? "Couldn't load" : "Loading…";
-
     return (
-      <>
-        {["Total Goals", "Total Assists", "Clean Sheets", "Best Win Streak"].map(
-          (title) => (
-            <HighlightCard
-              key={title}
-              title={title}
-              value="–"
-              description={placeholder}
-            />
-          ),
-        )}
-      </>
+      <HighlightCardPlaceholders
+        titles={[
+          "Total Goals",
+          "Total Assists",
+          "Clean Sheets",
+          "Best Win Streak",
+        ]}
+        isError={seasonQuery.isError || playersQuery.isError}
+      />
     );
   }
 

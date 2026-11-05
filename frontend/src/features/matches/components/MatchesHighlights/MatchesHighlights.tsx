@@ -1,5 +1,6 @@
 import { useSeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
+import HighlightCardPlaceholders from "@/components/ui/HighlightCardPlaceholders/HighlightCardPlaceholders";
 import { best, margin } from "@/features/matches/utils/matchStats";
 import type { LeagueCode } from "@/data/leagues";
 import type { PlayedMatch } from "@/types/api"; // Types for API responses
@@ -63,22 +64,8 @@ export default function MatchesHighlights({
     "Goalless Draws",
   ];
 
-  // Loading and error states keep the cards in place with a dash
   if (!data) {
-    const placeholder = isError ? "Couldn't load" : "Loading…";
-
-    return (
-      <>
-        {titles.map((title) => (
-          <HighlightCard
-            key={title}
-            title={title}
-            value="–"
-            description={placeholder}
-          />
-        ))}
-      </>
-    );
+    return <HighlightCardPlaceholders titles={titles} isError={isError} />;
   }
 
   const finished = data.matches.filter(isFinished);
