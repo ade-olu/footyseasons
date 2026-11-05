@@ -1,10 +1,8 @@
 # Players not matched to FotMob
 
-85 Understat players that `09_fetch_player_profiles.py` couldn't match to FotMob, so the app shows their initials. Most only played in 2014/15-2015/16 (before FotMob's season stat lists) or have a different spelling on FotMob.
+These show initials. To fix one, add `understat_id: fotmob_id` to `FOTMOB_IDS` in `09_fetch_player_profiles.py` and re-run it.
 
-To fix one, find their FotMob id (search fotmob.com; the id is in the player page URL), add `understat_id: fotmob_id` to `FOTMOB_IDS` in `09_fetch_player_profiles.py` and re-run it. The Transfermarkt name is often closer to FotMob's spelling.
-
-Sorted by total minutes, most first.
+Sorted by minutes, most first.
 
 | Understat id | Name | Transfermarkt name | Seasons | Minutes |
 | --- | --- | --- | --- | --- |
