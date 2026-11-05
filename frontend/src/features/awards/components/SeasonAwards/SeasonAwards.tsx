@@ -2,7 +2,7 @@ import { useAwards } from "@/features/awards/api/awards";
 import AwardCard from "@/features/awards/components/AwardCard/AwardCard";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import type { Award, AwardType } from "@/types/api"; // Types for API responses
 import "./SeasonAwards.scss";
 
@@ -45,7 +45,7 @@ function getStats(award: Award) {
 
 // "The class of <season>" section: one card per award winner
 export default function SeasonAwards({ league, season }: SeasonAwardsProps) {
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
   const { data, isError } = useAwards(league, season);
 
   let status = null;

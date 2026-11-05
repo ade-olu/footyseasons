@@ -3,7 +3,7 @@ import { usePlayers } from "@/api/players";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import LeaderCard from "@/features/players/components/LeaderCard/LeaderCard";
 import {
   formatDecimal,
@@ -233,7 +233,7 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
   const [group, setGroup] = useState<StatGroup>("attack");
 
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
   const unavailable =
     group !== "attack" && data !== undefined && !data.hasDefensiveStats;
 

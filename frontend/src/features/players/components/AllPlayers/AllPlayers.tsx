@@ -10,7 +10,7 @@ import Dropdown from "@/components/ui/Dropdown/Dropdown";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import PlayersTable from "@/features/players/components/PlayersTable/PlayersTable";
 import StatKey from "@/features/players/components/StatKey/StatKey";
 import {
@@ -131,7 +131,7 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
     changeView("general", []);
   }
 
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
   const columns = group.columns.map(
     (key) => PLAYER_COLUMNS.find((item) => item.key === key)!,
   );

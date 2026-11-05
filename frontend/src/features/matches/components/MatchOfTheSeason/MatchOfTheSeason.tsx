@@ -2,7 +2,7 @@ import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import { useSeasonData } from "@/api/seasonData";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import { best, margin } from "@/features/matches/utils/matchStats";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import { isFinished, totalGoals } from "@/utils/match";
 import "./MatchOfTheSeason.scss";
 
@@ -31,7 +31,7 @@ export default function MatchOfTheSeason({
   onShowMatchweek,
 }: MatchOfTheSeasonProps) {
   const { data, isError } = useSeasonData(league, season);
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
 
   const match = data
     ? best(data.matches.filter(isFinished), totalGoals, (m) => -margin(m))

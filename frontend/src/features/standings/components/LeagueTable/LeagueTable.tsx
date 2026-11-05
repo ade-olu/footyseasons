@@ -7,7 +7,7 @@ import Dropdown from "@/components/ui/Dropdown/Dropdown";
 import StandingsTable, {
   type TableView,
 } from "@/features/standings/components/StandingsTable/StandingsTable";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
 import { getClubForm } from "@/features/standings/utils/form";
 import type { Standing } from "@/types/api"; // Types for API responses
@@ -73,7 +73,7 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
   const [matchFilter, setMatchFilter] = useState<MatchFilter>("overall");
   const [view, setView] = useState<TableView>("short");
 
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
 
   // Overall, home or away rows; zones follow each table's own positions (as on FotMob)
   const rows = !data

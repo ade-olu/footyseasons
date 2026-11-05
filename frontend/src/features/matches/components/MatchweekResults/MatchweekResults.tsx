@@ -4,7 +4,7 @@ import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import MatchRow from "@/features/matches/components/MatchRow/MatchRow";
 import MatchweekPicker from "@/features/matches/components/MatchweekPicker/MatchweekPicker";
 import { groupByDay } from "@/features/matches/utils/matchDays";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import "./MatchweekResults.scss";
 
 // Props for the MatchweekResults component: the selected league and season start year
@@ -37,7 +37,7 @@ export default function MatchweekResults({
   onChange,
 }: MatchweekResultsProps) {
   const { data, isError } = useSeasonData(league, season);
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
 
   if (!data || matchweek === undefined) {
     return (

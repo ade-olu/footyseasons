@@ -2,7 +2,7 @@ import { usePlayers } from "@/api/players";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
 import Podium from "@/components/ui/Podium/Podium";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import {
   currentClub,
   goalContributions,
@@ -21,7 +21,7 @@ type PlayersBannerProps = {
 // Player Stats page banner: title, description and the top 3 goal contributors on a podium
 export default function PlayersBanner({ league, season }: PlayersBannerProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
 
   // Most goals plus assists, then most goals
   const podium = data

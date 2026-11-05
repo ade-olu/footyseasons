@@ -56,3 +56,8 @@ export const LEAGUES: {
     logoAlt: ligue1logoAlt,
   },
 ];
+
+// A league's full name, e.g. "Premier League"
+export function getLeagueName(code: LeagueCode) {
+  return LEAGUES.find((league) => league.code === code)!.name;
+}

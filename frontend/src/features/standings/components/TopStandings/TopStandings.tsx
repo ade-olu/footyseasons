@@ -2,7 +2,7 @@ import { useSeasonData } from "@/api/seasonData";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import StandingsTable from "@/features/standings/components/StandingsTable/StandingsTable";
-import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
 import { getClubForm } from "@/features/standings/utils/form";
 import "./TopStandings.scss";
@@ -21,7 +21,7 @@ export default function TopStandings({ league, season }: TopStandingsProps) {
   // Undefined until this league and season's data arrives, so an old selection never shows
   const { data, isError } = useSeasonData(league, season);
 
-  const leagueName = LEAGUES.find((item) => item.code === league)?.name;
+  const leagueName = getLeagueName(league);
   // A season has a champion once it's over (03 only sets it after the end date)
   const isFinal =
     data !== undefined && data.standings.championClubId !== null;
