@@ -8,8 +8,7 @@ Safe to re-run: only these 5 columns are overwritten.
 
 import sqlite3
 
-
-DB_FILE = "football.db"
+from common.db import DB_FILE
 
 
 def get_all_seasons(cursor):

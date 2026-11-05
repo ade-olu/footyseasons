@@ -9,19 +9,17 @@ Safe to re-run: each league-season's rows are replaced. I cache downloads in
 cache/fotmob/stats/ and always refetch the latest season. Run 09 first.
 """
 
-import json
 import os
 import sqlite3
 import time
 
-from common.db import get_season_id
+from common.cache import read_json, write_json
+from common.db import DB_FILE, get_season_id
 from common.fotmob import SECONDS_BETWEEN_REQUESTS, fetch, fetch_league_season
-from common.leagues import LATEST_SEASON, LEAGUES
+from common.leagues import FOTMOB_FIRST_SEASON, LATEST_SEASON, LEAGUES
 
 
-DB_FILE = "football.db"
 CACHE_DIR = os.path.join("cache", "fotmob", "stats")
-FOTMOB_FIRST_SEASON = 2016
 
 # FotMob stat list -> (column, field). Per-90 lists keep the season total in
 # SubStatValue; the others in StatValue
@@ -43,17 +41,6 @@ COLUMNS = [column for column, _ in STATS.values()]
 REAL_COLUMNS = {"goals_prevented", "save_percentage"}
 
 
-def read_cache(path):
-    with open(path, encoding="utf-8") as file:
-        return json.load(file)
-
-
-def write_cache(path, data):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as file:
-        json.dump(data, file)
-
-
 def fotmob_get(fetcher, *args):
     time.sleep(SECONDS_BETWEEN_REQUESTS)
     return fetcher(*args)
@@ -71,16 +58,16 @@ def load_stat_lists(league, year):
             os.path.basename(stat["fetchAllUrl"]).removesuffix(".json"): stat["fetchAllUrl"]
             for stat in page["stats"]["players"]
         }
-        write_cache(index_path, {name: urls[name] for name in STATS if name in urls})
+        write_json(index_path, {name: urls[name] for name in STATS if name in urls})
 
     lists = {}
-    for name in read_cache(index_path):
+    for name in read_json(index_path):
         path = os.path.join(folder, f"{name}.json")
         if refetch or not os.path.exists(path):
-            url = read_cache(index_path)[name]
+            url = read_json(index_path)[name]
             # "ParticiantId" is FotMob's spelling
-            write_cache(path, fotmob_get(fetch, url)["TopLists"][0]["StatList"])
-        lists[name] = read_cache(path)
+            write_json(path, fotmob_get(fetch, url)["TopLists"][0]["StatList"])
+        lists[name] = read_json(path)
     return lists
 
 
@@ -173,7 +160,7 @@ def main():
         print("Stats FotMob doesn't have:")
         for line in missing_stats:
             print(f"  {line}")
-    # Players with the most minutes first: add them to 09's FOTMOB_IDS
+    # Players with the most minutes first: add them to FOTMOB_IDS
     all_unmatched.sort(key=lambda item: -item[2]["minutes"])
     print(f"{len(all_unmatched)} FotMob player-seasons without an Understat match:")
     for code, year, player in all_unmatched[:20]:

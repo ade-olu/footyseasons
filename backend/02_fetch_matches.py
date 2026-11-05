@@ -8,17 +8,14 @@ Safe to re-run: existing matches get their date, status and score updated.
 import time
 import sqlite3
 
-from common.db import ensure_season, season_label
-from common.football_data import SECONDS_BETWEEN_REQUESTS, fetch, load_api_key
+from common.db import DB_FILE, ensure_season, season_label
+from common.football_data import (
+    SECONDS_BETWEEN_REQUESTS,
+    ensure_club,
+    fetch,
+    load_api_key,
+)
 from common.leagues import API_SEASONS, LEAGUES
-
-
-DB_FILE = "football.db"
-
-# Three-letter codes the API gets wrong. club_id -> code
-TLA_FIXES = {
-    576: "STR",  # Strasbourg, "RC " in the API
-}
 
 
 def fetch_matches(api_key, league_code, start_year):
@@ -58,18 +55,8 @@ def ensure_clubs(cursor, matches):
         clubs[home["id"]] = home
         clubs[away["id"]] = away
 
-    for club_id, club in clubs.items():
-        cursor.execute(
-            """INSERT OR IGNORE INTO clubs (club_id, name, short_name, tla, crest_url)
-               VALUES (?, ?, ?, ?, ?)""",
-            (
-                club_id,
-                club.get("name"),
-                club.get("shortName"),
-                TLA_FIXES.get(club_id, club.get("tla")),
-                club.get("crest"),
-            ),
-        )
+    for club in clubs.values():
+        ensure_club(cursor, club)
 
     print(f"  Inserted/verified {len(clubs)} unique clubs.")
 

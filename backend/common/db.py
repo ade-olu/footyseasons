@@ -3,6 +3,8 @@ common/db.py
 Season and club look-ups shared by the pipeline scripts.
 """
 
+DB_FILE = "football.db"
+
 
 def season_label(start_year):
     # 2025 -> "2025/26"

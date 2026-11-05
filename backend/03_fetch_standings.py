@@ -10,7 +10,7 @@ import time
 import sqlite3
 from datetime import date
 
-from common.db import get_season_id
+from common.db import DB_FILE, get_season_id
 from common.football_data import (
     SECONDS_BETWEEN_REQUESTS,
     ensure_club,
@@ -18,9 +18,6 @@ from common.football_data import (
     load_api_key,
 )
 from common.leagues import API_SEASONS, LEAGUES
-
-
-DB_FILE = "football.db"
 
 
 def build_club_stats(standings):

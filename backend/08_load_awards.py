@@ -14,10 +14,10 @@ import time
 import sqlite3
 from datetime import date
 
+from common.db import DB_FILE
 from common.understat import SECONDS_BETWEEN_REQUESTS, fetch_player_matches
 
 
-DB_FILE = "football.db"
 AWARDS_FILE = "awards.csv"
 
 AWARDS = ["player", "manager", "goalkeeper", "young_player"]

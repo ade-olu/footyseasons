@@ -8,6 +8,8 @@ starts, bump LATEST_SEASON here and in frontend/src/hooks/useSelection.ts.
 FIRST_SEASON = 2014
 # football-data.org's free tier returns 403 before this
 FIRST_API_SEASON = 2023
+# FotMob has no player stats before this
+FOTMOB_FIRST_SEASON = 2016
 # Start year of the newest season (2025 = 2025/26)
 LATEST_SEASON = 2025
 

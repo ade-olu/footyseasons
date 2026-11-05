@@ -7,7 +7,8 @@ Deletes football.db and rebuilds the empty tables from schema.sql.
 import os
 import sqlite3
 
-DB_FILE = "football.db"
+from common.db import DB_FILE
+
 SCHEMA_FILE = "schema.sql"
 
 

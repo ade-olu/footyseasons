@@ -12,7 +12,7 @@ import html
 import time
 import sqlite3
 
-from common.db import get_season_clubs, get_season_id
+from common.db import DB_FILE, get_season_clubs, get_season_id
 from common.leagues import ALL_SEASONS, LEAGUES
 from common.understat import (
     SECONDS_BETWEEN_REQUESTS,
@@ -21,8 +21,6 @@ from common.understat import (
     match_club,
 )
 
-
-DB_FILE = "football.db"
 
 # clubs.display_name is Understat's team name, except these.
 # Understat name -> display name

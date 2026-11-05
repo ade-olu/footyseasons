@@ -1,6 +1,6 @@
 # Players not matched to FotMob
 
-These show initials. To fix one, add `understat_id: fotmob_id` to `FOTMOB_IDS` in `09_fetch_player_profiles.py` and re-run it.
+These show initials. To fix one, add `understat_id: fotmob_id` to `FOTMOB_IDS` in `common/player_fixes.py` and re-run 09.
 
 Sorted by minutes, most first.
 

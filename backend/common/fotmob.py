@@ -1,6 +1,6 @@
 """
 common/fotmob.py
-Requests to fotmob.com, shared by 04 and 09. FotMob has no official API:
+Requests to fotmob.com, shared by 04, 09 and 10. FotMob has no official API:
 these are the JSON endpoints its own pages load, which could change without warning.
 """
 

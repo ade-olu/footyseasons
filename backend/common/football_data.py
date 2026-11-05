@@ -11,6 +11,11 @@ API_URL = "https://api.football-data.org/v4"
 # Pause between requests to stay under the free tier's 10 calls/minute
 SECONDS_BETWEEN_REQUESTS = 7
 
+# Three-letter codes the API gets wrong. club_id -> code
+TLA_FIXES = {
+    576: "STR",  # Strasbourg, "RC " in the API
+}
+
 
 def load_api_key():
     # Kept out of git
@@ -24,6 +29,7 @@ def fetch(api_key, path, params):
         f"{API_URL}{path}",
         headers={"X-Auth-Token": api_key},
         params=params,
+        timeout=30,
     )
 
     if response.status_code != 200:
@@ -36,7 +42,6 @@ def fetch(api_key, path, params):
 
 
 def ensure_club(cursor, team):
-    # In case 02 didn't add the club
     cursor.execute(
         """INSERT OR IGNORE INTO clubs (club_id, name, short_name, tla, crest_url)
            VALUES (?, ?, ?, ?, ?)""",
@@ -44,7 +49,7 @@ def ensure_club(cursor, team):
             team["id"],
             team.get("name"),
             team.get("shortName"),
-            team.get("tla"),
+            TLA_FIXES.get(team["id"], team.get("tla")),
             team.get("crest"),
         ),
     )

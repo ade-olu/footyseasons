@@ -13,7 +13,7 @@ import sqlite3
 from collections import Counter, defaultdict
 
 from common import fotmob
-from common.db import ensure_season, find_season_id, get_season_clubs
+from common.db import DB_FILE, ensure_season, find_season_id, get_season_clubs
 from common.leagues import API_SEASONS, LEAGUES, UNDERSTAT_ONLY_SEASONS
 from common.understat import (
     SECONDS_BETWEEN_REQUESTS,
@@ -21,8 +21,6 @@ from common.understat import (
     match_club,
 )
 
-
-DB_FILE = "football.db"
 
 # Older Understat teams that are the same club. Understat team id -> clubs.name
 # (pre-2015 Parma, refounded after going bankrupt)
