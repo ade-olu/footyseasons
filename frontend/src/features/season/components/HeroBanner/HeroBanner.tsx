@@ -4,7 +4,7 @@ import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
-import { isPlayed } from "@/utils/match";
+import { isFinished, isPlayed, totalGoals } from "@/utils/match";
 import { getHeroImage } from "@/features/season/data/heroImages"; // Get the hero image for a given club and season
 import { SEASON_STORIES } from "@/features/season/data/seasonStories"; // Hand-written stories for each season
 
@@ -47,9 +47,9 @@ function getHeroData({
   const played = matches.filter(isPlayed);
 
   // Goals only come from matches that were actually played, since an awarded score isn't real goals
-  const goalsScored = played
-    .filter((match) => match.status === "FINISHED")
-    .reduce((total, match) => total + match.homeGoals + match.awayGoals, 0);
+  const goalsScored = matches
+    .filter(isFinished)
+    .reduce((total, match) => total + totalGoals(match), 0);
 
   // Match order isn't chronological, so take the earliest and latest kickoff times
   const times = played.map((match) => new Date(match.utcDate).getTime());

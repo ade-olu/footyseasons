@@ -1,14 +1,10 @@
 import { useSeasonData } from "@/api/seasonData";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
-import {
-  goalsPerMatch,
-  isFinished,
-  totalGoals,
-} from "@/features/matches/utils/matchStats";
+import { goalsPerMatch } from "@/features/matches/utils/matchStats";
 import type { LeagueCode } from "@/data/leagues";
 import type { Match } from "@/types/api"; // Types for API responses
-import { isPlayed } from "@/utils/match";
+import { isFinished, isPlayed, totalGoals } from "@/utils/match";
 import "./AtAGlance.scss";
 
 // Props for the AtAGlance component: the selected league and season start year

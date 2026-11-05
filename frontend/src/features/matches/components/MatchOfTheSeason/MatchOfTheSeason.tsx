@@ -1,13 +1,9 @@
 import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import { useSeasonData } from "@/api/seasonData";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
-import {
-  best,
-  isFinished,
-  margin,
-  totalGoals,
-} from "@/features/matches/utils/matchStats";
+import { best, margin } from "@/features/matches/utils/matchStats";
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
+import { isFinished, totalGoals } from "@/utils/match";
 import "./MatchOfTheSeason.scss";
 
 // Props for the MatchOfTheSeason component: the selected league and season start year

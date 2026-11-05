@@ -1,13 +1,5 @@
 import type { Match, PlayedMatch } from "@/types/api"; // Types for API responses
-
-// Goals only count from FINISHED matches, since an awarded score isn't real goals
-export function isFinished(match: Match): match is PlayedMatch {
-  return match.status === "FINISHED";
-}
-
-export function totalGoals(match: PlayedMatch): number {
-  return match.homeGoals + match.awayGoals;
-}
+import { isFinished, totalGoals } from "@/utils/match";
 
 export function margin(match: PlayedMatch): number {
   return Math.abs(match.homeGoals - match.awayGoals);

@@ -1,13 +1,9 @@
 import { useSeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
-import {
-  best,
-  isFinished,
-  margin,
-  totalGoals,
-} from "@/features/matches/utils/matchStats";
+import { best, margin } from "@/features/matches/utils/matchStats";
 import type { LeagueCode } from "@/data/leagues";
 import type { PlayedMatch } from "@/types/api"; // Types for API responses
+import { isFinished, totalGoals } from "@/utils/match";
 
 // Props for the MatchesHighlights component: the selected league and season start year (2025 = 2025/26)
 type MatchesHighlightsProps = {
