@@ -54,7 +54,7 @@ export default function StandingsBanner({
         </h2>
         {isError && (
           <p className="standings-banner__description" role="alert">
-            Could not load the standings.
+            Couldn't load the standings.
           </p>
         )}
         {content && (
