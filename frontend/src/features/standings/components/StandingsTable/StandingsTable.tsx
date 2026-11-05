@@ -7,6 +7,7 @@ import {
 } from "@/features/standings/data/tablePlaces";
 import { getTableName } from "@/data/tableNames";
 import type { Standing } from "@/types/api";
+import { prefersReducedMotion } from "@/utils/motion";
 import "./StandingsTable.scss";
 
 // One letter of a club's form: win, draw or loss
@@ -95,10 +96,7 @@ export default function StandingsTable({
     const sameClubs =
       previous.size === tops.size &&
       [...tops.keys()].every((clubId) => previous.has(clubId));
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (!animateOrder || !sameClubs || reduceMotion) return;
+    if (!animateOrder || !sameClubs || prefersReducedMotion()) return;
 
     tops.forEach((top, clubId) => {
       const shift = (previous.get(clubId) ?? top) - top;
@@ -119,7 +117,7 @@ export default function StandingsTable({
   useLayoutEffect(() => {
     if (previousView.current === view) return;
     previousView.current = view;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReducedMotion()) return;
     tableRef.current?.animate([{ opacity: 0 }, { opacity: 1 }], {
       duration: 200,
       easing: "ease-out",

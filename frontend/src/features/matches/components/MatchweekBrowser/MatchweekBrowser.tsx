@@ -6,6 +6,7 @@ import MatchweekResults from "@/features/matches/components/MatchweekResults/Mat
 import type { LeagueCode } from "@/data/leagues";
 import type { Match } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
+import { prefersReducedMotion } from "@/utils/motion";
 import "./MatchweekBrowser.scss";
 
 // Props for the MatchweekBrowser component: the selected league and season start year
@@ -44,11 +45,8 @@ export default function MatchweekBrowser({
   // Picks the match's round and scrolls to the results
   const showMatchweek = (value: number) => {
     pick(value);
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
     resultsRef.current?.scrollIntoView({
-      behavior: reduce ? "auto" : "smooth",
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
       block: "start",
     });
   };
