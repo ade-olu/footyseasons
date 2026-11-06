@@ -4,7 +4,7 @@
 // A single background photo and how to display it
 type HeroPhoto = {
   src: string;
-  credit: string; // Photographer + license; required for CC BY / CC BY-SA images
+  credit: string; // Photographer + licence; required for CC BY / CC BY-SA images
   position?: string; // CSS object-position, to keep the crowd visible behind the gradient
 };
 

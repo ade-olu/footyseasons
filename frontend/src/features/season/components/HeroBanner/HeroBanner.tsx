@@ -184,7 +184,7 @@ export default function HeroBanner({ league, season }: HeroBannerProps) {
         </div>
       </div>
 
-      {/* Photo credit, only shown when the photo's license needs one */}
+      {/* Photo credit, only shown when the photo's licence needs one */}
       {photo.credit && (
         <p className="hero-banner__credit">Photo: {photo.credit}</p>
       )}
