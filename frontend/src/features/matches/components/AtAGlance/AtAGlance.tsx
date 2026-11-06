@@ -38,9 +38,9 @@ export default function AtAGlance({
   let description = isError ? "Couldn't load the matches." : "Loading…";
   let tiles = [
     { label: "Goals", value: "–" },
-    { label: "Home wins", value: "–" },
+    { label: "Home Wins", value: "–" },
     { label: "Draws", value: "–" },
-    { label: "Away wins", value: "–" },
+    { label: "Away Wins", value: "–" },
   ];
   let comparison: string | undefined;
 
@@ -57,9 +57,9 @@ export default function AtAGlance({
     description = playedLine(round, played.length, matchweek);
     tiles = [
       { label: "Goals", value: String(goals) },
-      { label: "Home wins", value: count((home, away) => home > away) },
+      { label: "Home Wins", value: count((home, away) => home > away) },
       { label: "Draws", value: count((home, away) => home === away) },
-      { label: "Away wins", value: count((home, away) => home < away) },
+      { label: "Away Wins", value: count((home, away) => home < away) },
     ];
 
     const roundAverage = goalsPerMatch(round);
