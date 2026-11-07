@@ -232,39 +232,6 @@ $standings-table-relegation-row-hover: color.mix(
     }
   }
 
-  &__form-list {
-    display: flex;
-    gap: rem(8);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  &__form-badge {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: rem(24);
-    height: rem(24);
-    border-radius: 50%;
-    @include text(10);
-    font-weight: 600;
-    color: $color-bg-surface;
-
-    &--win {
-      background-color: $color-form-win;
-    }
-
-    &--draw {
-      background-color: $color-form-draw;
-    }
-
-    &--loss {
-      background-color: $color-form-loss;
-    }
-  }
-
   &__legend {
     display: flex;
     flex-wrap: wrap;

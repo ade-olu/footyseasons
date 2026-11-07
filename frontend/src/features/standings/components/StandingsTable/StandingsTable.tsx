@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
+import FormBadges from "@/components/ui/FormBadges/FormBadges";
 import {
   getTableZone,
   type TablePlaces,
@@ -53,12 +54,6 @@ const ZONES: {
 ];
 
 const RELEGATION_ZONES: TableZone[] = ["relegationPlayoff", "relegation"];
-
-const FORM_LABELS: Record<FormResult, string> = {
-  W: "Win",
-  D: "Draw",
-  L: "Loss",
-};
 
 // Shows goal difference with a sign, e.g. +44, 0, -12
 function formatGoalDifference(club: Standing) {
@@ -300,20 +295,10 @@ export default function StandingsTable({
                     {club.points}
                   </td>
                   <td className="standings-table__form">
-                    <ol
+                    <FormBadges
                       className="standings-table__form-list"
-                      aria-label="Last 5 results, oldest first"
-                    >
-                      {results.map((result, resultIndex) => (
-                        <li
-                          key={resultIndex}
-                          className={`standings-table__form-badge standings-table__form-badge--${FORM_LABELS[result].toLowerCase()}`}
-                          title={FORM_LABELS[result]}
-                        >
-                          {result}
-                        </li>
-                      ))}
-                    </ol>
+                      results={results}
+                    />
                   </td>
                 </tr>
               );
