@@ -56,6 +56,12 @@ export type StandingsResponse = {
   standings: Standing[];
 };
 
+// One club's seasons in a league, from GET /api/leagues/:code/club-seasons
+export type ClubSeasons = {
+  clubId: number;
+  startYears: number[]; // Oldest first
+};
+
 // football-data.org's match statuses (2014-2022 matches are only FINISHED, AWARDED or CANCELLED)
 export type MatchStatus =
   | "SCHEDULED"
