@@ -1,3 +1,4 @@
+import ClubsBanner from "@/features/clubs/components/ClubsBanner/ClubsBanner";
 import type { LeagueCode } from "@/data/leagues";
 import { pageTitle } from "@/utils/pageTitle";
 
@@ -7,13 +8,13 @@ type ClubsPageProps = {
   season: number;
 };
 
-// Clubs page ("/clubs")
-// Placeholder until the page is designed and built
+// Clubs page ("/<league>/clubs"): banner with the season's club counts
 export default function ClubsPage({ league, season }: ClubsPageProps) {
   return (
     <>
       <title>{pageTitle("Clubs", league, season)}</title>
-      <h1>Clubs</h1>
+      {/* Title and club counts */}
+      <ClubsBanner league={league} season={season} />
     </>
   );
 }
