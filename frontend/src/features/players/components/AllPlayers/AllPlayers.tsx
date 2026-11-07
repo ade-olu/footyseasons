@@ -1,12 +1,11 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   ChevronLeft as ArrowLeftIcon,
   ChevronRight as ArrowRightIcon,
-  Search as SearchIcon,
-  X as ClearIcon,
 } from "reicon-react";
 import { usePlayers } from "@/api/players";
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
+import SearchBox from "@/components/ui/SearchBox/SearchBox";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl";
@@ -29,6 +28,7 @@ import {
   type Position,
 } from "@/features/players/utils/playerStats";
 import type { Player } from "@/types/api"; // Types for API responses
+import { searchable } from "@/utils/search";
 import { seasonLabel } from "@/utils/season";
 import "./AllPlayers.scss";
 
@@ -40,15 +40,6 @@ const POSITION_OPTIONS: { value: Position | "all"; label: string }[] = [
   { value: "all", label: "All positions" },
   ...POSITIONS,
 ];
-
-// "Raphaël" and "raphael" both match "rapha"
-function searchable(text: string) {
-  return text
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .trim();
-}
 
 // Every club in the season's player list, A-Z
 function clubOptions(players: Player[]) {
@@ -76,7 +67,6 @@ type AllPlayersProps = {
 export default function AllPlayers({ league, season }: AllPlayersProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
   const [search, setSearch] = useState("");
-  const searchRef = useRef<HTMLInputElement>(null);
   const [position, setPosition] = useState<Position | "all">("all");
   const [club, setClub] = useState<number | "all">("all");
   const [sort, setSort] = useState<PlayerColumn>("goals");
@@ -192,33 +182,11 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
           title="All players"
           description={`Every ${shownPlayers.slice(0, -1)} who played in the ${seasonLabel(season)} ${leagueName}, sorted by ${column.name.toLowerCase()}.`}
         />
-        <div className="all-players__search">
-          <label className="all-players__search-field">
-            <SearchIcon className="all-players__search-icon" aria-hidden />
-            <input
-              ref={searchRef}
-              className="all-players__search-input"
-              type="search"
-              placeholder="Search players"
-              aria-label="Search players"
-              value={search}
-              onChange={(event) => update(setSearch)(event.target.value)}
-            />
-          </label>
-          {search && (
-            <button
-              type="button"
-              className="all-players__search-clear"
-              aria-label="Clear search"
-              onClick={() => {
-                update(setSearch)("");
-                searchRef.current?.focus();
-              }}
-            >
-              <ClearIcon className="all-players__search-icon" aria-hidden />
-            </button>
-          )}
-        </div>
+        <SearchBox
+          label="Search players"
+          value={search}
+          onChange={update(setSearch)}
+        />
       </div>
 
       {/* Stats toggle on the left, position and club dropdowns on the right; on

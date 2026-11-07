@@ -1,0 +1,90 @@
+@use "@/styles/foundations" as *;
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: rem(8);
+  width: rem(280);
+  padding: rem(16);
+  border: 1px solid $color-border-default;
+  border-radius: $radius-12;
+  background-color: $color-bg-surface;
+  box-shadow: $shadow-resting;
+
+  @include motion-allowed {
+    transition: border-color 0.15s;
+  }
+
+  &:hover,
+  &:focus-within {
+    border-color: $color-text-secondary;
+  }
+
+  @include below-tablet {
+    width: 100%;
+  }
+
+  // Icon and input; clicking anywhere in it focuses the input
+  &__field {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    gap: rem(8);
+    min-width: 0;
+    cursor: text;
+  }
+
+  // Shown while there's text, in place of the browser's own clear button
+  &__clear {
+    display: flex;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    color: $color-text-tertiary;
+    cursor: pointer;
+    @include press(0.92, color 0.15s);
+
+    &:hover {
+      color: $color-text-primary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+
+    .search-box__icon {
+      color: inherit;
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: rem(17);
+    height: rem(17);
+    color: $color-text-tertiary;
+  }
+
+  &__input {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font: inherit;
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-primary;
+
+    &::placeholder {
+      color: $color-text-tertiary;
+      opacity: 1;
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+}
