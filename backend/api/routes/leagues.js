@@ -76,6 +76,32 @@ router.get("/", (req, res) => {
   );
 });
 
+// Get every club's seasons in a league since 2014/15, oldest first.
+router.get("/:code/club-seasons", (req, res) => {
+  const season = resolveSeason(req, res);
+  if (!season) return;
+
+  const rows = db
+    .prepare(
+      `
+    SELECT cs.club_id AS clubId, s.start_year AS startYear
+    FROM club_season_stats cs
+    JOIN seasons s ON s.season_id = cs.season_id
+    WHERE s.league_id = ?
+    ORDER BY s.start_year
+  `,
+    )
+    .all(season.leagueId);
+
+  const clubs = new Map();
+  for (const { clubId, startYear } of rows) {
+    if (!clubs.has(clubId)) clubs.set(clubId, { clubId, startYears: [] });
+    clubs.get(clubId).startYears.push(startYear);
+  }
+
+  res.json([...clubs.values()]);
+});
+
 // Get the standings for a league.
 router.get("/:code/standings", (req, res) => {
   const season = resolveSeason(req, res);
