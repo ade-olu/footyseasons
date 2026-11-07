@@ -1,0 +1,163 @@
+@use "@/styles/foundations" as *;
+
+// Content width where the crest, tag and chevron need a tighter row
+$compact-top: rem(400);
+
+.club-card {
+  display: flex;
+  flex-direction: column;
+  gap: rem(16);
+  height: 100%;
+  padding: rem(24);
+  border: 1px solid $color-border-default;
+  border-radius: $radius-16;
+  background-color: $color-bg-surface;
+  box-shadow: $shadow-resting;
+  cursor: pointer;
+
+  @include below-tablet {
+    padding: rem(16);
+  }
+
+  // Small phones: more room for the top row
+  @include below-phone-small {
+    padding: rem(16) rem(12);
+  }
+
+  // Lifts on hover (mouse only)
+  @include hover-motion {
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-card-hover;
+    }
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(8);
+
+    @include container-up-to($compact-top) {
+      gap: rem(4);
+    }
+  }
+
+  &__crest {
+    flex-shrink: 0;
+    width: rem(40);
+    height: rem(40);
+    object-fit: contain;
+
+    @include container-up-to($compact-top) {
+      width: rem(32);
+      height: rem(32);
+    }
+  }
+
+  &__top-right {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    min-width: 0;
+
+    @include container-up-to($compact-top) {
+      gap: rem(4);
+    }
+  }
+
+  &__tag {
+    padding: rem(4) rem(8);
+    border-radius: $radius-full;
+    background-color: $color-bg-subtle;
+    @include text(12);
+    color: $color-text-secondary;
+    white-space: nowrap;
+
+    @include container-up-to($compact-top) {
+      padding: rem(4) rem(6);
+      @include text(10);
+    }
+  }
+
+  // Always shown, so touch screens get the cue too
+  &__chevron {
+    flex-shrink: 0;
+    width: rem(17);
+    height: rem(17);
+    color: $color-text-tertiary;
+
+    @include motion-allowed {
+      transition: color 0.2s;
+    }
+  }
+
+  @include can-hover {
+    &:hover &__chevron {
+      color: $color-text-primary;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
+    min-width: 0;
+  }
+
+  &__name {
+    overflow: hidden;
+    @include text(16);
+    font-weight: 500;
+    color: $color-text-primary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__seasons {
+    @include text(14);
+    color: $color-text-secondary;
+  }
+
+  // The border is the divider above the stats
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(16);
+    margin: 0;
+    padding-top: rem(16);
+    border-top: 1px solid $color-border-default;
+  }
+
+  // column-reverse puts the value above the label
+  &__stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: rem(4);
+  }
+
+  &__stat-label {
+    @include text(12);
+    color: $color-text-tertiary;
+  }
+
+  &__stat-value {
+    margin: 0;
+    @include text(16);
+    font-weight: 500;
+    color: $color-text-primary;
+  }
+
+  &__form {
+    gap: rem(4);
+
+    @include below-phone-small {
+      gap: rem(2);
+    }
+  }
+}

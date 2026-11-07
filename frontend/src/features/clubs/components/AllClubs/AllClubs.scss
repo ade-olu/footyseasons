@@ -1,0 +1,52 @@
+@use "@/styles/foundations" as *;
+
+.all-clubs {
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+
+  // Title on the left, search on the right; the search wraps below when narrow
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(24);
+
+    > :first-child {
+      flex: 1 1 rem(240);
+    }
+  }
+
+  // 2 columns on phones (1 on the narrowest), 3 beside the sidebar on laptops,
+  // 4 once there's room. The container is .app__content (in App.scss)
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include below-tablet {
+      gap: rem(16);
+    }
+
+    @include container-up-to(rem(320)) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    @include container-from(rem(700)) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @include container-from($content-grid-four) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  &__status {
+    @include text(14);
+    color: $color-text-secondary;
+  }
+}
