@@ -1,6 +1,8 @@
-import type { FormResult } from "@/features/standings/components/StandingsTable/StandingsTable";
 import type { Match } from "@/types/api";
 import { isPlayed } from "@/utils/match";
+
+// One letter of a club's form: win, draw or loss
+export type FormResult = "W" | "D" | "L";
 
 // Each club's last `count` results, oldest first, keyed by clubId; `side` keeps only home or away games.
 // Matches can come in any order; they're sorted by date here.

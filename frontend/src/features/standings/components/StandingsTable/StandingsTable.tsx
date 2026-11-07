@@ -7,11 +7,9 @@ import {
 } from "@/data/tablePlaces";
 import { getTableName } from "@/data/tableNames";
 import type { Standing } from "@/types/api";
+import type { FormResult } from "@/utils/form";
 import { prefersReducedMotion } from "@/utils/motion";
 import "./StandingsTable.scss";
-
-// One letter of a club's form: win, draw or loss
-export type FormResult = "W" | "D" | "L";
 
 // Columns shown on phones: short (PL, GD, PTS), full (every stat) or form
 export type TableView = "short" | "full" | "form";
