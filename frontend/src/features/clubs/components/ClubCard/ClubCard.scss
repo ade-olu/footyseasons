@@ -156,7 +156,7 @@ $compact-top: rem(400);
   &__form {
     gap: rem(4);
 
-    @include below-phone-small {
+    @include below-phone-xsmall {
       gap: rem(2);
     }
   }

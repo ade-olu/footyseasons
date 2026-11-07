@@ -5,12 +5,20 @@ $phone: 440px;
 $tablet: 768px;
 $laptop: 1024px;
 
+$phone-xsmall: 375px;
 $phone-small: 402px;
 $phone-medium: 412px;
 
 // Below the phone width (small phones): smaller headings that would wrap
 @mixin below-phone {
   @media (max-width: #{$phone - 0.02px}) {
+    @content;
+  }
+}
+
+// Below 375px: the club cards' form badges move closer
+@mixin below-phone-xsmall {
+  @media (max-width: #{$phone-xsmall - 0.02px}) {
     @content;
   }
 }
