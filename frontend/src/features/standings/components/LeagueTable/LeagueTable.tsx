@@ -8,7 +8,7 @@ import StandingsTable, {
   type TableView,
 } from "@/features/standings/components/StandingsTable/StandingsTable";
 import { getLeagueName, type LeagueCode } from "@/data/leagues";
-import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
+import { TABLE_PLACES } from "@/data/tablePlaces";
 import { getClubForm } from "@/features/standings/utils/form";
 import type { Standing } from "@/types/api"; // Types for API responses
 import "./LeagueTable.scss";

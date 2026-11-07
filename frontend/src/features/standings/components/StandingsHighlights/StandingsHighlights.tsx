@@ -1,7 +1,7 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 import HighlightCardPlaceholders from "@/components/ui/HighlightCardPlaceholders/HighlightCardPlaceholders";
-import { TABLE_PLACES } from "@/features/standings/data/tablePlaces";
+import { TABLE_PLACES } from "@/data/tablePlaces";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
 

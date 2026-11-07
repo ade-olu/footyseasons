@@ -4,7 +4,7 @@ import {
   getTableZone,
   type TablePlaces,
   type TableZone,
-} from "@/features/standings/data/tablePlaces";
+} from "@/data/tablePlaces";
 import { getTableName } from "@/data/tableNames";
 import type { Standing } from "@/types/api";
 import { prefersReducedMotion } from "@/utils/motion";
