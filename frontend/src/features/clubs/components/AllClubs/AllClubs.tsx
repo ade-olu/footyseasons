@@ -5,7 +5,7 @@ import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
 import ClubCard from "@/features/clubs/components/ClubCard/ClubCard";
 import { useClubDirectory } from "@/features/clubs/hooks/useClubDirectory";
-import { useIsPhone } from "@/hooks/useIsPhone";
+import { useIsPhone } from "@/features/clubs/hooks/useIsPhone";
 import { searchable } from "@/utils/search";
 import "./AllClubs.scss";
 
