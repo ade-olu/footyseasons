@@ -1,5 +1,6 @@
 @use "sass:map";
 @use "functions" as *;
+@use "breakpoints" as *;
 
 // Type scale (px font sizes) and the line height for each.
 // Bigger text gets tighter lines; large text also gets -0.5px tracking.
@@ -13,6 +14,7 @@ $type-scale: (
   24: 1.2,
   28: 1.2,
   32: 1.2,
+  40: 1.2,
   48: 1.2,
 );
 
@@ -34,5 +36,23 @@ $type-scale: (
 
   @if $size >= 20 {
     letter-spacing: -0.5px;
+  }
+}
+
+// Banner titles: 48px from 1440px wide, 40px below that, 32px on phones and
+// 28px on small phones. Font weight stays in each component
+@mixin banner-title {
+  @include text(48);
+
+  @include below-desktop {
+    @include text(40);
+  }
+
+  @include container-up-to($content-phone) {
+    @include text(32);
+  }
+
+  @include below-phone-small {
+    @include text(28);
   }
 }

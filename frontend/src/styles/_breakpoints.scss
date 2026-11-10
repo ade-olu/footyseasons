@@ -4,6 +4,7 @@
 $phone: 440px;
 $tablet: 768px;
 $laptop: 1024px;
+$desktop: 1440px;
 
 $phone-xsmall: 375px;
 $phone-small: 402px;
@@ -61,6 +62,13 @@ $phone-medium: 412px;
 // Laptop width and up
 @mixin laptop-up {
   @media (min-width: $laptop) {
+    @content;
+  }
+}
+
+// Below desktop width (1440px): banner titles go from 48 to 40px
+@mixin below-desktop {
+  @media (max-width: #{$desktop - 0.02px}) {
     @content;
   }
 }

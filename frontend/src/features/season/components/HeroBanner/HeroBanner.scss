@@ -126,16 +126,11 @@
 
   &__title {
     padding-right: rem(32);
-    @include text(48);
+    @include banner-title;
     font-weight: 600;
 
     @include container-up-to($content-phone) {
       padding-right: 0;
-      @include text(32);
-    }
-
-    @include below-phone-small {
-      @include text(28);
     }
   }
 
