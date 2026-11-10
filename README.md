@@ -102,16 +102,16 @@ Runs on `http://localhost:3001` locally and at
 production. League routes take an optional `?season=` with
 the season's start year (`2024` = 2024/25) and default to the latest season.
 
-| Method | Endpoint                       | Description                                        |
-| ------ | ------------------------------ | -------------------------------------------------- |
-| GET    | `/api/leagues`                 | Gets the leagues and their seasons.                |
-| GET    | `/api/leagues/:code/standings` | Gets the table, with home and away records.        |
-| GET    | `/api/leagues/:code/matches`   | Gets every match in the season.                    |
-| GET    | `/api/leagues/:code/players`   | Gets player stats, sortable by goals, xG and more. |
-| GET    | `/api/leagues/:code/awards`    | Gets the season's award winners.                   |
+| Method | Endpoint                          | Description                                              |
+| ------ | --------------------------------- | -------------------------------------------------------- |
+| GET    | `/api/leagues`                    | Gets the leagues and their seasons.                      |
+| GET    | `/api/leagues/:code/standings`    | Gets the table, with home and away records.              |
+| GET    | `/api/leagues/:code/matches`      | Gets every match in the season.                          |
+| GET    | `/api/leagues/:code/players`      | Gets player stats, sortable by goals, xG and more.       |
+| GET    | `/api/leagues/:code/awards`       | Gets the season's award winners.                         |
 | GET    | `/api/leagues/:code/club-seasons` | Gets every club's seasons in the league (no `?season=`). |
-| GET    | `/api/clubs/:id`               | Gets a club and its stats for the season.          |
-| GET    | `/api/clubs/:id/matches`       | Gets a club's matches.                             |
+| GET    | `/api/clubs/:id`                  | Gets a club and its stats for the season.                |
+| GET    | `/api/clubs/:id/matches`          | Gets a club's matches.                                   |
 
 League codes: `PL` (Premier League), `PD` (La Liga), `SA` (Serie A), `BL1` (Bundesliga), `FL1`
 (Ligue 1).
