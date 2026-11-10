@@ -2,6 +2,7 @@ import { useSeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 import HighlightCardPlaceholders from "@/components/ui/HighlightCardPlaceholders/HighlightCardPlaceholders";
 import type { LeagueCode } from "@/data/leagues";
+import { getTableName } from "@/data/tableNames";
 import type { PlayedMatch } from "@/types/api"; // Types for API responses
 import { best, isFinished, margin, totalGoals } from "@/utils/match";
 
@@ -11,13 +12,17 @@ type MatchesHighlightsProps = {
   season: number;
 };
 
-// Score, crests and "Arsenal vs Leeds United" for a match card
+// Score, crests and "Arsenal vs Leeds" for a match card
 function matchCard(match: PlayedMatch | undefined) {
   if (!match) return { value: "–", description: "No matches played yet" };
+  const home = getTableName(match.homeClubId, match.homeClubDisplayName);
+  const away = getTableName(match.awayClubId, match.awayClubDisplayName);
 
   return {
     value: `${match.homeGoals} – ${match.awayGoals}`,
-    description: `${match.homeClubDisplayName} vs ${match.awayClubDisplayName}`,
+    // Table names fit the card ("Wolves vs Man City"); hover shows the full ones
+    description: `${home} vs ${away}`,
+    descriptionTitle: `${match.homeClubDisplayName} vs ${match.awayClubDisplayName}`,
     crests: [
       { name: match.homeClubDisplayName, crestUrl: match.homeClubCrestUrl },
     ],
