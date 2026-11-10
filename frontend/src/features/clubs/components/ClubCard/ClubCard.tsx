@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { ChevronRight as ChevronIcon } from "reicon-react";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
+import FittedName from "@/components/ui/FittedName/FittedName";
 import FormBadges from "@/components/ui/FormBadges/FormBadges";
 import {
   ordinal,
   type DirectoryClub,
 } from "@/features/clubs/utils/clubDirectory";
+import { shortClubNames } from "@/features/clubs/utils/clubPage";
 import { EARLIEST_SEASON, LATEST_SEASON } from "@/hooks/useSelection";
 import "./ClubCard.scss";
 
@@ -49,10 +51,17 @@ export default function ClubCard({
       </div>
 
       <div className="club-card__info">
-        {/* The link covers the whole card */}
-        <h3 className="club-card__name" title={club.displayName}>
+        {/* The link covers the whole card; a shorter name when this one doesn't fit */}
+        <h3 className="club-card__name">
           <Link className="club-card__link" to={to}>
-            {name}
+            <FittedName
+              className="club-card__name-text"
+              name={name}
+              shortNames={shortClubNames(club).filter(
+                (shortName) => shortName.length < name.length,
+              )}
+              title={club.displayName}
+            />
           </Link>
         </h3>
         <p className="club-card__seasons">

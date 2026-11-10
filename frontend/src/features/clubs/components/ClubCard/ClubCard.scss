@@ -111,10 +111,14 @@ $compact-top: rem(400);
   }
 
   &__name {
-    overflow: hidden;
     @include text(16);
     font-weight: 500;
     color: $color-text-primary;
+  }
+
+  // One line; FittedName swaps in a shorter name before it cuts off
+  &__name-text {
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
