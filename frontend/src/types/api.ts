@@ -56,6 +56,21 @@ export type StandingsResponse = {
   standings: Standing[];
 };
 
+// A club in GET /api/clubs/:id
+export type Club = {
+  clubId: number;
+  name: string;
+  displayName: string;
+  shortName: string;
+  tla: string;
+  crestUrl: string | null;
+};
+
+// Response from GET /api/clubs/:id (its `stats` for one season aren't used yet)
+export type ClubResponse = {
+  club: Club;
+};
+
 // One club's seasons in a league, from GET /api/leagues/:code/club-seasons
 export type ClubSeasons = {
   clubId: number;
