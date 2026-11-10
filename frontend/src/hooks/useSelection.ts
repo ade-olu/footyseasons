@@ -56,7 +56,11 @@ export function useSelection() {
   function select(next: { league?: LeagueCode; season?: number }) {
     const nextLeague = next.league ?? league;
     const nextSeason = next.season ?? season;
-    navigate(leaguePath(nextLeague, pathLeague ? page : "", nextSeason));
+    // A club's page goes to the new league's Clubs page, since the club isn't in it
+    const isClubPage = page.startsWith("/clubs/");
+    const nextPage =
+      isClubPage && nextLeague !== league ? "/clubs" : pathLeague ? page : "";
+    navigate(leaguePath(nextLeague, nextPage, nextSeason));
   }
 
   return {
