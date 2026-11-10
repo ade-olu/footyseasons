@@ -1,0 +1,71 @@
+@use "@/styles/foundations" as *;
+
+.club-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(16);
+
+  &__back {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: rem(16);
+    border-radius: $radius-12;
+    color: $color-text-primary;
+    text-decoration: none;
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+  }
+
+  // Square button as tall as the dropdown
+  &__back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(51);
+    height: rem(51);
+    border: 1px solid $color-border-default;
+    border-radius: $radius-12;
+    background-color: $color-bg-surface;
+    box-shadow: $shadow-resting;
+    @include press(0.92, border-color 0.15s);
+  }
+
+  &__back:hover &__back-button {
+    border-color: $color-text-secondary;
+  }
+
+  &__back-icon {
+    width: auto;
+    height: rem(18);
+  }
+
+  // Phones show only the button, so the dropdown gets the width
+  &__back-label {
+    @include text(14);
+    font-weight: 500;
+
+    @include below-tablet {
+      display: none;
+    }
+  }
+
+  &__dropdown {
+    width: rem(240);
+
+    @include below-tablet {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    // Up to 20 clubs: the list scrolls
+    .dropdown__list {
+      max-height: rem(320);
+      overflow-y: auto;
+    }
+  }
+}

@@ -18,6 +18,7 @@ import StandingsPage from "./pages/StandingsPage/StandingsPage";
 import MatchesPage from "./pages/MatchesPage/MatchesPage";
 import PlayerStatsPage from "./pages/PlayerStatsPage/PlayerStatsPage";
 import ClubsPage from "./pages/ClubsPage/ClubsPage";
+import ClubPage from "./pages/ClubPage/ClubPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
@@ -99,6 +100,11 @@ function App() {
                   <Route key={path} path={path.slice(1)} element={element} />
                 );
               })}
+              {/* One club's page, e.g. /premier-league/clubs/57/arsenal */}
+              <Route
+                path="clubs/:clubId/:slug?"
+                element={<ClubPage league={league} season={season} />}
+              />
             </Route>
             {/* 404 page route */}
             <Route path="*" element={<NotFoundPage />} />
