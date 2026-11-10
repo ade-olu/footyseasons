@@ -6,6 +6,7 @@ import { getTableName } from "@/data/tableNames";
 import ClubCard from "@/features/clubs/components/ClubCard/ClubCard";
 import { useClubDirectory } from "@/features/clubs/hooks/useClubDirectory";
 import { useIsPhone } from "@/features/clubs/hooks/useIsPhone";
+import { clubPath } from "@/features/clubs/utils/clubPage";
 import { searchable } from "@/utils/search";
 import "./AllClubs.scss";
 
@@ -54,7 +55,11 @@ export default function AllClubs({ league, season }: AllClubsProps) {
           <ul className="all-clubs__grid">
             {clubs.map(({ row, name }) => (
               <li key={row.club.clubId}>
-                <ClubCard {...row} name={name} />
+                <ClubCard
+                  {...row}
+                  name={name}
+                  to={clubPath(league, row.club, season)}
+                />
               </li>
             ))}
           </ul>

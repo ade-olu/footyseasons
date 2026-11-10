@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ChevronRight as ChevronIcon } from "reicon-react";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import FormBadges from "@/components/ui/FormBadges/FormBadges";
@@ -10,15 +11,17 @@ import "./ClubCard.scss";
 
 const TOTAL_SEASONS = LATEST_SEASON - EARLIEST_SEASON + 1;
 
-// Props for the ClubCard component: the club's row, and the name to show for this screen width
+// Props for the ClubCard component: the club's row, the name to show for this screen width and its page
 type ClubCardProps = DirectoryClub & {
   name: string;
+  to: string;
 };
 
 // A club in the directory: crest, tag, name, seasons, finish, points and form
 export default function ClubCard({
   club,
   name,
+  to,
   seasonsInLeague,
   form,
   tag,
@@ -46,8 +49,11 @@ export default function ClubCard({
       </div>
 
       <div className="club-card__info">
+        {/* The link covers the whole card */}
         <h3 className="club-card__name" title={club.displayName}>
-          {name}
+          <Link className="club-card__link" to={to}>
+            {name}
+          </Link>
         </h3>
         <p className="club-card__seasons">
           {seasonsInLeague} of {TOTAL_SEASONS} seasons

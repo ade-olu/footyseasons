@@ -4,6 +4,7 @@
 $compact-top: rem(400);
 
 .club-card {
+  position: relative; // For the link covering the card
   display: flex;
   flex-direction: column;
   gap: rem(16);
@@ -116,6 +117,29 @@ $compact-top: rem(400);
     color: $color-text-primary;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  // Stretched over the whole card, so a click anywhere opens the club
+  &__link {
+    color: inherit;
+    text-decoration: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-16;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  // The focus ring goes round the card, not the name
+  &:has(.club-card__link:focus-visible) {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
   }
 
   &__seasons {
