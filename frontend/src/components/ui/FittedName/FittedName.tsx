@@ -19,7 +19,7 @@ export default function FittedName({
   title,
   className,
 }: FittedNameProps) {
-  const nameRef = useRef<HTMLParagraphElement>(null);
+  const nameRef = useRef<HTMLSpanElement>(null);
   const measureRef = useRef<HTMLSpanElement>(null);
   const [shown, setShown] = useState(0);
   const options = [name, ...shortNames];
@@ -47,7 +47,7 @@ export default function FittedName({
   }, [name, shortNames]);
 
   return (
-    <p
+    <span
       className={`fitted-name ${className}`}
       ref={nameRef}
       title={title ?? name}
@@ -68,6 +68,6 @@ export default function FittedName({
           <span className="fitted-name__full">{name}</span>
         </>
       )}
-    </p>
+    </span>
   );
 }

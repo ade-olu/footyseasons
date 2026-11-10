@@ -2,6 +2,7 @@
 
 .fitted-name {
   position: relative;
+  display: block; // A span, so it can sit inside a heading
 
   // Each option at its natural width, out of sight; stacked, so the name's
   // scrollWidth is still the full name's
