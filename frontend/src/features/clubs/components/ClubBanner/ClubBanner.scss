@@ -1,0 +1,158 @@
+@use "@/styles/foundations" as *;
+
+.club-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(48);
+  min-height: rem(218); // Same height while loading
+  padding: rem(48);
+  overflow: hidden;
+  border-radius: $radius-24;
+  background: $color-bg-inverse;
+  color: $color-text-inverse;
+
+  // Metrics below the text
+  @include container-up-to($content-medium) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  @include container-up-to($content-phone) {
+    padding: rem(24);
+  }
+
+  // Crest beside the name and summary; on phones beside the name only
+  &__identity {
+    display: grid;
+    grid-template-columns: rem(112) minmax(0, 1fr);
+    grid-template-areas:
+      "crest title"
+      "crest description";
+    align-content: center;
+    column-gap: rem(24);
+    row-gap: rem(16);
+    flex: 1 1 auto;
+    min-width: 0;
+
+    @include container-up-to($content-phone) {
+      grid-template-columns: rem(64) minmax(0, 1fr);
+      grid-template-areas:
+        "crest title"
+        "description description";
+      column-gap: rem(16);
+    }
+
+    @include below-phone-xsmall {
+      grid-template-columns: rem(56) minmax(0, 1fr);
+    }
+  }
+
+  &__crest {
+    grid-area: crest;
+    align-self: center;
+    width: rem(112);
+    height: rem(112);
+    object-fit: contain;
+
+    @include container-up-to($content-phone) {
+      width: rem(64);
+      height: rem(64);
+    }
+
+    // Room for "Middlesbrough" on the narrowest phones
+    @include below-phone-xsmall {
+      width: rem(56);
+      height: rem(56);
+    }
+  }
+
+  &__title {
+    grid-area: title;
+    align-self: end;
+    min-width: 0;
+    padding-right: rem(24); // Keeps a long name clear of the metrics
+    @include banner-title;
+    font-weight: 600;
+
+    // Metrics are below the text here
+    @include container-up-to($content-medium) {
+      padding-right: 0;
+    }
+
+    @include container-up-to($content-phone) {
+      align-self: center;
+    }
+  }
+
+  // Never wraps; FittedName swaps in a shorter name instead
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__description {
+    grid-area: description;
+    max-width: rem(460);
+    @include text(16, $wrap: true);
+    color: $color-text-inverse-secondary;
+
+    @include container-up-to($content-phone) {
+      max-width: none;
+    }
+  }
+
+  &__metrics {
+    display: grid;
+    flex-shrink: 0;
+    grid-template-columns: repeat(3, rem(104));
+    gap: rem(8);
+    margin: 0;
+
+    // Equal columns across the banner
+    @include container-up-to($content-phone) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      width: 100%;
+    }
+  }
+
+  // column-reverse puts the value above the label
+  &__metric {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: rem(8);
+  }
+
+  &__metric-label {
+    @include text(14);
+    color: $color-text-inverse-muted;
+  }
+
+  &__label-short {
+    display: none;
+    text-decoration: none;
+  }
+
+  @include below-phone-small {
+    &__label-full {
+      display: none;
+    }
+
+    &__label-short {
+      display: inline;
+    }
+  }
+
+  &__metric-value {
+    margin: 0;
+    @include text(28);
+    font-weight: 600;
+
+    @include container-up-to($content-phone) {
+      @include text(24);
+    }
+  }
+}

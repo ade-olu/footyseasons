@@ -1,5 +1,10 @@
-import type { LeagueCode } from "@/data/leagues";
+import { getLeagueName, type LeagueCode } from "@/data/leagues";
+import { getTableName } from "@/data/tableNames";
+import { TABLE_PLACES } from "@/data/tablePlaces";
+import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { leaguePath } from "@/hooks/useSelection";
+import type { Standing } from "@/types/api";
+import { seasonLabel } from "@/utils/season";
 
 // "Brighton & Hove Albion" -> "brighton-hove-albion", "Atlético" -> "atletico"
 export function clubSlug(name: string) {
@@ -22,4 +27,56 @@ export function clubPath(
     `/clubs/${clubId}/${clubSlug(displayName)}`,
     season,
   );
+}
+
+// Shorter names to try when the full one doesn't fit, longest first:
+// "Wolverhampton", then "Wolves"
+export function shortClubNames(club: {
+  clubId: number;
+  displayName: string;
+  shortName: string;
+}) {
+  const names = [getTableName(club.clubId, club.displayName), club.shortName];
+  return [...new Set(names)]
+    .filter((name) => name.length < club.displayName.length)
+    .sort((a, b) => b.length - a.length);
+}
+
+// "+44", "0", "-12"
+export function formatGoalDifference({ goalsFor, goalsAgainst }: Standing) {
+  const difference = goalsFor - goalsAgainst;
+  return difference > 0 ? `+${difference}` : String(difference);
+}
+
+// "1 point", "7 points"
+function count(value: number, word: string, plural = `${word}s`) {
+  return `${value} ${value === 1 ? word : plural}`;
+}
+
+// "2025/26 Premier League champions by 7 points, with 26 wins, 7 draws and 5 losses."
+export function getClubSummary(
+  club: Standing,
+  standings: Standing[],
+  championClubId: number | null,
+  league: LeagueCode,
+  season: number,
+) {
+  const competition = `${seasonLabel(season)} ${getLeagueName(league)}`;
+  const record = `with ${count(club.wins, "win")}, ${count(club.draws, "draw")} and ${count(club.losses, "loss", "losses")}`;
+  const relegation = TABLE_PLACES[`${league}-${season}`]?.relegation ?? [];
+  const finish = club.position === null ? null : ordinal(club.position);
+
+  if (club.clubId === championClubId) {
+    const runnerUp = standings.find(({ clubId }) => clubId !== championClubId);
+    const gap = runnerUp ? club.points - runnerUp.points : 0;
+    const margin =
+      gap > 0 ? `by ${count(gap, "point")}` : "on goal difference";
+    return `${competition} champions ${margin}, ${record}.`;
+  }
+  if (club.position !== null && relegation.includes(club.position)) {
+    return `Relegated from the ${competition} in ${finish}, ${record}.`;
+  }
+  return finish
+    ? `${finish} in the ${competition}, ${record}.`
+    : `In the ${competition}, ${record}.`;
 }

@@ -2,6 +2,7 @@ import { Navigate, useParams } from "react-router-dom";
 import type { LeagueCode } from "@/data/leagues";
 import { useClub } from "@/features/clubs/api/club";
 import { useClubSeasons } from "@/features/clubs/api/clubSeasons";
+import ClubBanner from "@/features/clubs/components/ClubBanner/ClubBanner";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import { clubPath, clubSlug } from "@/features/clubs/utils/clubPage";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
@@ -43,6 +44,8 @@ export default function ClubPage({ league, season }: ClubPageProps) {
       <title>{pageTitle(name, league, season)}</title>
       {/* Back to the directory, and the club picker */}
       <ClubNav league={league} season={season} clubId={clubId} />
+      {/* Crest, name, season summary, position, points and goal difference */}
+      <ClubBanner league={league} season={season} clubId={clubId} />
     </>
   );
 }
