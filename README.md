@@ -181,14 +181,16 @@ frontend/
   public/crests/      # club crests (SVG)
   src/
     pages/            # one folder per page, built from features
-    features/         # standings, matches, players, awards, season
-      standings/
-        components/   # league table and its page sections
-        data/         # table places (European spots, relegation)
-        utils/        # last-5 form
+    features/         # standings, matches, players, awards, season, clubs
+      clubs/
+        api/          # the feature's API calls
+        components/   # directory cards, club banner and highlights
+        hooks/        # data combined for the directory
+        utils/        # club page helpers (summary, streaks, addresses)
     components/       # shared layout and ui components
     api/              # API calls and caching
-    data/             # leagues, short club names
+    data/             # leagues, short club names, table places
+    utils/            # shared helpers (form, matches, seasons)
     styles/           # foundations: colours, type, effects, radii, breakpoints
 ```
 
