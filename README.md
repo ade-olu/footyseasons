@@ -35,7 +35,9 @@ the same clean dashboard feel as the apps I use every week.
   last 5 results, and a page for each club with its season summary, best win
   streak, clean sheets, and biggest win and defeat
 - **Shareable URLs:** The league and season live in the URL
-  (`/serie-a/standings?season=2016-2017`), so any page can be linked to
+  (`/serie-a/standings?season=2016-2017`), and each club has its own address
+  (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
+  linked to
 - **Responsive:** Works from phones up to wide desktop screens
 
 ## Tech Stack
