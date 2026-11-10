@@ -45,10 +45,12 @@ def get_club_matches(cursor, season_id, club_id):
 def calculate_club_aggregates(club_id, matches):
     clean_sheets = 0
 
-    best_win_diff = -1  # so a 1-0 still counts
+    # Biggest win and loss: largest margin, then most goals, then the earliest
+    # (matches come oldest first, so a tie keeps the earlier one)
+    best_win = (0, 0)  # (margin, total goals)
     best_win_match_id = None
 
-    best_loss_diff = -1
+    best_loss = (0, 0)
     best_loss_match_id = None
 
     current_win_streak = 0
@@ -71,11 +73,12 @@ def calculate_club_aggregates(club_id, matches):
             clean_sheets += 1
 
         diff = us - them
+        total = us + them
 
         if diff > 0:
             # Win
-            if diff > best_win_diff:
-                best_win_diff = diff
+            if (diff, total) > best_win:
+                best_win = (diff, total)
                 best_win_match_id = match_id
 
             current_win_streak += 1
@@ -89,9 +92,9 @@ def calculate_club_aggregates(club_id, matches):
             longest_winless_streak = max(longest_winless_streak, current_winless_streak)
 
             if diff < 0:
-                loss_diff = them - us  # lost 1-3 -> 2
-                if loss_diff > best_loss_diff:
-                    best_loss_diff = loss_diff
+                loss = (them - us, total)  # lost 1-3 -> (2, 4)
+                if loss > best_loss:
+                    best_loss = loss
                     best_loss_match_id = match_id
 
     return {
