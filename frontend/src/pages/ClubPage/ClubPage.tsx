@@ -3,10 +3,12 @@ import type { LeagueCode } from "@/data/leagues";
 import { useClub } from "@/features/clubs/api/club";
 import { useClubSeasons } from "@/features/clubs/api/clubSeasons";
 import ClubBanner from "@/features/clubs/components/ClubBanner/ClubBanner";
+import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighlights";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import { clubPath, clubSlug } from "@/features/clubs/utils/clubPage";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
 import { pageTitle } from "@/utils/pageTitle";
+import "./ClubPage.scss";
 
 // Props for the ClubPage: the selected league and season start year (2025 = 2025/26)
 type ClubPageProps = {
@@ -37,6 +39,7 @@ export default function ClubPage({ league, season }: ClubPageProps) {
     return <Navigate to={clubPath(league, club.data.club, season)} replace />;
   }
 
+  const isInSeason = startYears?.includes(season) ?? true;
   const name = club.data?.club.displayName ?? "Clubs";
 
   return (
@@ -46,6 +49,12 @@ export default function ClubPage({ league, season }: ClubPageProps) {
       <ClubNav league={league} season={season} clubId={clubId} />
       {/* Crest, name, season summary, position, points and goal difference */}
       <ClubBanner league={league} season={season} clubId={clubId} />
+      {/* Best win streak, clean sheets, biggest win and biggest defeat */}
+      {isInSeason && (
+        <section className="club-page__highlights">
+          <ClubHighlights league={league} season={season} clubId={clubId} />
+        </section>
+      )}
     </>
   );
 }

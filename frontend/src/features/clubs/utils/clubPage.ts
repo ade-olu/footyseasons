@@ -3,7 +3,8 @@ import { getTableName } from "@/data/tableNames";
 import { TABLE_PLACES } from "@/data/tablePlaces";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { leaguePath } from "@/hooks/useSelection";
-import type { Standing } from "@/types/api";
+import type { Match, PlayedMatch, Standing } from "@/types/api";
+import { best, isFinished, margin, totalGoals } from "@/utils/match";
 import { seasonLabel } from "@/utils/season";
 
 // "Brighton & Hove Albion" -> "brighton-hove-albion", "Atlético" -> "atletico"
@@ -79,4 +80,49 @@ export function getClubSummary(
   return finish
     ? `${finish} in the ${competition}, ${record}.`
     : `In the ${competition}, ${record}.`;
+}
+
+// The club's FINISHED matches, oldest first (awarded scores aren't real goals)
+export function getClubMatches(matches: Match[], clubId: number) {
+  return matches
+    .filter(isFinished)
+    .filter(
+      ({ homeClubId, awayClubId }) =>
+        homeClubId === clubId || awayClubId === clubId,
+    )
+    .sort((a, b) => a.utcDate.localeCompare(b.utcDate));
+}
+
+// Goals for minus goals against, from the club's side
+export function clubMargin(match: PlayedMatch, clubId: number) {
+  const difference = match.homeGoals - match.awayGoals;
+  return match.homeClubId === clubId ? difference : -difference;
+}
+
+// The longest run of wins, the latest on a tie; null without a win
+export function getWinStreak(matches: PlayedMatch[], clubId: number) {
+  let longest: PlayedMatch[] = [];
+  let current: PlayedMatch[] = [];
+
+  for (const match of matches) {
+    current = clubMargin(match, clubId) > 0 ? [...current, match] : [];
+    if (current.length > 0 && current.length >= longest.length) {
+      longest = current;
+    }
+  }
+  return longest.length > 0 ? longest : null;
+}
+
+// Biggest win or defeat: largest margin, then most goals, then the earliest
+export function getBiggestResult(
+  matches: PlayedMatch[],
+  clubId: number,
+  result: "win" | "defeat",
+) {
+  const sign = result === "win" ? 1 : -1;
+  return best(
+    matches.filter((match) => clubMargin(match, clubId) * sign > 0),
+    margin,
+    totalGoals,
+  );
 }
