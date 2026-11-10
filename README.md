@@ -8,7 +8,8 @@ player's stats, the award winners and the final day.
 **Live:** [footyseasons.vercel.app](https://footyseasons.vercel.app)
 
 > Still in development. The Overview, Standings, Matches and Player Stats pages
-> are done, with Clubs next.
+> are done. Clubs is in progress: the directory is done, and each club's page
+> has its banner and highlights so far.
 
 ## Why
 
