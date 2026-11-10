@@ -12,6 +12,7 @@ type HighlightCardProps = {
   title: string;
   value: string;
   description: string;
+  descriptionTitle?: string; // Hover text for a shortened description, e.g. the full club names
   club?: HighlightClub; // When set, the card shows the club's crest and uses `value` as the club name
   crests?: HighlightClub[]; // Crests shown before the value (e.g. the relegated clubs)
   crestsAfter?: HighlightClub[]; // Crests shown after the value (e.g. a match's away club)
@@ -39,6 +40,7 @@ export default function HighlightCard({
   title,
   value,
   description,
+  descriptionTitle,
   club,
   crests,
   crestsAfter,
@@ -66,7 +68,9 @@ export default function HighlightCard({
             <CrestList crests={crestsAfter} />
           )}
         </p>
-        <p className="highlight-card__description">{description}</p>
+        <p className="highlight-card__description" title={descriptionTitle}>
+          {description}
+        </p>
       </div>
     </article>
   );
