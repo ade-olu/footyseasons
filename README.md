@@ -200,7 +200,7 @@ and features only import shared code, never each other.
 
 ## Roadmap
 
-- Clubs page
+- The rest of each club's page (charts, results, squad and more)
 - Charts for player and club stats
 
 ## Credits
