@@ -33,13 +33,14 @@
     min-width: 0;
   }
 
-  // Opens the sidebar drawer; hidden once the sidebar is always shown
+  // Opens the sidebar drawer; hidden once the sidebar is always shown.
+  // Square and as tall as the season dropdown
   &__menu {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: rem(40);
-    height: rem(40);
+    width: rem(48);
+    height: rem(48);
     flex-shrink: 0;
     margin-right: rem(8);
     padding: 0;
