@@ -31,6 +31,9 @@ the same clean dashboard feel as the apps I use every week.
   defending or goalkeeping stats you can search and filter by position and club
 - **Season awards:** Player, manager, goalkeeper and young player of the
   season, with each winner's stats
+- **Clubs:** Every club in the season, A to Z, with its finish, points and
+  last 5 results, and a page for each club with its season summary, best win
+  streak, clean sheets, and biggest win and defeat
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), so any page can be linked to
 - **Responsive:** Works from phones up to wide desktop screens
