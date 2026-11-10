@@ -24,7 +24,9 @@ export default function OverviewPage({ league, season }: OverviewPageProps) {
       {/* Grid section for page content */}
       <section className="overview-page__grid">
         {/* Season highlight cards */}
-        <SeasonHighlights league={league} season={season} />
+        <section className="overview-page__highlights">
+          <SeasonHighlights league={league} season={season} />
+        </section>
         {/* Season award winners */}
         <SeasonAwards league={league} season={season} />
         {/* Top 5 of the league table */}
