@@ -9,7 +9,7 @@ player's stats, the award winners and the final day.
 
 > Still in development. The Overview, Standings, Matches and Player Stats pages
 > are done. Clubs is in progress: the directory is done, and each club's page
-> has its banner and highlights so far.
+> has its banner, highlights and phone tabs so far.
 
 ## Why
 
@@ -38,7 +38,9 @@ the same clean dashboard feel as the apps I use every week.
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
   (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
   linked to
-- **Responsive:** Works from phones up to wide desktop screens
+- **Responsive:** Works from phones up to wide desktop screens, with
+  swipeable award and leader cards, table headers that stay in view, and tabs
+  for each part of a club's page
 
 ## Tech Stack
 
@@ -184,7 +186,7 @@ frontend/
     features/         # standings, matches, players, awards, season, clubs
       clubs/
         api/          # the feature's API calls
-        components/   # directory cards, club banner and highlights
+        components/   # directory cards, club nav, banner and highlights
         hooks/        # data combined for the directory
         utils/        # club page helpers (summary, streaks, addresses)
     components/       # shared layout and ui components
