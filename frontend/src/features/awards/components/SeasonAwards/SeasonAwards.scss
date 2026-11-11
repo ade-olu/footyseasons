@@ -1,8 +1,18 @@
 @use "@/styles/foundations" as *;
 
-
 .season-awards {
   grid-column: 1 / -1; // Full width of the overview grid
+
+  // Phones: the cards scroll to the card's edges, so only the header and
+  // status keep side padding
+  @include below-tablet {
+    padding-inline: 0;
+
+    > .section-header,
+    &__status {
+      padding-inline: rem(16);
+    }
+  }
 
   // 1 column on smaller screens, 2 once the cards have room for name + photo.
   // The container is .app__content (in App.scss)
@@ -13,6 +23,23 @@
 
     @include container-from($content-medium) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    // Phones: a sideways carousel, the next card peeking in
+    @include below-tablet {
+      display: flex;
+      gap: rem(16);
+      padding-inline: rem(16);
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: rem(16);
+      scrollbar-width: none;
+
+      > * {
+        flex: 0 0 min(rem(312), 85%);
+        scroll-snap-align: start;
+      }
     }
   }
 
