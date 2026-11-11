@@ -1,5 +1,6 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import MatchResult from "@/features/matches/components/MatchResult/MatchResult";
+import MatchRow from "@/features/matches/components/MatchRow/MatchRow";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
@@ -96,10 +97,18 @@ export default function FinalDayMatches({
                   {formatDay(day.date)}
                 </h3>
               )}
+              {/* Tiles on wider screens, edge-to-edge rows on phones */}
               <ul className="final-day-matches__list">
                 {day.matches.map((match) => (
                   <li key={match.matchId}>
                     <MatchResult match={match} />
+                  </li>
+                ))}
+              </ul>
+              <ul className="final-day-matches__rows">
+                {day.matches.map((match) => (
+                  <li className="final-day-matches__row" key={match.matchId}>
+                    <MatchRow match={match} hideTime />
                   </li>
                 ))}
               </ul>

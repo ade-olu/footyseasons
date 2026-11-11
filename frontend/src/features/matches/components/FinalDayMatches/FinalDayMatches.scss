@@ -3,22 +3,49 @@
 .final-day-matches {
   grid-column: 1 / -1; // Full width of the overview grid
 
+  // Phones: the rows run edge to edge and close the card, so only the header
+  // and status are padded
+  @include below-tablet {
+    padding-inline: 0;
+    padding-bottom: 0;
+
+    > .section-header {
+      padding-inline: rem(16);
+    }
+  }
+
   &__days {
     display: flex;
     flex-direction: column;
     gap: rem(32);
+
+    @include below-tablet {
+      gap: 0;
+    }
   }
 
   &__day {
     display: flex;
     flex-direction: column;
     gap: rem(16);
+
+    @include below-tablet {
+      gap: 0;
+    }
   }
 
   &__date {
     @include text(14);
     font-weight: 500;
     color: $color-text-secondary;
+
+    // Phones: a grey strip above each day, as in the Matches results
+    @include below-tablet {
+      padding: rem(16);
+      background-color: $color-bg-subtle;
+      border-top: 1px solid $color-border-default;
+      border-bottom: 1px solid $color-border-default;
+    }
   }
 
   // 1 column on smaller screens, 2 once both club names fit.
@@ -31,17 +58,48 @@
     padding: 0;
     list-style: none;
 
-    @include below-tablet {
-      gap: rem(16);
-    }
-
     @include container-from($content-medium) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include below-tablet {
+      display: none;
+    }
+  }
+
+  // Result rows, phones only
+  &__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid $color-border-default;
+
+    @include tablet-up {
+      display: none;
+    }
+  }
+
+  // The day's strip already has a line above the rows
+  &__date + &__list + &__rows {
+    border-top: none;
+  }
+
+  // A divider under each match except the last, which the card's border or
+  // the next day's strip closes
+  &__row {
+    border-bottom: 1px solid $color-border-default;
+
+    &:last-child {
+      border-bottom: none;
     }
   }
 
   &__status {
     @include text(14);
     color: $color-text-secondary;
+
+    @include below-tablet {
+      padding: 0 rem(16) rem(24);
+    }
   }
 }
