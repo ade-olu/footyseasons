@@ -1,10 +1,8 @@
 import { useSeasonData } from "@/api/seasonData";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
-import { goalsPerMatch } from "@/features/matches/utils/matchStats";
+import { getRoundStats } from "@/features/matches/utils/matchStats";
 import type { LeagueCode } from "@/data/leagues";
-import type { Match } from "@/types/api"; // Types for API responses
-import { isFinished, isPlayed, totalGoals } from "@/utils/match";
 import "./AtAGlance.scss";
 
 // Props for the AtAGlance component: the selected league and season start year
@@ -16,8 +14,7 @@ type AtAGlanceProps = {
 };
 
 // "All 10 matches of matchweek 38 played."
-function playedLine(round: Match[], played: number, matchweek: number) {
-  const total = round.length;
+function playedLine(total: number, played: number, matchweek: number) {
   if (total === 0) return `No matches in matchweek ${matchweek}.`;
   if (played === total)
     return `All ${total} matches of matchweek ${matchweek} played.`;
@@ -45,25 +42,14 @@ export default function AtAGlance({
   let comparison: string | undefined;
 
   if (data && matchweek !== undefined) {
-    const round = data.matches.filter((match) => match.matchday === matchweek);
-    const played = round.filter(isPlayed);
-    // Wins and draws from every result; goals from FINISHED matches only
-    const goals = round
-      .filter(isFinished)
-      .reduce((sum, match) => sum + totalGoals(match), 0);
-    const count = (test: (home: number, away: number) => boolean) =>
-      String(played.filter((m) => test(m.homeGoals, m.awayGoals)).length);
+    const { total, played, stats, roundAverage, seasonAverage } = getRoundStats(
+      data.matches,
+      matchweek,
+    );
 
-    description = playedLine(round, played.length, matchweek);
-    tiles = [
-      { label: "Goals", value: String(goals) },
-      { label: "Home Wins", value: count((home, away) => home > away) },
-      { label: "Draws", value: count((home, away) => home === away) },
-      { label: "Away Wins", value: count((home, away) => home < away) },
-    ];
+    description = playedLine(total, played, matchweek);
+    tiles = stats.map(({ label, value }) => ({ label, value: String(value) }));
 
-    const roundAverage = goalsPerMatch(round);
-    const seasonAverage = goalsPerMatch(data.matches);
     if (roundAverage !== null && seasonAverage !== null) {
       comparison = `${roundAverage.toFixed(2)} goals per match this round, against ${seasonAverage.toFixed(2)} across the season.`;
     }
