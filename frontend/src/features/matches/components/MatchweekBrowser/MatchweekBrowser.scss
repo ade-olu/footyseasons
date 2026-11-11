@@ -11,7 +11,11 @@
     "results";
   gap: rem(32);
 
+  // Phones: At a glance moves into the results header (RoundStats)
   @include below-tablet {
+    grid-template-areas:
+      "season"
+      "results";
     gap: rem(24);
   }
 
@@ -46,6 +50,10 @@
 
   &__glance {
     grid-area: glance;
+
+    @include below-tablet {
+      display: none;
+    }
   }
 
   &__season {

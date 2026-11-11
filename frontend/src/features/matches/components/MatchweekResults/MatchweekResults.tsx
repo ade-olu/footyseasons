@@ -3,6 +3,7 @@ import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import MatchRow from "@/features/matches/components/MatchRow/MatchRow";
 import MatchweekPicker from "@/features/matches/components/MatchweekPicker/MatchweekPicker";
+import RoundStats from "@/features/matches/components/RoundStats/RoundStats";
 import { groupByDay } from "@/features/matches/utils/matchDays";
 import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import "./MatchweekResults.scss";
@@ -75,11 +76,21 @@ export default function MatchweekResults({
           description={`${round} of the ${label} ${leagueName} season.`}
         />
         {total > 0 && (
-          <MatchweekPicker
-            matchweek={matchweek}
-            total={total}
-            onChange={onChange}
-          />
+          <div className="matchweek-results__round">
+            <MatchweekPicker
+              matchweek={matchweek}
+              total={total}
+              onChange={onChange}
+            />
+            {/* At a glance, in short, on phones */}
+            <div className="matchweek-results__round-stats">
+              <RoundStats
+                league={league}
+                season={season}
+                matchweek={matchweek}
+              />
+            </div>
+          </div>
         )}
       </div>
       {days.length > 0 ? (

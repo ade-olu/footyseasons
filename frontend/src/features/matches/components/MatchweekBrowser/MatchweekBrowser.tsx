@@ -22,8 +22,8 @@ function latestMatchweek(matches: Match[]): number {
 }
 
 // Results with At a glance and Match of the Season beside them (below them on smaller
-// screens, where the order is Match of the Season, At a glance, results).
-// Keeps the picked matchweek for all three
+// screens, where the order is Match of the Season, At a glance, results; on phones
+// At a glance is in the results header). Keeps the picked matchweek for all three
 export default function MatchweekBrowser({
   league,
   season,

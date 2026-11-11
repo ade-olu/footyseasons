@@ -27,6 +27,23 @@
     }
   }
 
+  // The picker, with the round's stats under it on phones
+  &__round {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+
+    @include below-tablet {
+      flex: 1 1 100%;
+    }
+  }
+
+  &__round-stats {
+    @include tablet-up {
+      display: none;
+    }
+  }
+
   &__days {
     @include motion-allowed {
       animation: matchweek-results-fade 0.2s;
