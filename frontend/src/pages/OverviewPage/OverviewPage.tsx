@@ -3,6 +3,7 @@ import HeroBanner from "@/features/season/components/HeroBanner/HeroBanner";
 import SeasonAwards from "@/features/awards/components/SeasonAwards/SeasonAwards";
 import SeasonHighlights from "@/features/season/components/SeasonHighlights/SeasonHighlights";
 import type { LeagueCode } from "@/data/leagues";
+import HighlightCards from "@/components/ui/HighlightCards/HighlightCards";
 import { pageTitle } from "@/utils/pageTitle";
 import TopPlayers from "@/features/players/components/TopPlayers/TopPlayers";
 import TopStandings from "@/features/standings/components/TopStandings/TopStandings";
@@ -24,9 +25,9 @@ export default function OverviewPage({ league, season }: OverviewPageProps) {
       {/* Grid section for page content */}
       <section className="overview-page__grid">
         {/* Season highlight cards */}
-        <section className="overview-page__highlights">
+        <HighlightCards className="overview-page__highlights">
           <SeasonHighlights league={league} season={season} />
-        </section>
+        </HighlightCards>
         {/* Season award winners */}
         <SeasonAwards league={league} season={season} />
         {/* Top 5 of the league table */}

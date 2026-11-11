@@ -2,8 +2,8 @@ import LeagueTable from "@/features/standings/components/LeagueTable/LeagueTable
 import StandingsBanner from "@/features/standings/components/StandingsBanner/StandingsBanner";
 import StandingsHighlights from "@/features/standings/components/StandingsHighlights/StandingsHighlights";
 import type { LeagueCode } from "@/data/leagues";
+import HighlightCards from "@/components/ui/HighlightCards/HighlightCards";
 import { pageTitle } from "@/utils/pageTitle";
-import "./StandingsPage.scss";
 
 // Props for the StandingsPage: the selected league and season start year (2025 = 2025/26)
 type StandingsPageProps = {
@@ -19,9 +19,9 @@ export default function StandingsPage({ league, season }: StandingsPageProps) {
       {/* Title and top 3 */}
       <StandingsBanner league={league} season={season} />
       {/* Title margin, best attack, best defence and relegated clubs */}
-      <section className="standings-page__highlights">
+      <HighlightCards>
         <StandingsHighlights league={league} season={season} />
-      </section>
+      </HighlightCards>
       {/* Full table */}
       <LeagueTable league={league} season={season} />
     </>

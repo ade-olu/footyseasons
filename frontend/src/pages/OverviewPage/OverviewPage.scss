@@ -21,19 +21,8 @@
     }
   }
 
-  // Its own grid, so rows of cards are 24px apart, closer than the sections
+  // Its own grid (HighlightCards), so rows of cards are 24px apart, closer than the sections
   &__highlights {
     grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: rem(24);
-
-    @include container-from($content-grid-two) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @include container-from($content-grid-four) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
   }
 }

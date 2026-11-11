@@ -2,8 +2,8 @@ import MatchesBanner from "@/features/matches/components/MatchesBanner/MatchesBa
 import MatchesHighlights from "@/features/matches/components/MatchesHighlights/MatchesHighlights";
 import MatchweekBrowser from "@/features/matches/components/MatchweekBrowser/MatchweekBrowser";
 import type { LeagueCode } from "@/data/leagues";
+import HighlightCards from "@/components/ui/HighlightCards/HighlightCards";
 import { pageTitle } from "@/utils/pageTitle";
-import "./MatchesPage.scss";
 
 // Props for the MatchesPage: the selected league and season start year (2025 = 2025/26)
 type MatchesPageProps = {
@@ -19,9 +19,9 @@ export default function MatchesPage({ league, season }: MatchesPageProps) {
       {/* Title and home win / draw / away win split */}
       <MatchesBanner league={league} season={season} />
       {/* Goals per match, biggest win, most common score and goalless draws */}
-      <section className="matches-page__highlights">
+      <HighlightCards>
         <MatchesHighlights league={league} season={season} />
-      </section>
+      </HighlightCards>
       {/* One matchweek's results, its summary and the match of the season */}
       <MatchweekBrowser league={league} season={season} />
     </>

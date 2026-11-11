@@ -7,8 +7,8 @@ import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighl
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import { clubPath, clubSlug } from "@/features/clubs/utils/clubPage";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage";
+import HighlightCards from "@/components/ui/HighlightCards/HighlightCards";
 import { pageTitle } from "@/utils/pageTitle";
-import "./ClubPage.scss";
 
 // Props for the ClubPage: the selected league and season start year (2025 = 2025/26)
 type ClubPageProps = {
@@ -51,9 +51,9 @@ export default function ClubPage({ league, season }: ClubPageProps) {
       <ClubBanner league={league} season={season} clubId={clubId} />
       {/* Best win streak, clean sheets, biggest win and biggest defeat */}
       {isInSeason && (
-        <section className="club-page__highlights">
+        <HighlightCards>
           <ClubHighlights league={league} season={season} clubId={clubId} />
-        </section>
+        </HighlightCards>
       )}
     </>
   );
