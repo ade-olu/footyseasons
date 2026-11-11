@@ -134,6 +134,7 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
           showGoals
           view={view}
           animateOrder
+          stickyHeader
         />
       ) : (
         <p className="league-table__status">

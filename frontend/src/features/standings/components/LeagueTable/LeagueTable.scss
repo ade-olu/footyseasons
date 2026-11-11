@@ -4,6 +4,12 @@
 .league-table {
   padding: rem(24) 0 0;
 
+  // Clips to the corners without becoming a scroll container, so the table's
+  // header row can stick to the page
+  @include below-tablet {
+    overflow: clip;
+  }
+
   // Title on the left, toggle on the right; the toggle wraps below when narrow
   &__header {
     display: flex;
