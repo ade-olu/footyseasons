@@ -1,17 +1,18 @@
 @use "@/styles/foundations" as *;
 
-// 1 column on phones, 2 on smaller screens, 4 once there's room.
-// The container is .app__content (in App.scss)
+// 2 columns, 4 once there's room. The container is .app__content (in App.scss)
 .highlight-cards {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: rem(24);
-
-  @include container-from($content-grid-two) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 
   @include container-from($content-grid-four) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  // Phones: every card as tall as the tallest
+  @include below-tablet {
+    grid-auto-rows: 1fr;
+    gap: rem(16);
   }
 }
