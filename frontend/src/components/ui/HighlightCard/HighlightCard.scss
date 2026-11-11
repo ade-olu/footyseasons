@@ -70,8 +70,9 @@
     }
   }
 
-  // Long club names get cut off with an ellipsis (full name is in the title attribute)
+  // A club name shortens to fit (FittedName), with an ellipsis as a last resort
   &__value-text {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
