@@ -1,8 +1,7 @@
 @use "functions" as *;
 
 // A row of cards that scrolls sideways and snaps to each card's start. Cards
-// are $card-width, or 85% of the row if that's narrower, so the next one
-// always peeks in; the 16px side padding is the row's own
+// are $card-width, or narrower so the next one always peeks in by 32px
 @mixin carousel($card-width) {
   display: flex;
   gap: rem(16);
@@ -14,7 +13,7 @@
   scrollbar-width: none;
 
   > * {
-    flex: 0 0 min($card-width, 85%);
+    flex: 0 0 min($card-width, calc(100% - #{rem(32)}));
     scroll-snap-align: start;
   }
 }
