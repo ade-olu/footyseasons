@@ -15,7 +15,8 @@
   border-radius: $radius-16;
 
   @include below-tablet {
-    padding: rem(24) rem(16);
+    gap: rem(24);
+    padding: rem(16);
   }
 
   transition:
@@ -40,6 +41,10 @@
     display: flex;
     flex-direction: column;
     gap: rem(8);
+
+    @include below-tablet {
+      gap: rem(4);
+    }
   }
 
   &__value {
@@ -50,9 +55,18 @@
     @include text(32);
     font-weight: 600;
 
+    @include below-tablet {
+      gap: rem(8);
+      @include text(24);
+    }
+
     // Crest + club name instead of a single number
     &--club {
       @include text(28);
+
+      @include below-tablet {
+        @include text(22);
+      }
     }
   }
 
@@ -70,6 +84,11 @@
     height: rem(38);
     max-width: rem(38);
     object-fit: contain;
+
+    @include below-tablet {
+      height: rem(24);
+      max-width: rem(24);
+    }
   }
 
   // Crests before a number
@@ -85,6 +104,11 @@
     height: rem(32);
     max-width: rem(40);
     object-fit: contain;
+
+    @include below-tablet {
+      height: rem(24);
+      max-width: rem(30);
+    }
   }
 
   &__description {
