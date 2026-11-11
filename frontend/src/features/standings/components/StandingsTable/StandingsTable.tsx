@@ -62,6 +62,85 @@ function formatGoalDifference(club: Standing) {
   return difference > 0 ? `+${difference}` : String(difference);
 }
 
+// Fixed column widths, so every row lines up
+function TableColumns({ showGoals }: { showGoals: boolean }) {
+  return (
+    <colgroup>
+      <col className="standings-table__col-position" />
+      <col />
+      <col className="standings-table__col-stat" />
+      {Array.from({ length: 3 }, (_, index) => (
+        <col
+          key={index}
+          className="standings-table__col-stat standings-table__col-result"
+        />
+      ))}
+      {showGoals && (
+        <>
+          <col className="standings-table__col-stat standings-table__col-goals" />
+          <col className="standings-table__col-stat standings-table__col-goals" />
+        </>
+      )}
+      <col className="standings-table__col-stat" />
+      <col className="standings-table__col-stat standings-table__col-points" />
+      <col className="standings-table__col-form" />
+    </colgroup>
+  );
+}
+
+// The column headings
+function HeaderRow({ showGoals }: { showGoals: boolean }) {
+  return (
+    <tr>
+      <th scope="col" className="standings-table__position">
+        #
+      </th>
+      <th scope="col" className="standings-table__club">
+        Club
+      </th>
+      <th scope="col" className="standings-table__stat">
+        <abbr title="Played">PL</abbr>
+      </th>
+      <th scope="col" className="standings-table__stat standings-table__result">
+        <abbr title="Won">W</abbr>
+      </th>
+      <th scope="col" className="standings-table__stat standings-table__result">
+        <abbr title="Drawn">D</abbr>
+      </th>
+      <th scope="col" className="standings-table__stat standings-table__result">
+        <abbr title="Lost">L</abbr>
+      </th>
+      {showGoals && (
+        <>
+          <th
+            scope="col"
+            className="standings-table__stat standings-table__goals"
+          >
+            <abbr title="Goals for">GF</abbr>
+          </th>
+          <th
+            scope="col"
+            className="standings-table__stat standings-table__goals"
+          >
+            <abbr title="Goals against">GA</abbr>
+          </th>
+        </>
+      )}
+      <th scope="col" className="standings-table__stat">
+        <abbr title="Goal difference">GD</abbr>
+      </th>
+      <th scope="col" className="standings-table__stat standings-table__points">
+        <abbr title="Points">PTS</abbr>
+      </th>
+      <th scope="col" className="standings-table__form">
+        {/* The Form view on phones has room for the longer label */}
+        <span className="standings-table__form-label">Form</span>
+        <span className="standings-table__form-label-long">Last 5 matches</span>
+      </th>
+    </tr>
+  );
+}
+
 // League table: position, club, played, W/D/L, optional GF/GA, goal difference, points and form
 export default function StandingsTable({
   standings,
@@ -143,88 +222,9 @@ export default function StandingsTable({
       {/* Scrolls sideways instead of squashing the columns on narrow screens */}
       <div className="standings-table__scroll">
         <table ref={tableRef} className="standings-table__table">
-          <colgroup>
-            <col className="standings-table__col-position" />
-            <col />
-            <col className="standings-table__col-stat" />
-            {Array.from({ length: 3 }, (_, index) => (
-              <col
-                key={index}
-                className="standings-table__col-stat standings-table__col-result"
-              />
-            ))}
-            {showGoals && (
-              <>
-                <col className="standings-table__col-stat standings-table__col-goals" />
-                <col className="standings-table__col-stat standings-table__col-goals" />
-              </>
-            )}
-            <col className="standings-table__col-stat" />
-            <col className="standings-table__col-stat standings-table__col-points" />
-            <col className="standings-table__col-form" />
-          </colgroup>
+          <TableColumns showGoals={showGoals} />
           <thead>
-            <tr>
-              <th scope="col" className="standings-table__position">
-                #
-              </th>
-              <th scope="col" className="standings-table__club">
-                Club
-              </th>
-              <th scope="col" className="standings-table__stat">
-                <abbr title="Played">PL</abbr>
-              </th>
-              <th
-                scope="col"
-                className="standings-table__stat standings-table__result"
-              >
-                <abbr title="Won">W</abbr>
-              </th>
-              <th
-                scope="col"
-                className="standings-table__stat standings-table__result"
-              >
-                <abbr title="Drawn">D</abbr>
-              </th>
-              <th
-                scope="col"
-                className="standings-table__stat standings-table__result"
-              >
-                <abbr title="Lost">L</abbr>
-              </th>
-              {showGoals && (
-                <>
-                  <th
-                    scope="col"
-                    className="standings-table__stat standings-table__goals"
-                  >
-                    <abbr title="Goals for">GF</abbr>
-                  </th>
-                  <th
-                    scope="col"
-                    className="standings-table__stat standings-table__goals"
-                  >
-                    <abbr title="Goals against">GA</abbr>
-                  </th>
-                </>
-              )}
-              <th scope="col" className="standings-table__stat">
-                <abbr title="Goal difference">GD</abbr>
-              </th>
-              <th
-                scope="col"
-                className="standings-table__stat standings-table__points"
-              >
-                <abbr title="Points">PTS</abbr>
-              </th>
-              <th scope="col" className="standings-table__form">
-                {/* The Form view on phones has room for the longer label */}
-                <span className="standings-table__form-label">Form</span>
-                <span className="standings-table__form-label-long">
-                  Last 5 matches
-                </span>
-              </th>
-            </tr>
+            <HeaderRow showGoals={showGoals} />
           </thead>
           <tbody>
             {rows.map((club, index) => {
