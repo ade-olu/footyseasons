@@ -1,6 +1,7 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import HighlightCard from "@/components/ui/HighlightCard/HighlightCard";
 import HighlightCardPlaceholders from "@/components/ui/HighlightCardPlaceholders/HighlightCardPlaceholders";
+import { getTableName } from "@/data/tableNames";
 import { TABLE_PLACES } from "@/data/tablePlaces";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
@@ -55,6 +56,11 @@ function getHighlights(
   };
 }
 
+// The club's shorter name for phones ("Man City")
+function tableName(club: Standing) {
+  return getTableName(club.clubId, club.displayName);
+}
+
 // The club's name and crest for a card
 function crestOf(club: Standing) {
   return { name: club.displayName, crestUrl: club.crestUrl };
@@ -91,18 +97,25 @@ export default function StandingsHighlights({
             ? `${leader.displayName} over ${runnerUp.displayName}`
             : leader.displayName
         }
+        shortDescription={
+          runnerUp
+            ? `${tableName(leader)} over ${tableName(runnerUp)}`
+            : tableName(leader)
+        }
         crests={[crestOf(leader)]}
       />
       <HighlightCard
         title="Best Attack"
         value={String(bestAttack.goalsFor)}
         description={`Goals scored by ${bestAttack.displayName}`}
+        shortDescription={`Scored by ${tableName(bestAttack)}`}
         crests={[crestOf(bestAttack)]}
       />
       <HighlightCard
         title="Best Defence"
         value={String(bestDefence.goalsAgainst)}
         description={`Goals conceded by ${bestDefence.displayName}`}
+        shortDescription={`Conceded by ${tableName(bestDefence)}`}
         crests={[crestOf(bestDefence)]}
       />
       <HighlightCard
@@ -112,6 +125,11 @@ export default function StandingsHighlights({
           relegated.length > 0
             ? listFormat.format(relegated.map((club) => club.shortName))
             : "No relegation places"
+        }
+        shortDescription={
+          relegated.length > 0
+            ? relegated.map(tableName).join(", ")
+            : undefined
         }
         crests={relegated.map(crestOf)}
       />

@@ -116,4 +116,17 @@
     @include text(12);
     color: $color-text-secondary;
   }
+
+  // A shorter description on phones
+  &__description-text--wide {
+    @include below-tablet {
+      display: none;
+    }
+  }
+
+  &__description-text--phone {
+    @include tablet-up {
+      display: none;
+    }
+  }
 }

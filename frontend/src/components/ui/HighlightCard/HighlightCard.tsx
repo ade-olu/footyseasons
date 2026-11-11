@@ -14,6 +14,7 @@ type HighlightCardProps = {
   value: string;
   description: string;
   descriptionTitle?: string; // Hover text for a shortened description, e.g. the full club names
+  shortDescription?: string; // Shown instead on phones, so it fits on one line
   club?: HighlightClub; // When set, the card shows the club's crest and uses `value` as the club name
   shortNames?: string[]; // Shorter club names to try when `value` doesn't fit
   crests?: HighlightClub[]; // Crests shown before the value (e.g. the relegated clubs)
@@ -43,6 +44,7 @@ export default function HighlightCard({
   value,
   description,
   descriptionTitle,
+  shortDescription,
   club,
   shortNames,
   crests,
@@ -79,7 +81,18 @@ export default function HighlightCard({
           )}
         </p>
         <p className="highlight-card__description" title={descriptionTitle}>
-          {description}
+          {shortDescription ? (
+            <>
+              <span className="highlight-card__description-text--wide">
+                {description}
+              </span>
+              <span className="highlight-card__description-text--phone">
+                {shortDescription}
+              </span>
+            </>
+          ) : (
+            description
+          )}
         </p>
       </div>
     </article>

@@ -51,18 +51,24 @@ function matchCard(match: PlayedMatch | undefined, none: string) {
   };
 }
 
-// Which rounds the longest run of wins covered
+// Which rounds the longest run of wins covered, and a shorter version for phones
 function streakDescription(streak: PlayedMatch[]) {
   const first = streak[0];
   const last = streak[streak.length - 1];
-  if (streak.length === 1) return "No wins back to back";
+  if (streak.length === 1) return { description: "No wins back to back" };
   // Matchweeks, unless a rescheduled match makes the range longer than the run
   if (last.matchday - first.matchday + 1 === streak.length) {
-    return `Wins in a row, matchweeks ${first.matchday} to ${last.matchday}`;
+    return {
+      description: `Wins in a row, matchweeks ${first.matchday} to ${last.matchday}`,
+      shortDescription: `Matchweeks ${first.matchday} to ${last.matchday}`,
+    };
   }
   const from = shortDate.format(new Date(first.utcDate));
   const to = shortDate.format(new Date(last.utcDate));
-  return `Wins in a row, ${from} to ${to}`;
+  return {
+    description: `Wins in a row, ${from} to ${to}`,
+    shortDescription: `${from} to ${to}`,
+  };
 }
 
 // Club page highlight cards: best win streak, clean sheets, biggest win and biggest defeat
@@ -92,9 +98,9 @@ export default function ClubHighlights({
       <HighlightCard
         title={TITLES[0]}
         value={String(streak?.length ?? 0)}
-        description={
-          streak ? streakDescription(streak) : "No wins this season"
-        }
+        {...(streak
+          ? streakDescription(streak)
+          : { description: "No wins this season" })}
       />
       <HighlightCard
         title={TITLES[1]}

@@ -109,6 +109,11 @@ export default function MatchesHighlights({
               ? commonMatches
               : `${commonMatches}, either way round`
         }
+        shortDescription={
+          common && common.high !== common.low
+            ? `${commonMatches}, either way`
+            : undefined
+        }
       />
       <HighlightCard
         title={titles[3]}
