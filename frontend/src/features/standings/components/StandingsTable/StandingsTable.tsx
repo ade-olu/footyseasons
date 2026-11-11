@@ -25,6 +25,7 @@ type StandingsTableProps = {
   showGoals?: boolean; // Adds goals for and against (the Standings page)
   view?: TableView; // Phone columns; leave out to fit columns to the width
   animateOrder?: boolean; // Slides rows to their new place when the same clubs are re-ordered
+  stickyHeader?: boolean; // Header row sticks under the navbar on phones
 };
 
 // Legend labels, in the order they're shown under the table
@@ -70,6 +71,7 @@ export default function StandingsTable({
   showGoals = false,
   view,
   animateOrder = false,
+  stickyHeader = false,
 }: StandingsTableProps) {
   const rows = limit === undefined ? standings : standings.slice(0, limit);
 
@@ -133,7 +135,10 @@ export default function StandingsTable({
 
   return (
     <div
-      className={`standings-table${view ? ` standings-table--${view}` : ""}`}
+      className={`standings-table${view ? ` standings-table--${view}` : ""}${
+        // The Full view scrolls sideways, so its header can't stick to the page
+        stickyHeader && view !== "full" ? " standings-table--sticky-header" : ""
+      }`}
     >
       {/* Scrolls sideways instead of squashing the columns on narrow screens */}
       <div className="standings-table__scroll">

@@ -300,6 +300,36 @@ $standings-table-relegation-row-hover: color.mix(
     }
   }
 
+  // Phones: the header row sticks under the navbar. A sticky cell follows its
+  // nearest scroll container, so the table mustn't be one, and the lines are
+  // shadows, since collapsed borders stay behind when a cell sticks (they're
+  // kept, transparent, for their space)
+  &--sticky-header {
+    @include below-tablet {
+      .standings-table__scroll {
+        overflow-x: visible;
+      }
+
+      thead th {
+        position: sticky;
+        top: calc(#{rem(88)} - 2px); // Its top border and line tuck under the navbar's
+        z-index: 1;
+        border-color: transparent;
+        box-shadow:
+          inset 0 1px 0 $color-border-default,
+          inset 0 -1px 0 $color-border-default;
+      }
+    }
+
+    // Too narrow for the table: it scrolls sideways again, so the header
+    // can't stick
+    @include container-up-to(rem(299)) {
+      .standings-table__scroll {
+        overflow-x: auto;
+      }
+    }
+  }
+
   // Phone views chosen with the toggle (the `view` prop); wider screens ignore them
   @include below-tablet {
     // Short: #, club, PL, GD, PTS
