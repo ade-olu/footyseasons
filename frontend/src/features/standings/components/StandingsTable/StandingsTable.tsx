@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import FormBadges from "@/components/ui/FormBadges/FormBadges";
 import {
@@ -62,7 +62,7 @@ function formatGoalDifference(club: Standing) {
   return difference > 0 ? `+${difference}` : String(difference);
 }
 
-// Fixed column widths, so every row lines up
+// Fixed column widths, shared by the table and its floating header
 function TableColumns({ showGoals }: { showGoals: boolean }) {
   return (
     <colgroup>
@@ -88,7 +88,7 @@ function TableColumns({ showGoals }: { showGoals: boolean }) {
   );
 }
 
-// The column headings
+// The column headings, shared by the table and its floating header
 function HeaderRow({ showGoals }: { showGoals: boolean }) {
   return (
     <tr>
@@ -185,6 +185,25 @@ export default function StandingsTable({
   });
 
   const tableRef = useRef<HTMLTableElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const floatingRef = useRef<HTMLDivElement>(null);
+  // The Full view scrolls sideways, so its header can't stick to the page:
+  // a copy of the header row sticks instead
+  const hasFloatingHeader = stickyHeader && view === "full";
+
+  // Keeps the floating header level with the table as it scrolls sideways
+  useEffect(() => {
+    const scroll = scrollRef.current;
+    const floating = floatingRef.current;
+    if (!scroll || !floating) return;
+    const sync = () => {
+      floating.scrollLeft = scroll.scrollLeft;
+    };
+    sync();
+    scroll.addEventListener("scroll", sync, { passive: true });
+    return () => scroll.removeEventListener("scroll", sync);
+  }, [hasFloatingHeader]);
+
   const previousView = useRef(view);
 
   // Fades the table in when the phone columns change (Short / Full / Form)
@@ -215,12 +234,30 @@ export default function StandingsTable({
   return (
     <div
       className={`standings-table${view ? ` standings-table--${view}` : ""}${
-        // The Full view scrolls sideways, so its header can't stick to the page
-        stickyHeader && view !== "full" ? " standings-table--sticky-header" : ""
+        stickyHeader
+          ? hasFloatingHeader
+            ? " standings-table--floating-header"
+            : " standings-table--sticky-header"
+          : ""
       }`}
     >
+      {/* Screen readers use the table's own header row */}
+      {hasFloatingHeader && (
+        <div
+          className="standings-table__floating-header"
+          ref={floatingRef}
+          aria-hidden
+        >
+          <table className="standings-table__table">
+            <TableColumns showGoals={showGoals} />
+            <thead>
+              <HeaderRow showGoals={showGoals} />
+            </thead>
+          </table>
+        </div>
+      )}
       {/* Scrolls sideways instead of squashing the columns on narrow screens */}
-      <div className="standings-table__scroll">
+      <div className="standings-table__scroll" ref={scrollRef}>
         <table ref={tableRef} className="standings-table__table">
           <TableColumns showGoals={showGoals} />
           <thead>

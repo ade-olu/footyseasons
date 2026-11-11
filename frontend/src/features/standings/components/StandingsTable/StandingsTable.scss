@@ -312,7 +312,8 @@ $standings-table-relegation-row-hover: color.mix(
 
       thead th {
         position: sticky;
-        top: calc(#{rem(88)} - 2px); // Its top border and line tuck under the navbar's
+        // Its top border and line tuck under the navbar's
+        top: calc(#{rem(88)} - 2px);
         z-index: 1;
         border-color: transparent;
         box-shadow:
@@ -326,6 +327,42 @@ $standings-table-relegation-row-hover: color.mix(
     @include container-up-to(rem(299)) {
       .standings-table__scroll {
         overflow-x: auto;
+      }
+    }
+  }
+
+  &__floating-header {
+    display: none;
+  }
+
+  // Phones, Full view: the table scrolls sideways, so a copy of the header
+  // row sticks under the navbar instead and follows it sideways (in JS). The
+  // table's own header row stays for screen readers, with no height
+  &--floating-header {
+    @include below-tablet {
+      .standings-table__floating-header {
+        display: block;
+        position: sticky;
+        // Its top line tucks under the navbar's
+        top: calc(#{rem(88)} - 1px);
+        z-index: 2;
+        overflow: hidden;
+        // The half of a collapsed top border, so rows start where they do in
+        // the other views
+        margin-bottom: 0.5px;
+
+        // Each cell owns its lines, so the pinned # and Club cells keep theirs
+        .standings-table__table {
+          border-collapse: separate;
+          border-spacing: 0;
+        }
+      }
+
+      .standings-table__scroll thead th {
+        height: 0;
+        font-size: 0;
+        line-height: 0;
+        border: none;
       }
     }
   }
