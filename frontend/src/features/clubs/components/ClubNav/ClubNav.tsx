@@ -4,19 +4,20 @@ import { useSeasonData } from "@/api/seasonData";
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
 import type { LeagueCode } from "@/data/leagues";
 import { useClub } from "@/features/clubs/api/club";
-import { clubPath } from "@/features/clubs/utils/clubPage";
+import { clubPath, type ClubTab } from "@/features/clubs/utils/clubPage";
 import { leaguePath } from "@/hooks/useSelection";
 import "./ClubNav.scss";
 
-// Props for the ClubNav component: the selected league, season and club
+// Props for the ClubNav component: the selected league, season, club and tab
 type ClubNavProps = {
   league: LeagueCode;
   season: number;
   clubId: number;
+  tab: ClubTab;
 };
 
 // Back to the directory, and a dropdown to switch to another club in the season
-export default function ClubNav({ league, season, clubId }: ClubNavProps) {
+export default function ClubNav({ league, season, clubId, tab }: ClubNavProps) {
   const navigate = useNavigate();
   const { data: seasonData } = useSeasonData(league, season);
   const { data: clubData } = useClub(clubId);
@@ -56,6 +57,7 @@ export default function ClubNav({ league, season, clubId }: ClubNavProps) {
               league,
               { clubId: nextClubId, displayName: labelOf(nextClubId) },
               season,
+              tab,
             ),
           )
         }

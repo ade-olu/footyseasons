@@ -102,9 +102,9 @@ function App() {
                   <Route key={path} path={path.slice(1)} element={element} />
                 );
               })}
-              {/* One club's page, e.g. /premier-league/clubs/57/arsenal */}
+              {/* A club's page or one of its tabs */}
               <Route
-                path="clubs/:clubId/:slug?"
+                path="clubs/:clubId/:slug?/:tab?"
                 element={<ClubPage league={league} season={season} />}
               />
             </Route>

@@ -1,0 +1,32 @@
+@use "@/styles/foundations" as *;
+
+.club-page {
+  // Phones only; wider screens show one page
+  &__tabs {
+    @include tablet-up {
+      display: none;
+    }
+  }
+
+  // Fades in when its tab opens
+  &__on-tab {
+    @include below-tablet {
+      @include motion-allowed {
+        animation: club-page-tab-fade 0.2s ease-out;
+      }
+    }
+  }
+
+  // A section under another tab
+  &__off-tab {
+    @include below-tablet {
+      display: none;
+    }
+  }
+}
+
+@keyframes club-page-tab-fade {
+  from {
+    opacity: 0;
+  }
+}
