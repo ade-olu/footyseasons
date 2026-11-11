@@ -28,10 +28,10 @@ export default function OverviewPage({ league, season }: OverviewPageProps) {
         <HighlightCards className="overview-page__highlights">
           <SeasonHighlights league={league} season={season} />
         </HighlightCards>
-        {/* Season award winners */}
-        <SeasonAwards league={league} season={season} />
         {/* Top 5 of the league table */}
         <TopStandings league={league} season={season} />
+        {/* Season award winners */}
+        <SeasonAwards league={league} season={season} />
         {/* Top 3 scorers and assist providers, side by side */}
         <TopPlayers
           league={league}
