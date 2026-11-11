@@ -1,0 +1,93 @@
+@use "@/styles/foundations" as *;
+
+// Sticks under the navbar, edge to edge so nothing shows at the sides
+.tab-bar {
+  position: sticky;
+  top: rem(88); // The navbar's height
+  z-index: 50; // Under the navbar (100)
+  margin-inline: rem(-32);
+  padding-inline: rem(32);
+  background-color: $color-bg-page;
+
+  @include below-tablet {
+    margin-inline: rem(-16);
+    padding-inline: rem(16);
+  }
+
+  // A 1px line with round ends (a border's ends can't be rounded)
+  &__track {
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      background-color: $color-border-default;
+      border-radius: $radius-full;
+    }
+  }
+
+  // Equal tabs
+  &__list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  &__tab {
+    flex: 1;
+    padding: rem(12) 0;
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-secondary;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+
+    @include can-hover {
+      &:hover {
+        color: $color-text-primary;
+      }
+    }
+
+    @include motion-allowed {
+      transition: color 0.15s;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: -2px;
+    }
+
+    &--active {
+      font-weight: 600;
+      color: $color-text-primary;
+    }
+  }
+
+  // The open tab's underline, slid into place by --tab-index
+  &__indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% / var(--tab-count));
+    height: 2px;
+    background-color: $color-text-primary;
+    border-radius: $radius-full;
+    transform: translateX(calc(100% * var(--tab-index)));
+
+    @include motion-allowed {
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+}

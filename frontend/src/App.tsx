@@ -42,13 +42,15 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const navigationType = useNavigationType();
+  // Tab links keep the scroll
+  const keepScroll = (state as { keepScroll?: boolean } | null)?.keepScroll;
 
   // Start each new page at the top; Back and Forward keep the browser's scroll
   useEffect(() => {
-    if (navigationType !== "POP") window.scrollTo(0, 0);
-  }, [pathname, navigationType]);
+    if (navigationType !== "POP" && !keepScroll) window.scrollTo(0, 0);
+  }, [pathname, navigationType, keepScroll]);
 
   function closeMenu() {
     setIsMenuOpen(false);
