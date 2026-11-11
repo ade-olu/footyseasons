@@ -42,6 +42,14 @@
     @include container-from(rem(1120)) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    // Phones: a sideways carousel running to the screen's edges; 1px below
+    // for the cards' shadow
+    @include below-tablet {
+      @include carousel(rem(352));
+      margin-inline: rem(-16);
+      padding-bottom: 1px;
+    }
   }
 
   // Seasons before FotMob's stats
