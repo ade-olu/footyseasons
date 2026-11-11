@@ -25,21 +25,9 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    // Phones: a sideways carousel, the next card peeking in
+    // Phones: a sideways carousel
     @include below-tablet {
-      display: flex;
-      gap: rem(16);
-      padding-inline: rem(16);
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      scroll-snap-type: x mandatory;
-      scroll-padding-inline: rem(16);
-      scrollbar-width: none;
-
-      > * {
-        flex: 0 0 min(rem(312), 85%);
-        scroll-snap-align: start;
-      }
+      @include carousel(rem(312));
     }
   }
 
