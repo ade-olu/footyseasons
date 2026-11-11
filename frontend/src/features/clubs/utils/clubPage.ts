@@ -17,15 +17,31 @@ export function clubSlug(name: string) {
     .replace(/^-|-$/g, "");
 }
 
-// A club's page, e.g. "/premier-league/clubs/57/arsenal?season=2025-2026"
+// The club page's phone tabs; Overview has no path
+export const CLUB_TABS = [
+  { path: "", label: "Overview" },
+  { path: "matches", label: "Matches" },
+  { path: "history", label: "History" },
+  { path: "squad", label: "Squad" },
+] as const;
+
+export type ClubTab = (typeof CLUB_TABS)[number]["path"];
+
+// Whether a path segment is a tab
+export function isClubTab(path: string): path is ClubTab {
+  return CLUB_TABS.some((tab) => tab.path === path);
+}
+
+// A club's page or tab, e.g. "/premier-league/clubs/57/arsenal/matches"
 export function clubPath(
   league: LeagueCode,
   { clubId, displayName }: { clubId: number; displayName: string },
   season: number,
+  tab: ClubTab = "",
 ) {
   return leaguePath(
     league,
-    `/clubs/${clubId}/${clubSlug(displayName)}`,
+    `/clubs/${clubId}/${clubSlug(displayName)}${tab ? `/${tab}` : ""}`,
     season,
   );
 }
