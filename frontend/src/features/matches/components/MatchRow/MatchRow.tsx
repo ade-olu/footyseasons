@@ -14,6 +14,11 @@ type MatchRowProps = {
   match: Match;
 };
 
+// Props for the row itself: whether to leave out the kick-off time
+type MatchRowOptions = MatchRowProps & {
+  hideTime?: boolean;
+};
+
 type Side = "home" | "away";
 
 // Club name (table name, or three-letter code on phones) and crest
@@ -46,7 +51,7 @@ function Club({
 
 // One row of the results list: kick-off time, home club, score, away club.
 // The losing club's name is muted
-export default function MatchRow({ match }: MatchRowProps) {
+export default function MatchRow({ match, hideTime = false }: MatchRowOptions) {
   const played = isPlayed(match);
   const homeLost = played && match.homeGoals < match.awayGoals;
   const awayLost = played && match.awayGoals < match.homeGoals;
@@ -59,8 +64,12 @@ export default function MatchRow({ match }: MatchRowProps) {
   else score = statusLabel(match);
 
   return (
-    <div className="match-row">
-      <p className="match-row__time">{hasTime ? kickOffTime(match) : "–"}</p>
+    <div className={`match-row${hideTime ? " match-row--no-time" : ""}`}>
+      {!hideTime && (
+        <p className="match-row__time">
+          {hasTime ? kickOffTime(match) : "–"}
+        </p>
+      )}
       <Club match={match} side="home" lost={homeLost} />
       <p
         className={`match-row__score${played ? "" : " match-row__score--unplayed"}`}

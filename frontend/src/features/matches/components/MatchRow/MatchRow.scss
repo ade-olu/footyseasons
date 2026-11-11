@@ -16,6 +16,15 @@
     padding: rem(16);
   }
 
+  // No time, so no spacer either: the score stays in the middle
+  &--no-time {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+
+    @include below-tablet {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    }
+  }
+
   // Shades on hover like the standings rows; not a link, so no pointer
   @include can-hover {
     &:hover {
