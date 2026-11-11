@@ -1,0 +1,53 @@
+@use "@/styles/foundations" as *;
+
+.round-stats {
+  background-color: $color-bg-subtle;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-12;
+
+  // Four equal cells with 1px dividers between them; when a label doesn't
+  // fit, its cell takes room from the shorter ones
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(max-content, 1fr));
+    margin: 0;
+  }
+
+  // Value above the label, though the label comes first for screen readers
+  &__stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: rem(4);
+    padding: rem(12);
+
+    // So the labels still fit on the smallest phones
+    @include below-phone-xsmall {
+      padding-inline: rem(8);
+    }
+
+    & + & {
+      border-left: 1px solid $color-border-default;
+    }
+  }
+
+  &__value {
+    margin: 0;
+    @include text(16);
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+
+  &__label {
+    @include text(12);
+    color: $color-text-secondary;
+    white-space: nowrap;
+  }
+
+  &__comparison {
+    padding: rem(12);
+    @include text(12);
+    color: $color-text-secondary;
+    border-top: 1px solid $color-border-default;
+  }
+}
