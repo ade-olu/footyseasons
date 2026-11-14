@@ -17,7 +17,6 @@
   border-radius: $radius-16;
 
   @include below-tablet {
-    gap: rem(24);
     padding: calc(#{rem(16)} + 1lh) rem(16) rem(16);
   }
 
