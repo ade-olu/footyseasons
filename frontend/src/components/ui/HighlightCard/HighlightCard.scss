@@ -10,14 +10,13 @@
   border: 1px solid $color-border-default;
   box-shadow: $shadow-resting;
   color: $color-text-primary;
-  // The description's size, so 1lh below is one description line
+  // The description's size, so 1lh is one description line (HighlightCards' wrapped grid)
   @include text(12);
-  // A description line more on top: a one-line description sits evenly, a second line takes from the bottom
-  padding: calc(#{rem(24)} + 1lh) rem(24) rem(24);
+  padding: rem(24);
   border-radius: $radius-16;
 
   @include below-tablet {
-    padding: calc(#{rem(16)} + 1lh) rem(16) rem(16);
+    padding: rem(16);
   }
 
   transition:
@@ -122,10 +121,8 @@
     }
   }
 
-  // Room for 2 lines, so values line up across a row
   &__description {
     @include text(12);
-    min-height: 2lh;
     color: $color-text-secondary;
   }
 

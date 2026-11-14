@@ -15,4 +15,19 @@
     grid-auto-rows: 1fr;
     gap: rem(16);
   }
+
+  // A description on 2 lines: a line more on top of every card and room for 2 lines, so values line up
+  &--wrapped {
+    .highlight-card {
+      padding-top: calc(#{rem(24)} + 1lh);
+
+      @include below-tablet {
+        padding-top: calc(#{rem(16)} + 1lh);
+      }
+    }
+
+    .highlight-card__description {
+      min-height: 2lh;
+    }
+  }
 }
