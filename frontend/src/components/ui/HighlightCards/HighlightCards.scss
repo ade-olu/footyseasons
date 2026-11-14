@@ -6,7 +6,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: rem(24);
 
-  @include container-from($content-grid-four) {
+  @include container-from($content-highlights-four) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
