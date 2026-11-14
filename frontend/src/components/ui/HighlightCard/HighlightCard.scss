@@ -5,18 +5,20 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: rem(32);
   background-color: $color-bg-surface;
   border: 1px solid $color-border-default;
   box-shadow: $shadow-resting;
   color: $color-text-primary;
-  padding: rem(24);
+  // The description's size, so 1lh below is one description line
+  @include text(12);
+  // A description line more on top: a one-line description sits evenly, a second line takes from the bottom
+  padding: calc(#{rem(24)} + 1lh) rem(24) rem(24);
   border-radius: $radius-16;
 
   @include below-tablet {
     gap: rem(24);
-    padding: rem(16);
+    padding: calc(#{rem(16)} + 1lh) rem(16) rem(16);
   }
 
   transition:
@@ -112,8 +114,10 @@
     }
   }
 
+  // Room for 2 lines, so values line up across a row
   &__description {
     @include text(12);
+    min-height: 2lh;
     color: $color-text-secondary;
   }
 
