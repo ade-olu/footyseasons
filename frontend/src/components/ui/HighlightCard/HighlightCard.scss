@@ -68,6 +68,15 @@
       @include below-tablet {
         @include text(22);
       }
+
+      // 24px while 4 narrow cards share the row
+      @include container-from($content-highlights-four) {
+        @include text(24);
+      }
+
+      @include container-from(rem(1120)) {
+        @include text(28);
+      }
     }
   }
 
