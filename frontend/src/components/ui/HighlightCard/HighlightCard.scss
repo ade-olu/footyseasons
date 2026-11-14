@@ -98,6 +98,11 @@ $laptop-end: rem(1120);
     white-space: nowrap;
   }
 
+  // The club name fills the row, so FittedName measures the room, not the name shown
+  &__value--club &__value-text {
+    flex: 1;
+  }
+
   // Crests come from the API in different shapes, so fix the height and let the width follow
   &__crest {
     flex-shrink: 0;
