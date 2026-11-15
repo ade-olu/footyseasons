@@ -11,6 +11,7 @@ type HighlightClub = {
 // Props for the HighlightCard component: a title, the headline value and a line of context under it
 type HighlightCardProps = {
   title: string;
+  shortTitle?: string; // Shown instead on phones, so it fits on one line
   value: string;
   description: string;
   descriptionTitle?: string; // Hover text for a shortened description, e.g. the full club names
@@ -41,6 +42,7 @@ function CrestList({ crests }: { crests: HighlightClub[] }) {
 // Small stat card for the season highlights row
 export default function HighlightCard({
   title,
+  shortTitle,
   value,
   description,
   descriptionTitle,
@@ -52,7 +54,16 @@ export default function HighlightCard({
 }: HighlightCardProps) {
   return (
     <article className="highlight-card">
-      <h3 className="highlight-card__title">{title}</h3>
+      <h3 className="highlight-card__title">
+        {shortTitle ? (
+          <>
+            <span className="highlight-card__wide-text">{title}</span>
+            <span className="highlight-card__phone-text">{shortTitle}</span>
+          </>
+        ) : (
+          title
+        )}
+      </h3>
       <div className="highlight-card__content">
         {/* Club cards show crest + name (smaller text), the rest show a single number */}
         <p
@@ -83,10 +94,8 @@ export default function HighlightCard({
         <p className="highlight-card__description" title={descriptionTitle}>
           {shortDescription ? (
             <>
-              <span className="highlight-card__description-text--wide">
-                {description}
-              </span>
-              <span className="highlight-card__description-text--phone">
+              <span className="highlight-card__wide-text">{description}</span>
+              <span className="highlight-card__phone-text">
                 {shortDescription}
               </span>
             </>

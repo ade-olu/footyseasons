@@ -162,14 +162,14 @@ $laptop-end: rem(1120);
     color: $color-text-secondary;
   }
 
-  // A shorter description on phones
-  &__description-text--wide {
+  // A shorter title or description on phones
+  &__wide-text {
     @include below-tablet {
       display: none;
     }
   }
 
-  &__description-text--phone {
+  &__phone-text {
     @include tablet-up {
       display: none;
     }
