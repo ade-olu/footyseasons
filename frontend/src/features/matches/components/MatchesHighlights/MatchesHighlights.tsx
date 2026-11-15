@@ -101,6 +101,7 @@ export default function MatchesHighlights({
       />
       <HighlightCard
         title={titles[2]}
+        shortTitle="Common Score"
         value={common ? `${common.high} – ${common.low}` : "–"}
         description={
           !common
