@@ -12,6 +12,7 @@ import "./styles/App.scss";
 import Sidebar from "./components/layout/Sidebar/Sidebar";
 import type { LeagueCode } from "./data/leagues";
 import type { LeaguePagePath } from "./data/pages";
+import { useDrawerSwipe } from "./hooks/useDrawerSwipe";
 import { useSelection } from "./hooks/useSelection";
 import OverviewPage from "./pages/OverviewPage/OverviewPage";
 import StandingsPage from "./pages/StandingsPage/StandingsPage";
@@ -56,6 +57,9 @@ function App() {
     setIsMenuOpen(false);
     menuButtonRef.current?.focus();
   }
+
+  // Swipe right to open the drawer, left to close it
+  useDrawerSwipe(isMenuOpen, () => setIsMenuOpen(true), closeMenu);
 
   return (
     <div className="app">
