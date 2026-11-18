@@ -240,6 +240,11 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
     gridRef.current?.scrollTo({ left: 0 });
   }
 
+  // Stats no one has this season (Goals Prevented before 2018/19) are left out
+  const cards = LEADER_STATS[group]
+    .map((stat) => ({ stat, leaders: data && getLeaders(data.players, stat) }))
+    .filter(({ leaders }) => leaders?.length !== 0);
+
   const leagueName = getLeagueName(league);
   const unavailable =
     group !== "attack" && data !== undefined && !data.hasDefensiveStats;
@@ -274,12 +279,12 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
         </SectionCard>
       ) : (
         <div className="season-leaders__grid" ref={gridRef}>
-          {LEADER_STATS[group].map((stat) => (
+          {cards.map(({ stat, leaders }) => (
             <LeaderCard
               key={stat.title}
               title={stat.title}
               description={stat.description}
-              leaders={data && getLeaders(data.players, stat)}
+              leaders={leaders}
               isError={isError}
             />
           ))}
