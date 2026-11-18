@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePlayers } from "@/api/players";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
@@ -232,6 +232,13 @@ type SeasonLeadersProps = {
 export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
   const [group, setGroup] = useState<LeaderGroup>("attack");
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // A new tab starts the phone carousel at its first card
+  function changeGroup(value: LeaderGroup) {
+    setGroup(value);
+    gridRef.current?.scrollTo({ left: 0 });
+  }
 
   const leagueName = getLeagueName(league);
   const unavailable =
@@ -248,7 +255,7 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
           className="season-leaders__toggle"
           options={LEADER_GROUPS}
           value={group}
-          onChange={setGroup}
+          onChange={changeGroup}
           label="Stats shown"
           fit="content"
           maxPadding={24}
@@ -266,7 +273,7 @@ export default function SeasonLeaders({ league, season }: SeasonLeadersProps) {
           </p>
         </SectionCard>
       ) : (
-        <div className="season-leaders__grid">
+        <div className="season-leaders__grid" ref={gridRef}>
           {LEADER_STATS[group].map((stat) => (
             <LeaderCard
               key={stat.title}
