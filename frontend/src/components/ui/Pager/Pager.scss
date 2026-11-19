@@ -1,0 +1,51 @@
+@use "@/styles/foundations" as *;
+
+// Previous and next buttons around the page number
+.pager {
+  display: flex;
+  align-items: center;
+  gap: rem(12);
+
+  &__page {
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-primary;
+    white-space: nowrap;
+  }
+
+  // Square buttons, as the matchweek picker's
+  &__step {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: rem(40);
+    height: rem(40);
+    border: 1px solid $color-border-default;
+    border-radius: $radius-12;
+    background-color: $color-bg-surface;
+    box-shadow: $shadow-resting;
+    color: $color-text-primary;
+    cursor: pointer;
+    @include press(0.92, border-color 0.15s);
+
+    &:hover:not(:disabled) {
+      border-color: $color-text-secondary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__icon {
+    width: auto;
+    height: rem(17);
+  }
+}

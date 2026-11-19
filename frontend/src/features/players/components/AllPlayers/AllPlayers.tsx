@@ -1,10 +1,7 @@
 import { useState } from "react";
-import {
-  ChevronLeft as ArrowLeftIcon,
-  ChevronRight as ArrowRightIcon,
-} from "reicon-react";
 import { usePlayers } from "@/api/players";
 import Dropdown from "@/components/ui/Dropdown/Dropdown";
+import Pager from "@/components/ui/Pager/Pager";
 import SearchBox from "@/components/ui/SearchBox/SearchBox";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
@@ -258,32 +255,11 @@ export default function AllPlayers({ league, season }: AllPlayersProps) {
                 </>
               )}
             </p>
-            <div className="all-players__pager">
-              <button
-                type="button"
-                className="all-players__page-step"
-                aria-label="Previous page"
-                disabled={currentPage <= 1}
-                onClick={() => setPage(currentPage - 1)}
-              >
-                <ArrowLeftIcon className="all-players__page-icon" aria-hidden />
-              </button>
-              <p className="all-players__page">
-                Page {currentPage} of {pageCount}
-              </p>
-              <button
-                type="button"
-                className="all-players__page-step"
-                aria-label="Next page"
-                disabled={currentPage >= pageCount}
-                onClick={() => setPage(currentPage + 1)}
-              >
-                <ArrowRightIcon
-                  className="all-players__page-icon"
-                  aria-hidden
-                />
-              </button>
-            </div>
+            <Pager
+              page={currentPage}
+              pageCount={pageCount}
+              onChange={setPage}
+            />
           </div>
           <StatKey
             columns={columns}
