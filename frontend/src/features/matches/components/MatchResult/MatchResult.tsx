@@ -1,6 +1,6 @@
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import { getTableName } from "@/data/tableNames";
-import { statusLabel } from "@/features/matches/utils/matchStatus";
+import { statusLabel } from "@/utils/matchStatus";
 import type { Match } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
 import "./MatchResult.scss";

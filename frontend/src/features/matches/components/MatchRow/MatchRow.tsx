@@ -4,7 +4,7 @@ import {
   isUpcoming,
   kickOffTime,
   statusLabel,
-} from "@/features/matches/utils/matchStatus";
+} from "@/utils/matchStatus";
 import type { Match } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
 import "./MatchRow.scss";
