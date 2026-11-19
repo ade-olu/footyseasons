@@ -77,6 +77,23 @@ export type ClubSeasons = {
   startYears: number[]; // Oldest first
 };
 
+// One season in GET /api/clubs/:id/seasons (oldest first): the final table row
+export type ClubSeasonRecord = {
+  startYear: number;
+  label: string; // e.g. "2025/26"
+  leagueCode: string;
+  position: number;
+  gamesPlayed: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  points: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  isChampion: boolean;
+  clubCount: number; // Clubs in the league that season
+};
+
 // football-data.org's match statuses (2014-2022 matches are only FINISHED, AWARDED or CANCELLED)
 export type MatchStatus =
   | "SCHEDULED"
