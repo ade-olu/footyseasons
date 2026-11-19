@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import FittedName from "@/components/ui/FittedName/FittedName";
+import { cx } from "@/utils/cx";
 import "./Podium.scss";
 
 // One step: a crest or photo (sized by the caller), a name, and the stat under it
@@ -24,10 +25,7 @@ type PodiumProps = {
 export default function Podium({ steps, label, className }: PodiumProps) {
   // Steps in table order; CSS shows them as 2, 1, 3
   return (
-    <ol
-      className={`podium${className ? ` ${className}` : ""}`}
-      aria-label={label}
-    >
+    <ol className={cx("podium", className)} aria-label={label}>
       {steps.map((step, index) => (
         <li
           key={step.id}

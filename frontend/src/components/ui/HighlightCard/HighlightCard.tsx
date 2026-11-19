@@ -1,5 +1,6 @@
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import FittedName from "@/components/ui/FittedName/FittedName";
+import { cx } from "@/utils/cx";
 import "./HighlightCard.scss";
 
 // Club shown next to the value (e.g. the club with the best win streak)
@@ -67,7 +68,10 @@ export default function HighlightCard({
       <div className="highlight-card__content">
         {/* Club cards show crest + name (smaller text), the rest show a single number */}
         <p
-          className={`highlight-card__value${club ? " highlight-card__value--club" : ""}`}
+          className={cx(
+            "highlight-card__value",
+            club && "highlight-card__value--club",
+          )}
         >
           {crests && crests.length > 0 && <CrestList crests={crests} />}
           {club && (

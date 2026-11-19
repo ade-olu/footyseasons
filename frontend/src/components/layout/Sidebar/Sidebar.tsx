@@ -4,6 +4,7 @@ import { X as CloseIcon } from "reicon-react";
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
 import { PAGES, type LeaguePagePath } from "@/data/pages";
 import logoIcon from "@/assets/logo.svg";
+import { cx } from "@/utils/cx";
 import "./Sidebar.scss";
 
 // Props for the Sidebar component: the selected league and season, a link builder for
@@ -51,14 +52,14 @@ export default function Sidebar({
     <>
       {/* Dims the page behind the drawer */}
       <div
-        className={`sidebar-backdrop${isOpen ? " sidebar-backdrop--visible" : ""}`}
+        className={cx(
+          "sidebar-backdrop",
+          isOpen && "sidebar-backdrop--visible",
+        )}
         onClick={onClose}
         aria-hidden
       />
-      <aside
-        id="sidebar"
-        className={`sidebar${isOpen ? " sidebar--open" : ""}`}
-      >
+      <aside id="sidebar" className={cx("sidebar", isOpen && "sidebar--open")}>
         <div className="sidebar__header">
           <Link
             to={pathTo("")}
@@ -120,7 +121,10 @@ export default function Sidebar({
                   <li key={league.code}>
                     <button
                       type="button"
-                      className={`sidebar__nav-item${isSelected ? " sidebar__nav-item--selected" : ""}`}
+                      className={cx(
+                        "sidebar__nav-item",
+                        isSelected && "sidebar__nav-item--selected",
+                      )}
                       aria-pressed={isSelected}
                       onClick={() => {
                         onSelectLeague(league.code);

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { cx } from "@/utils/cx";
 import "./HighlightCards.scss";
 
 // Props for the HighlightCards component: the cards, and the page's own class
@@ -45,7 +46,11 @@ export default function HighlightCards({
 
   return (
     <section
-      className={`highlight-cards${isWrapped ? " highlight-cards--wrapped" : ""}${className ? ` ${className}` : ""}`}
+      className={cx(
+        "highlight-cards",
+        isWrapped && "highlight-cards--wrapped",
+        className,
+      )}
       ref={gridRef}
     >
       {children}

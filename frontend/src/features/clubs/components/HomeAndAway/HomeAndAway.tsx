@@ -3,6 +3,7 @@ import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
 import { getClubMatches, possessive } from "@/features/clubs/utils/clubPage";
+import { cx } from "@/utils/cx";
 import "./HomeAndAway.scss";
 
 // Props for the HomeAndAway component: the selected league, season and club,
@@ -99,7 +100,7 @@ export default function HomeAndAway({
   const points = club.homePoints + club.awayPoints;
 
   return (
-    <SectionCard className={`home-and-away${className ? ` ${className}` : ""}`}>
+    <SectionCard className={cx("home-and-away", className)}>
       <SectionHeader
         title={TITLE}
         description={`Where ${possessive(club.displayName)} ${points} points came from.`}
@@ -139,7 +140,10 @@ export default function HomeAndAway({
             return (
               <li
                 key={row.label}
-                className={`home-and-away__row${side ? ` home-and-away__row--${side}` : ""}`}
+                className={cx(
+                  "home-and-away__row",
+                  side && `home-and-away__row--${side}`,
+                )}
                 aria-label={`${row.label}: ${row.home} at home, ${row.away} away`}
               >
                 <span className="home-and-away__home" aria-hidden>

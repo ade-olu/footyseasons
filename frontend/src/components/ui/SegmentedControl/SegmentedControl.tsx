@@ -4,6 +4,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
+import { cx } from "@/utils/cx";
 import "./SegmentedControl.scss";
 
 // Side padding of content-sized options: 16px when it fits (or maxPadding),
@@ -101,7 +102,11 @@ export default function SegmentedControl<Value extends string>({
   return (
     <div
       ref={controlRef}
-      className={`segmented-control segmented-control--${fit}${direction ? ` segmented-control--${direction}` : ""}${className ? ` ${className}` : ""}`}
+      className={cx(
+        `segmented-control segmented-control--${fit}`,
+        direction && `segmented-control--${direction}`,
+        className,
+      )}
       role="group"
       aria-label={label}
       style={

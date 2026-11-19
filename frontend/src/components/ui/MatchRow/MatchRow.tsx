@@ -8,6 +8,7 @@ import {
 } from "@/utils/matchStatus";
 import type { Match } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
+import { cx } from "@/utils/cx";
 import "./MatchRow.scss";
 
 // Props for the MatchRow component: one match, played or not
@@ -42,7 +43,10 @@ function Club({
 
   return (
     <p
-      className={`match-row__club match-row__club--${side}${lost ? " match-row__club--lost" : ""}`}
+      className={cx(
+        `match-row__club match-row__club--${side}`,
+        lost && "match-row__club--lost",
+      )}
     >
       <span className="match-row__club-name">
         <span className="match-row__name-short">
@@ -79,7 +83,7 @@ export default function MatchRow({ match, hideTime = false }: MatchRowOptions) {
   else score = statusLabel(match);
 
   return (
-    <div className={`match-row${hideTime ? " match-row--no-time" : ""}`}>
+    <div className={cx("match-row", hideTime && "match-row--no-time")}>
       {!hideTime && (
         <p className="match-row__time">
           {hasTime ? kickOffTime(match) : "–"}
@@ -87,7 +91,10 @@ export default function MatchRow({ match, hideTime = false }: MatchRowOptions) {
       )}
       <Club match={match} side="home" lost={homeLost} />
       <p
-        className={`match-row__score${played ? "" : " match-row__score--unplayed"}`}
+        className={cx(
+          "match-row__score",
+          !played && "match-row__score--unplayed",
+        )}
       >
         {score}
       </p>

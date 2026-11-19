@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { cx } from "@/utils/cx";
 import "./FittedName.scss";
 
 // Props for the FittedName component: the full name, shorter ones to try in
@@ -55,7 +56,10 @@ export default function FittedName({
 
   return (
     <span
-      className={`fitted-name ${className}${isWrapped ? " fitted-name--wrapped" : ""}`}
+      className={cx(
+        `fitted-name ${className}`,
+        isWrapped && "fitted-name--wrapped",
+      )}
       ref={nameRef}
       title={title ?? name}
     >

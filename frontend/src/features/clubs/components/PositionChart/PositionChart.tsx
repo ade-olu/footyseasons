@@ -21,6 +21,7 @@ import {
   type RoundPosition,
 } from "@/features/clubs/utils/positionByRound";
 import { seasonLabel } from "@/utils/season";
+import { cx } from "@/utils/cx";
 import "./PositionChart.scss";
 
 // Props for the PositionChart component: the selected league, season and club,
@@ -284,7 +285,12 @@ export default function PositionChart({
         {axisRounds(total).map(({ round, wide }) => (
           <span
             key={round}
-            className={`position-chart__round${wide ? " position-chart__round--wide" : ""}${round === 1 ? " position-chart__round--first" : ""}${round === total ? " position-chart__round--last" : ""}`}
+            className={cx(
+              "position-chart__round",
+              wide && "position-chart__round--wide",
+              round === 1 && "position-chart__round--first",
+              round === total && "position-chart__round--last",
+            )}
             style={at(xOf(round), 0)}
             aria-hidden
           >
@@ -315,7 +321,11 @@ export default function PositionChart({
         {shown && (
           <>
             <span
-              className={`position-chart__marker position-chart__marker--active${shown === last ? " position-chart__marker--latest" : ""}${active === null ? " position-chart__marker--hidden" : ""}`}
+              className={cx(
+                "position-chart__marker position-chart__marker--active",
+                shown === last && "position-chart__marker--latest",
+                active === null && "position-chart__marker--hidden",
+              )}
               style={at(xOf(shown.round), lineYs[shown.round - 1])}
               aria-hidden
             >
@@ -323,7 +333,11 @@ export default function PositionChart({
             </span>
             <div
               ref={tooltipRef}
-              className={`position-chart__tooltip${yOf(shown.position) > 0.5 ? " position-chart__tooltip--above" : ""}${active === null ? " position-chart__tooltip--hidden" : ""}`}
+              className={cx(
+                "position-chart__tooltip",
+                yOf(shown.position) > 0.5 && "position-chart__tooltip--above",
+                active === null && "position-chart__tooltip--hidden",
+              )}
               style={at(xOf(shown.round), lineYs[shown.round - 1])}
               data-x={xOf(shown.round)}
               aria-hidden

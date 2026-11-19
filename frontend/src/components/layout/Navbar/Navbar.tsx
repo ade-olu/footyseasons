@@ -6,6 +6,7 @@ import type { LeagueCode } from "@/data/leagues";
 import { LEAGUES } from "@/data/leagues";
 import type { Season } from "@/types/api";
 
+import { cx } from "@/utils/cx";
 import "./Navbar.scss";
 
 // Props for the Navbar component: the selected league and season (start year, 2025 = 2025/26),
@@ -50,7 +51,7 @@ export default function Navbar({
 
   return (
     // Navbar component for displaying the selected league and a dropdown for selecting the season
-    <nav className={`navbar${showSelection ? "" : " navbar--menu-only"}`}>
+    <nav className={cx("navbar", !showSelection && "navbar--menu-only")}>
       {/* Selected league section */}
       <div className="navbar__league">
         <button

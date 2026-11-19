@@ -7,6 +7,7 @@ import {
   shortPlayerNames,
 } from "@/features/players/utils/playerStats";
 import type { Player } from "@/types/api"; // Types for API responses
+import { cx } from "@/utils/cx";
 import "./PlayerInfo.scss";
 
 // Props for the PlayerInfo component: the player, a larger size for a leader
@@ -27,7 +28,10 @@ export default function PlayerInfo({
 
   return (
     <div
-      className={`player-info player-info--${size}${onDark ? " player-info--on-dark" : ""}`}
+      className={cx(
+        `player-info player-info--${size}`,
+        onDark && "player-info--on-dark",
+      )}
     >
       <PlayerPhoto
         className="player-info__photo"

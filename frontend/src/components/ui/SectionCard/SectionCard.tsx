@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cx } from "@/utils/cx";
 import "./SectionCard.scss";
 
 // Props for the SectionCard component: its content, plus a class for grid span and layout tweaks
@@ -10,7 +11,7 @@ type SectionCardProps = {
 // White panel that wraps each overview section
 export default function SectionCard({ children, className }: SectionCardProps) {
   return (
-    <section className={`section-card${className ? ` ${className}` : ""}`}>
+    <section className={cx("section-card", className)}>
       {children}
     </section>
   );

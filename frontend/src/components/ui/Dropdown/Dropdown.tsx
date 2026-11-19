@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { ChevronDown as ArrowDownIcon } from "reicon-react";
 import { Check as CheckIcon } from "reicon-react"; // Tick shown next to the selected option
+import { cx } from "@/utils/cx";
 import "./Dropdown.scss";
 
 // One option in the list
@@ -157,14 +158,11 @@ export default function Dropdown<Value extends string | number>({
   }
 
   return (
-    <div
-      className={`dropdown${className ? ` ${className}` : ""}`}
-      ref={wrapperRef}
-    >
+    <div className={cx("dropdown", className)} ref={wrapperRef}>
       <button
         ref={buttonRef}
         type="button"
-        className={`dropdown__button${isOpen ? " dropdown__button--open" : ""}`}
+        className={cx("dropdown__button", isOpen && "dropdown__button--open")}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-controls={listId}
@@ -201,7 +199,12 @@ export default function Dropdown<Value extends string | number>({
                 role="option"
                 aria-selected={isSelected}
                 aria-disabled={option.disabled}
-                className={`dropdown__option${isActive ? " dropdown__option--active" : ""}${isSelected ? " dropdown__option--selected" : ""}${option.disabled ? " dropdown__option--disabled" : ""}`}
+                className={cx(
+                  "dropdown__option",
+                  isActive && "dropdown__option--active",
+                  isSelected && "dropdown__option--selected",
+                  option.disabled && "dropdown__option--disabled",
+                )}
                 onPointerEnter={() => !option.disabled && setActiveIndex(index)}
                 onClick={() => select(option)}
               >

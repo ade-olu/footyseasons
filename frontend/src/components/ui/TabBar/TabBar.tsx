@@ -5,6 +5,7 @@ import {
   useLocation,
   useNavigationType,
 } from "react-router-dom";
+import { cx } from "@/utils/cx";
 import "./TabBar.scss";
 
 // One tab; `end` for a route other tabs extend
@@ -47,7 +48,7 @@ export default function TabBar({ tabs, ariaLabel, className }: TabBarProps) {
 
   return (
     <nav
-      className={`tab-bar${className ? ` ${className}` : ""}`}
+      className={cx("tab-bar", className)}
       aria-label={ariaLabel}
       ref={barRef}
     >

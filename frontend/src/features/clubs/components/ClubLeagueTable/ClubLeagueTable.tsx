@@ -6,6 +6,7 @@ import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
 import type { Standing } from "@/types/api";
 import { formatGoalDifference } from "@/utils/goalDifference";
+import { cx } from "@/utils/cx";
 import "./ClubLeagueTable.scss";
 
 // Props for the ClubLeagueTable component: the selected league, season and
@@ -41,9 +42,7 @@ export default function ClubLeagueTable({
   const rows = rowsAround(standings, clubId);
 
   return (
-    <SectionCard
-      className={`club-league-table${className ? ` ${className}` : ""}`}
-    >
+    <SectionCard className={cx("club-league-table", className)}>
       <div className="club-league-table__header">
         <SectionHeader
           title="League table"

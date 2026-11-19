@@ -3,6 +3,7 @@ import { getTableName } from "@/data/tableNames";
 import { statusLabel } from "@/utils/matchStatus";
 import type { Match } from "@/types/api"; // Types for API responses
 import { isPlayed } from "@/utils/match";
+import { cx } from "@/utils/cx";
 import "./MatchResult.scss";
 
 // Props for the MatchResult component: one match, played or not
@@ -20,7 +21,10 @@ export default function MatchResult({ match }: MatchResultProps) {
   return (
     <div className="match-result">
       <p
-        className={`match-result__club match-result__club--home${homeLost ? " match-result__club--lost" : ""}`}
+        className={cx(
+          "match-result__club match-result__club--home",
+          homeLost && "match-result__club--lost",
+        )}
       >
         <span
           className="match-result__club-name"
@@ -40,14 +44,20 @@ export default function MatchResult({ match }: MatchResultProps) {
         </span>
       </p>
       <p
-        className={`match-result__score${played ? "" : " match-result__score--unplayed"}`}
+        className={cx(
+          "match-result__score",
+          !played && "match-result__score--unplayed",
+        )}
       >
         {played
           ? `${match.homeGoals} – ${match.awayGoals}`
           : statusLabel(match)}
       </p>
       <p
-        className={`match-result__club${awayLost ? " match-result__club--lost" : ""}`}
+        className={cx(
+          "match-result__club",
+          awayLost && "match-result__club--lost",
+        )}
       >
         <span className="match-result__crest-slot">
           <ClubCrest

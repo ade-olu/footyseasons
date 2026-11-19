@@ -21,6 +21,7 @@ import type { ClubSeasonRecord } from "@/types/api";
 import { formatGoalDifference } from "@/utils/goalDifference";
 import { prefersReducedMotion } from "@/utils/motion";
 import { seasonLabel } from "@/utils/season";
+import { cx } from "@/utils/cx";
 import "./SeasonBySeason.scss";
 
 // Props for the SeasonBySeason component: the selected league, season and
@@ -194,7 +195,7 @@ export default function SeasonBySeason({
   }, [active]);
 
   const name = club.data?.club.displayName;
-  const classes = `season-by-season${className ? ` ${className}` : ""}`;
+  const classes = cx("season-by-season", className);
 
   if (!data || !name) {
     const status =
@@ -333,7 +334,11 @@ export default function SeasonBySeason({
             {records.map((record) => (
               <span
                 key={`${shape}-${record.startYear}`}
-                className={`season-by-season__point${record.startYear === season ? " season-by-season__point--selected" : ""}`}
+                className={cx(
+                  "season-by-season__point",
+                  record.startYear === season &&
+                    "season-by-season__point--selected",
+                )}
                 style={
                   {
                     ...at(
@@ -352,7 +357,10 @@ export default function SeasonBySeason({
             {SEASONS.map((year) => (
               <span
                 key={year}
-                className={`season-by-season__season${year === season ? " season-by-season__season--selected" : ""}`}
+                className={cx(
+                  "season-by-season__season",
+                  year === season && "season-by-season__season--selected",
+                )}
                 style={at(xOf(year), 0)}
                 aria-hidden
               >
@@ -364,7 +372,12 @@ export default function SeasonBySeason({
             {shown && (
               <>
                 <span
-                  className={`season-by-season__point season-by-season__point--active${shown.startYear === season ? " season-by-season__point--selected" : ""}${active === null ? " season-by-season__point--hidden" : ""}`}
+                  className={cx(
+                    "season-by-season__point season-by-season__point--active",
+                    shown.startYear === season &&
+                      "season-by-season__point--selected",
+                    active === null && "season-by-season__point--hidden",
+                  )}
                   style={at(xOf(shown.startYear), yOf(shown.position))}
                   aria-hidden
                 >
@@ -372,7 +385,12 @@ export default function SeasonBySeason({
                 </span>
                 <div
                   ref={tooltipRef}
-                  className={`season-by-season__tooltip${yOf(shown.position) > 0.5 ? " season-by-season__tooltip--above" : ""}${active === null ? " season-by-season__tooltip--hidden" : ""}`}
+                  className={cx(
+                    "season-by-season__tooltip",
+                    yOf(shown.position) > 0.5 &&
+                      "season-by-season__tooltip--above",
+                    active === null && "season-by-season__tooltip--hidden",
+                  )}
                   style={at(xOf(shown.startYear), yOf(shown.position))}
                   data-x={xOf(shown.startYear)}
                   aria-hidden

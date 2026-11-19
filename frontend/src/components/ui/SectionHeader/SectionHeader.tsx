@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { LeaguePagePath } from "@/data/pages";
 import { useSelection } from "@/hooks/useSelection";
 import { ChevronRight as ArrowRightIcon } from "reicon-react";
+import { cx } from "@/utils/cx";
 import "./SectionHeader.scss";
 
 // Link shown on the right of the header (e.g. "All players ›"); phones show
@@ -29,7 +30,7 @@ export default function SectionHeader({
 
   return (
     <header
-      className={`section-header${action ? " section-header--with-action" : ""}`}
+      className={cx("section-header", action && "section-header--with-action")}
     >
       <h2 className="section-header__title">{title}</h2>
       {description && (

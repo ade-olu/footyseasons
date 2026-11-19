@@ -9,6 +9,7 @@ import type { LeagueCode } from "@/data/leagues";
 import type { Match } from "@/types/api";
 import { formatDay } from "@/utils/date";
 import { seasonLabel } from "@/utils/season";
+import { cx } from "@/utils/cx";
 import "./ClubResults.scss";
 
 // Props for the ClubResults component: the selected league, season and club,
@@ -65,7 +66,10 @@ function pageFrom(matches: Match[], date: string) {
 function MatchItem({ match, hidden }: { match: Match; hidden?: boolean }) {
   return (
     <li
-      className={`club-results__match${hidden ? " club-results__match--filler" : ""}`}
+      className={cx(
+        "club-results__match",
+        hidden && "club-results__match--filler",
+      )}
       aria-hidden={hidden || undefined}
     >
       <div className="club-results__strip">
@@ -99,7 +103,7 @@ export default function ClubResults({
     setPage(1);
   }
 
-  const classes = `club-results${className ? ` ${className}` : ""}`;
+  const classes = cx("club-results", className);
 
   if (!data) {
     return (
