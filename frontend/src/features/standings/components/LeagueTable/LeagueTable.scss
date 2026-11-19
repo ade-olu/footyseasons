@@ -26,6 +26,15 @@
     > :first-child {
       flex: 1 1 rem(240);
     }
+
+    // Wraps onto 2 lines, well clear of the toggle
+    @include tablet-up {
+      column-gap: rem(48);
+
+      .section-header__description {
+        max-width: rem(560);
+      }
+    }
   }
 
   // Phones swap the toggle for the controls row below
