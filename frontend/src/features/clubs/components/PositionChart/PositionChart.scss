@@ -128,7 +128,7 @@ $position-chart-glide: 0.25s;
     font-weight: 500;
     color: $color-text-inverse;
     background-color: $color-bg-inverse;
-    border: 2px solid $color-bg-subtle;
+    border: 2px solid $color-bg-surface;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
@@ -148,7 +148,6 @@ $position-chart-glide: 0.25s;
     &--active {
       width: rem(28);
       height: rem(28);
-      border-color: $color-bg-surface;
       animation: none;
 
       @include motion-allowed {
