@@ -6,9 +6,9 @@ import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import {
   currentClub,
   goalContributions,
-  shortPlayerNames,
   sortPlayers,
 } from "@/features/players/utils/playerStats";
+import { shortPlayerNames } from "@/utils/playerNames";
 import { seasonLabel } from "@/utils/season";
 import "./PlayersBanner.scss";
 

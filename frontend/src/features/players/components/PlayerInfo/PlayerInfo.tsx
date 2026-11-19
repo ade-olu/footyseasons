@@ -2,12 +2,10 @@ import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import FittedName from "@/components/ui/FittedName/FittedName";
 import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
 import { getTableName } from "@/data/tableNames";
-import {
-  currentClub,
-  shortPlayerNames,
-} from "@/features/players/utils/playerStats";
+import { currentClub } from "@/features/players/utils/playerStats";
 import type { Player } from "@/types/api"; // Types for API responses
 import { cx } from "@/utils/cx";
+import { shortPlayerNames } from "@/utils/playerNames";
 import "./PlayerInfo.scss";
 
 // Props for the PlayerInfo component: the player, a larger size for a leader
