@@ -1,5 +1,32 @@
 @use "@/styles/foundations" as *;
 
+// Narrower columns, gaps and crest slots: on phones, so the codes fit at
+// 360px (with 16px padding), and in a narrow container (the club page's
+// Results beside the League table on laptops), so full names fit
+@mixin match-row-compact {
+  grid-template-columns: rem(36) minmax(0, 1fr) auto minmax(0, 1fr) rem(36);
+  gap: rem(8);
+
+  &.match-row--no-time {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .match-row__club {
+    gap: rem(8);
+  }
+
+  .match-row__crest-slot {
+    width: rem(24);
+  }
+
+  // 16px from the clubs, like the Overview's results
+  .match-row__score {
+    min-width: rem(48);
+    margin-inline: rem(8);
+    padding: rem(8);
+  }
+}
+
 // Time, home club, score, away club and an empty column as wide as the time,
 // so the score sits in the middle
 .match-row {
@@ -9,20 +36,18 @@
   gap: rem(16);
   padding: rem(16) rem(24);
 
-  // Narrower columns and gaps on phones, so the codes fit at 360px
   @include below-tablet {
-    grid-template-columns: rem(36) minmax(0, 1fr) auto minmax(0, 1fr) rem(36);
-    gap: rem(8);
+    @include match-row-compact;
     padding: rem(16);
+  }
+
+  @include container-up-to(rem(560)) {
+    @include match-row-compact;
   }
 
   // No time, so no spacer either: the score stays in the middle
   &--no-time {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-
-    @include below-tablet {
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    }
   }
 
   // Shades on hover like the standings rows; not a link, so no pointer
@@ -48,10 +73,6 @@
     min-width: 0;
     @include text(14);
     color: $color-text-primary;
-
-    @include below-tablet {
-      gap: rem(8);
-    }
 
     // Crest next to the score on both sides
     &--home {
@@ -113,10 +134,6 @@
     align-items: center;
     justify-content: center;
     width: rem(32);
-
-    @include below-tablet {
-      width: rem(24);
-    }
   }
 
   &__crest {
@@ -135,13 +152,6 @@
     background-color: $color-bg-subtle;
     border: 1px solid $color-border-default;
     border-radius: $radius-8;
-
-    // 16px from the clubs, like the Overview's results
-    @include below-tablet {
-      min-width: rem(48);
-      margin-inline: rem(8);
-      padding: rem(8);
-    }
 
     // "vs", or a status such as "Postponed"
     &--unplayed {
