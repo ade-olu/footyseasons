@@ -7,6 +7,7 @@ import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighl
 import ClubLeagueTable from "@/features/clubs/components/ClubLeagueTable/ClubLeagueTable";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import ClubResults from "@/features/clubs/components/ClubResults/ClubResults";
+import ClubTopPlayers from "@/features/clubs/components/ClubTopPlayers/ClubTopPlayers";
 import HomeAndAway from "@/features/clubs/components/HomeAndAway/HomeAndAway";
 import PositionChart from "@/features/clubs/components/PositionChart/PositionChart";
 import SeasonBySeason from "@/features/clubs/components/SeasonBySeason/SeasonBySeason";
@@ -126,6 +127,16 @@ export default function ClubPage({ league, season }: ClubPageProps) {
         season={season}
         clubId={clubId}
       />
+      {/* The club's leaders in goals, assists and minutes */}
+      {isInSeason && club.data && (
+        <ClubTopPlayers
+          className={onTab("squad")}
+          league={league}
+          season={season}
+          clubId={clubId}
+          clubName={club.data.club.displayName}
+        />
+      )}
     </>
   );
 }
