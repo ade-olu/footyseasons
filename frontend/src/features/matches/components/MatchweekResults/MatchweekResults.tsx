@@ -6,6 +6,7 @@ import MatchweekPicker from "@/features/matches/components/MatchweekPicker/Match
 import RoundStats from "@/features/matches/components/RoundStats/RoundStats";
 import { groupByDay } from "@/features/matches/utils/matchDays";
 import { getLeagueName, type LeagueCode } from "@/data/leagues";
+import { formatDay } from "@/utils/date";
 import "./MatchweekResults.scss";
 
 // Props for the MatchweekResults component: the selected league and season start year
@@ -16,19 +17,6 @@ type MatchweekResultsProps = {
   matchweek?: number;
   onChange: (matchweek: number) => void;
 };
-
-// "Sunday 24 May 2026" from a UTC date (en-GB puts a comma after the weekday)
-const dayFormat = new Intl.DateTimeFormat("en-GB", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
-function formatDay(date: string): string {
-  return dayFormat.format(new Date(date)).replace(",", "");
-}
 
 // Matches page "Results" section: one matchweek's matches as a list, grouped by day
 export default function MatchweekResults({
