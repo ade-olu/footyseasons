@@ -18,9 +18,16 @@ $type-scale: (
   48: 1.2,
 );
 
+// Line heights for small text that can wrap, between normal and a paragraph's
+$relaxed-line-heights: (
+  12: 16,
+  14: 20,
+);
+
 // Sets font size, line height and letter spacing from the scale.
-// $wrap: true for text that runs onto several lines (e.g. a paragraph).
-// Font weight and color stay in each component.
+// $wrap: true for a paragraph (1.5), or relaxed for a sentence that can wrap
+// (a description or a status line; 12 and 14 only). Font weight and color
+// stay in each component.
 @mixin text($size, $wrap: false) {
   @if not map.has-key($type-scale, $size) {
     @error "text(#{$size}) isn't in the type scale: #{map.keys($type-scale)}";
@@ -28,7 +35,13 @@ $type-scale: (
 
   font-size: rem($size);
 
-  @if $wrap {
+  @if $wrap == relaxed {
+    @if not map.has-key($relaxed-line-heights, $size) {
+      @error "text(#{$size}, $wrap: relaxed) needs 12 or 14";
+    }
+
+    line-height: rem(map.get($relaxed-line-heights, $size));
+  } @else if $wrap {
     line-height: 1.5;
   } @else {
     line-height: map.get($type-scale, $size);
