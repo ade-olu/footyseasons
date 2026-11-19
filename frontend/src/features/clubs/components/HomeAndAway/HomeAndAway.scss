@@ -1,8 +1,11 @@
 @use "@/styles/foundations" as *;
 
 .home-and-away {
+  // Fills the card when it's stretched beside a taller Results, so the rows
+  // can share the extra height
   &__comparison {
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: rem(16);
   }
@@ -64,12 +67,17 @@
   }
 
   &__rows {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
+  // Rows grow evenly into any spare height, text centred
   &__row {
+    flex: 1;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
