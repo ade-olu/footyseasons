@@ -5,6 +5,7 @@ import { useClubSeasons } from "@/features/clubs/api/clubSeasons";
 import ClubBanner from "@/features/clubs/components/ClubBanner/ClubBanner";
 import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighlights";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
+import PositionChart from "@/features/clubs/components/PositionChart/PositionChart";
 import {
   CLUB_TABS,
   clubPath,
@@ -80,6 +81,15 @@ export default function ClubPage({ league, season }: ClubPageProps) {
         <HighlightCards className={onTab("")}>
           <ClubHighlights league={league} season={season} clubId={clubId} />
         </HighlightCards>
+      )}
+      {/* The club's league position after every round */}
+      {isInSeason && (
+        <PositionChart
+          className={onTab("")}
+          league={league}
+          season={season}
+          clubId={clubId}
+        />
       )}
     </>
   );
