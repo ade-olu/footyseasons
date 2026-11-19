@@ -57,7 +57,6 @@
   &__filters {
     display: flex;
     gap: rem(16);
-    margin-left: auto;
 
     @include below-tablet {
       display: contents;
