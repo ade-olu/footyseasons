@@ -1,0 +1,136 @@
+@use "@/styles/foundations" as *;
+
+// The table runs edge to edge, so the card's padding moves to the header
+.club-league-table {
+  padding: 0;
+  gap: 0;
+
+  &__header {
+    padding: rem(24);
+
+    @include below-tablet {
+      padding: rem(24) rem(16);
+    }
+  }
+
+  &__status {
+    padding: 0 rem(24) rem(24);
+    @include text(14);
+    color: $color-text-secondary;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  // Column widths include the 8px gap before each cell
+  &__col-position {
+    width: rem(40);
+  }
+
+  &__col-record {
+    width: rem(36);
+  }
+
+  &__col-difference {
+    width: rem(44);
+  }
+
+  &__col-points {
+    width: rem(56); // Also the 16px at the row's end
+  }
+
+  th,
+  td {
+    padding: rem(16) 0 rem(16) rem(8);
+    border-bottom: 1px solid $color-border-default;
+    @include text(14);
+    font-weight: 400;
+    color: $color-text-primary;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: rem(16);
+    }
+  }
+
+  thead th {
+    height: rem(60);
+    padding-block: 0;
+    font-weight: 500;
+    color: $color-text-secondary;
+    background-color: $color-bg-subtle;
+    border-top: 1px solid $color-border-default;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: none;
+  }
+
+  abbr {
+    text-decoration: none;
+  }
+
+  th#{&}__club {
+    text-align: left;
+  }
+
+  td#{&}__position {
+    color: $color-text-secondary;
+  }
+
+  td#{&}__points {
+    font-weight: 500;
+  }
+
+  // The club this page is about
+  tbody &__row--current > * {
+    font-weight: 500;
+    color: $color-text-primary;
+    background-color: $color-bg-subtle;
+  }
+
+  &__row--current td#{&}__position {
+    color: $color-text-primary;
+  }
+
+  // Other rows shade on hover, as in the standings tables
+  @include can-hover {
+    tbody tr:not(#{&}__row--current):hover > * {
+      background-color: $color-bg-surface-hover;
+    }
+  }
+
+  @include motion-allowed {
+    tbody tr > * {
+      transition: background-color 0.2s;
+    }
+  }
+
+  &__club-inner {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    min-width: 0;
+  }
+
+  &__crest {
+    flex-shrink: 0;
+    width: rem(24);
+    height: rem(24);
+  }
+
+  &__name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
