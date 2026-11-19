@@ -1,0 +1,392 @@
+@use "@/styles/foundations" as *;
+
+// Plot geometry: 1st place, the range down to last, and the season labels
+$season-chart-top: rem(18);
+$season-chart-range: rem(221);
+$season-chart-labels: rem(255);
+$season-chart-height: rem(282); // The selected column runs 12px past the labels
+$season-chart-phone-column: rem(64);
+
+// Motion, as in Position by matchweek: the line draws in, each circle pops in
+// as it arrives, and the selected column grows up from the axis
+$season-chart-ease: cubic-bezier(0.22, 1, 0.36, 1);
+$season-chart-glide: 0.25s;
+$season-chart-draw: 0.8s;
+$season-chart-slide: 0.4s;
+
+// A season across and a place down, from the --x and --y set inline (0 to 1)
+@function season-x() {
+  @return calc(100% * var(--x));
+}
+
+@function season-y() {
+  @return calc(#{$season-chart-top} + #{$season-chart-range} * var(--y));
+}
+
+// The chart and table run edge to edge, so the card's padding moves inside
+.season-by-season {
+  padding: 0;
+  gap: 0;
+
+  // Title and description beside the view toggle; on phones it goes under them
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: rem(24);
+    padding: rem(24);
+
+    > .section-header {
+      flex: 1;
+      min-width: 0;
+    }
+
+    @include below-tablet {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: rem(24) rem(16);
+    }
+  }
+
+  &__view {
+    flex-shrink: 0;
+    width: rem(182);
+  }
+
+  // Phones scroll the seasons sideways, 64px each
+  &__scroll {
+    padding: 0 rem(24) rem(12);
+
+    @include below-tablet {
+      margin: 0 rem(16) rem(12);
+      padding: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  &__plot {
+    position: relative;
+    height: $season-chart-height;
+    border-radius: $radius-8;
+
+    @include below-tablet {
+      width: calc(#{$season-chart-phone-column} * var(--seasons));
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: -2px;
+    }
+  }
+
+  // The selected season's column, fading up from the axis
+  &__selected {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(#{season-x()} - 50% / var(--seasons));
+    width: calc(100% / var(--seasons));
+    background: linear-gradient(
+      to top,
+      rgba($color-accent, 0.32),
+      rgba($color-accent, 0)
+    );
+    border-radius: $radius-8;
+    transform-origin: bottom;
+
+    // Grows on load, then slides to another season
+    @include motion-allowed {
+      animation: season-chart-grow 0.6s $season-chart-ease;
+      transition: left $season-chart-slide $season-chart-ease;
+    }
+  }
+
+  &__gridline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(#{season-y()} - 0.5px);
+    height: 1px;
+    background-color: $color-border-default;
+  }
+
+  &__line {
+    position: absolute;
+    left: 0;
+    top: $season-chart-top;
+    width: 100%;
+    height: $season-chart-range;
+    overflow: visible;
+
+    @include motion-allowed {
+      animation: season-chart-draw $season-chart-draw $season-chart-ease;
+    }
+
+    polyline {
+      fill: none;
+      stroke: $color-text-primary;
+      stroke-width: 2;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+  }
+
+  &__point {
+    @include text(12);
+    position: absolute;
+    left: season-x();
+    top: season-y();
+    display: grid;
+    place-items: center;
+    width: rem(24);
+    height: rem(24);
+    font-weight: 500;
+    color: $color-text-inverse;
+    background-color: $color-bg-inverse;
+    border: 2px solid $color-bg-surface;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+
+    // Pops in as the line reaches it, then changes colour with the season
+    @include motion-allowed {
+      animation: season-chart-pop 0.3s $ease-out-back
+        calc(var(--arrival) * #{$season-chart-draw} - 0.1s) backwards;
+      transition:
+        color 0.2s,
+        background-color 0.2s;
+    }
+
+    &--selected {
+      color: $color-text-primary;
+      background-color: $color-accent;
+    }
+
+    // The season under the pointer, gliding from season to season
+    &--active {
+      width: rem(28);
+      height: rem(28);
+      animation: none;
+
+      @include motion-allowed {
+        transition:
+          left $season-chart-glide $season-chart-ease,
+          top $season-chart-glide $season-chart-ease,
+          opacity 0.15s ease-out,
+          scale 0.2s $ease-out-back;
+      }
+    }
+
+    &--hidden {
+      opacity: 0;
+      scale: 0.8;
+    }
+  }
+
+  &__season {
+    @include text(12);
+    position: absolute;
+    top: $season-chart-labels;
+    left: season-x();
+    color: $color-text-tertiary;
+    white-space: nowrap;
+    transform: translateX(-50%);
+
+    @include motion-allowed {
+      transition: color 0.2s;
+    }
+
+    &--selected {
+      font-weight: 500;
+      color: $color-text-primary;
+    }
+  }
+
+  &__tooltip {
+    @include text(12);
+    position: absolute;
+    top: calc(#{season-y()} + #{rem(22)});
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    padding: rem(16);
+    white-space: nowrap;
+    color: $color-text-inverse-secondary;
+    background-color: $color-bg-inverse;
+    border-radius: $radius-8;
+    box-shadow: $shadow-popover;
+    pointer-events: none;
+
+    @include motion-allowed {
+      transition:
+        left $season-chart-glide $season-chart-ease,
+        top $season-chart-glide $season-chart-ease,
+        opacity 0.15s ease-out,
+        translate 0.15s ease-out;
+    }
+
+    // Points in the lower half open it upwards, so it stays inside the chart
+    &--above {
+      top: calc(#{season-y()} - #{rem(22)});
+      transform: translateY(-100%);
+    }
+
+    &--hidden {
+      opacity: 0;
+      translate: 0 rem(4);
+    }
+  }
+
+  &__tooltip-summary {
+    font-weight: 500;
+    color: $color-text-inverse;
+  }
+
+  // Screen readers only
+  &__live {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  // Column widths include the 16px gap before each cell (8px on phones)
+  &__col,
+  &__wide-col {
+    width: rem(64);
+
+    @include below-tablet {
+      width: rem(56);
+    }
+  }
+
+  // Also the padding at the row's end
+  &__last-col {
+    width: rem(88);
+
+    @include below-tablet {
+      width: rem(72);
+    }
+  }
+
+  th,
+  td {
+    padding: rem(16) 0 rem(16) rem(16);
+    border-bottom: 1px solid $color-border-default;
+    @include text(14);
+    font-weight: 400;
+    color: $color-text-primary;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    @include below-tablet {
+      padding-left: rem(8);
+    }
+
+    &:first-child {
+      padding-left: rem(24);
+
+      @include below-tablet {
+        padding-left: rem(16);
+      }
+    }
+
+    &:last-child {
+      padding-right: rem(24);
+
+      @include below-tablet {
+        padding-right: rem(16);
+      }
+    }
+  }
+
+  thead th {
+    height: rem(60);
+    padding-block: 0;
+    font-weight: 500;
+    color: $color-text-secondary;
+    background-color: $color-bg-subtle;
+    border-top: 1px solid $color-border-default;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: none;
+  }
+
+  abbr {
+    text-decoration: none;
+  }
+
+  th#{&}__label {
+    text-align: left;
+  }
+
+  td#{&}__points {
+    font-weight: 500;
+  }
+
+  // Phones keep Season, Pos, GD and Pts
+  @include below-tablet {
+    &__wide-col,
+    th#{&}__wide,
+    td#{&}__wide {
+      display: none;
+    }
+  }
+
+  // The selected season
+  tbody &__row--current > * {
+    font-weight: 500;
+    background-color: $color-bg-subtle;
+  }
+
+  @include can-hover {
+    tbody tr:not(#{&}__row--current):hover > * {
+      background-color: $color-bg-surface-hover;
+    }
+  }
+
+  @include motion-allowed {
+    tbody tr > * {
+      transition: background-color 0.2s;
+    }
+  }
+}
+
+@keyframes season-chart-draw {
+  from {
+    clip-path: inset(-4px 100% -4px -4px);
+  }
+  to {
+    clip-path: inset(-4px -4px -4px -4px);
+  }
+}
+
+@keyframes season-chart-pop {
+  from {
+    opacity: 0;
+    scale: 0;
+  }
+}
+
+@keyframes season-chart-grow {
+  from {
+    opacity: 0;
+    scale: 1 0;
+  }
+}

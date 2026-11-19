@@ -9,6 +9,7 @@ import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import ClubResults from "@/features/clubs/components/ClubResults/ClubResults";
 import HomeAndAway from "@/features/clubs/components/HomeAndAway/HomeAndAway";
 import PositionChart from "@/features/clubs/components/PositionChart/PositionChart";
+import SeasonBySeason from "@/features/clubs/components/SeasonBySeason/SeasonBySeason";
 import {
   CLUB_TABS,
   clubPath,
@@ -118,6 +119,13 @@ export default function ClubPage({ league, season }: ClubPageProps) {
           />
         </div>
       )}
+      {/* Final league position in every season since 2014/15 */}
+      <SeasonBySeason
+        className={isInSeason ? onTab("history") : undefined}
+        league={league}
+        season={season}
+        clubId={clubId}
+      />
     </>
   );
 }
