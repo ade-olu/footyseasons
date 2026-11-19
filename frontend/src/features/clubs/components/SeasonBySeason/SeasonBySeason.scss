@@ -38,6 +38,15 @@ $season-chart-slide: 0.4s;
       min-width: 0;
     }
 
+    // Wraps onto 2 lines, well clear of the toggle
+    @include tablet-up {
+      gap: rem(48);
+
+      .section-header__description {
+        max-width: rem(560);
+      }
+    }
+
     @include below-tablet {
       flex-direction: column;
       align-items: flex-start;
