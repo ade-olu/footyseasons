@@ -1,6 +1,6 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import MatchResult from "@/features/matches/components/MatchResult/MatchResult";
-import MatchRow from "@/features/matches/components/MatchRow/MatchRow";
+import MatchRow from "@/components/ui/MatchRow/MatchRow";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";

@@ -1,7 +1,7 @@
 import { useSeasonData } from "@/api/seasonData";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
-import MatchRow from "@/features/matches/components/MatchRow/MatchRow";
+import MatchRow from "@/components/ui/MatchRow/MatchRow";
 import MatchweekPicker from "@/features/matches/components/MatchweekPicker/MatchweekPicker";
 import RoundStats from "@/features/matches/components/RoundStats/RoundStats";
 import { groupByDay } from "@/features/matches/utils/matchDays";
