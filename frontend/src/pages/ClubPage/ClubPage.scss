@@ -18,7 +18,8 @@
   }
 
   // Wide: the chart full width, then Results beside a column with the League
-  // table. Tablets: one column. Phones: one column in tab order, table first
+  // table and Home and away. Tablets: one column. Phones: one column in tab
+  // order, table first
   &__season {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -32,6 +33,7 @@
     @include below-tablet {
       display: flex;
       flex-direction: column;
+      align-items: stretch;
       gap: rem(24);
 
       // A tab with none of these sections, so it adds no gap
@@ -56,6 +58,16 @@
 
     @include below-tablet {
       order: 1;
+    }
+  }
+
+  &__venue {
+    @include container-from($content-medium) {
+      grid-column: 2;
+    }
+
+    @include below-tablet {
+      order: 3;
     }
   }
 

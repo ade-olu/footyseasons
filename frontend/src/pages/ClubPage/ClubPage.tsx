@@ -3,9 +3,10 @@ import type { LeagueCode } from "@/data/leagues";
 import { useClub } from "@/features/clubs/api/club";
 import { useClubSeasons } from "@/features/clubs/api/clubSeasons";
 import ClubBanner from "@/features/clubs/components/ClubBanner/ClubBanner";
-import ClubLeagueTable from "@/features/clubs/components/ClubLeagueTable/ClubLeagueTable";
 import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighlights";
+import ClubLeagueTable from "@/features/clubs/components/ClubLeagueTable/ClubLeagueTable";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
+import HomeAndAway from "@/features/clubs/components/HomeAndAway/HomeAndAway";
 import PositionChart from "@/features/clubs/components/PositionChart/PositionChart";
 import {
   CLUB_TABS,
@@ -96,6 +97,13 @@ export default function ClubPage({ league, season }: ClubPageProps) {
           {/* Five rows of the table around the club */}
           <ClubLeagueTable
             className={`club-page__table ${onTab("")}`}
+            league={league}
+            season={season}
+            clubId={clubId}
+          />
+          {/* Points, record and goals at home against away */}
+          <HomeAndAway
+            className={`club-page__venue ${onTab("")}`}
             league={league}
             season={season}
             clubId={clubId}
