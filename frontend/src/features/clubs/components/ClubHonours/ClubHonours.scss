@@ -1,0 +1,97 @@
+@use "@/styles/foundations" as *;
+
+// Tiles in a grid; on phones flat rows edge to edge, so the card's side and
+// bottom padding move into the rows
+.club-honours {
+  @include below-tablet {
+    padding: rem(24) 0 0;
+  }
+
+  &__header {
+    @include below-tablet {
+      padding-inline: rem(16);
+    }
+  }
+
+  // 1 column, 2 from a 560px content area, 3 from 900px
+  &__items {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: rem(24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include container-from($content-grid-two) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include container-from($content-medium) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @include below-tablet {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    min-width: 0;
+    padding: rem(16);
+    background-color: $color-bg-subtle;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-12;
+
+    @include below-tablet {
+      background: none;
+      border: none;
+      border-top: 1px solid $color-border-default;
+      border-radius: 0;
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: rem(32);
+    height: rem(32);
+    object-fit: contain;
+
+    &--trophy {
+      color: $color-award-trophy;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: rem(4);
+    min-width: 0;
+  }
+
+  &__name {
+    overflow: hidden;
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-primary;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__last {
+    @include text(12);
+    color: $color-text-secondary;
+  }
+
+  &__count {
+    flex-shrink: 0;
+    @include text(24);
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+}
