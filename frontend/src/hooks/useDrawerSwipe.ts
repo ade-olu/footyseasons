@@ -25,6 +25,13 @@ function startsInScroller(target: EventTarget | null) {
   return false;
 }
 
+// True if the touch began in something that uses sideways drags (a chart)
+function startsInDragArea(target: EventTarget | null) {
+  return (
+    target instanceof Element && !!target.closest("[data-no-drawer-swipe]")
+  );
+}
+
 // Opens the drawer on a swipe to the right and closes it on a swipe to the left
 export function useDrawerSwipe(
   isOpen: boolean,
@@ -39,7 +46,9 @@ export function useDrawerSwipe(
       start =
         event.touches.length === 1 &&
         drawerQuery.matches &&
-        (isOpen || !startsInScroller(event.target))
+        (isOpen ||
+          (!startsInScroller(event.target) &&
+            !startsInDragArea(event.target)))
           ? { x: touch.clientX, y: touch.clientY }
           : null;
     }
