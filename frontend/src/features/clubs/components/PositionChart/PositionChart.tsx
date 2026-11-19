@@ -13,13 +13,13 @@ import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
 import { TABLE_PLACES } from "@/data/tablePlaces";
+import { useEasedValues } from "@/features/clubs/hooks/useEasedValues";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { possessive } from "@/features/clubs/utils/clubPage";
 import {
   getPositionByRound,
   type RoundPosition,
 } from "@/features/clubs/utils/positionByRound";
-import { prefersReducedMotion } from "@/utils/motion";
 import { seasonLabel } from "@/utils/season";
 import "./PositionChart.scss";
 
@@ -91,41 +91,6 @@ function axisRounds(total: number) {
     round,
     wide: round === 10 || round === 30,
   }));
-}
-
-// How long the line takes to move to another club's positions
-const MORPH_DURATION = 500;
-
-// Eases from the values shown to new ones, such as another club's line
-function useEasedValues(target: number[]) {
-  const key = target.join(",");
-  const [shown, setShown] = useState(target);
-  const shownRef = useRef(target);
-
-  useEffect(() => {
-    const to = key ? key.split(",").map(Number) : [];
-    const from = shownRef.current;
-    // A different number of rounds can't morph, so it switches straight away
-    const duration =
-      from.length === to.length && !prefersReducedMotion() ? MORPH_DURATION : 0;
-    const start = performance.now();
-    let frame = 0;
-
-    const step = (now: number) => {
-      const progress = duration ? Math.min((now - start) / duration, 1) : 1;
-      const eased = 1 - (1 - progress) ** 3; // Ease-out cubic
-      const next = to.map(
-        (value, i) => (from[i] ?? value) * (1 - eased) + value * eased,
-      );
-      shownRef.current = next;
-      setShown(next);
-      if (progress < 1) frame = requestAnimationFrame(step);
-    };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
-  }, [key]);
-
-  return shown.length === target.length ? shown : target;
 }
 
 // A club's league position after every round, as a line on a fixed scale
