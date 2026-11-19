@@ -1,0 +1,151 @@
+@use "@/styles/foundations" as *;
+
+// Phones and narrow screens: a carousel running to the card's edges, so the
+// card's side padding moves to the header
+.club-top-players {
+  @include container-up-to($content-medium - rem(0.02)) {
+    padding-inline: 0;
+
+    &__header {
+      padding-inline: rem(24);
+
+      @include below-tablet {
+        padding-inline: rem(16);
+      }
+    }
+
+    &__boards {
+      // 1px so the cards' shadow isn't clipped
+      padding-bottom: 1px;
+      @include carousel(rem(320));
+
+      @include tablet-up {
+        padding-inline: rem(24);
+        scroll-padding-inline: rem(24);
+      }
+    }
+  }
+
+  // Three across from a 900px content area
+  &__boards {
+    @include container-from($content-medium) {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: rem(24);
+      align-items: start;
+    }
+  }
+
+  // A white card whose top is the dark leader panel
+  &__board {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background-color: $color-bg-surface;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-16;
+    box-shadow: $shadow-resting;
+  }
+
+  &__hero {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    padding: rem(24);
+    background-color: $color-bg-inverse;
+  }
+
+  &__info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: rem(8);
+    min-width: 0;
+  }
+
+  &__label {
+    @include text(14);
+    font-weight: 400;
+    color: $color-text-inverse-secondary;
+  }
+
+  // Names stay on one line, shortening ("V. Gyökeres") when they don't fit
+  &__name,
+  &__row-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__name {
+    @include text(16);
+    font-weight: 500;
+    color: $color-text-inverse;
+  }
+
+  &__value {
+    @include text(32);
+    font-weight: 600;
+    color: $color-text-inverse;
+  }
+
+  &__photo {
+    width: rem(32);
+    height: rem(32);
+
+    // Shrinks the cut-out so the whole head fits, shoulders on the bottom edge
+    &:is(img) {
+      padding: 0 rem(2);
+      object-fit: contain;
+      object-position: bottom;
+    }
+
+    &--large {
+      width: rem(80);
+      height: rem(80);
+
+      &:is(img) {
+        padding: 0 rem(4);
+        background-color: $color-bg-photo-inverse;
+      }
+
+      // Initials sit on the dark panel too
+      &.player-photo--initials {
+        color: $color-text-inverse-secondary;
+        background-color: $color-bg-photo-inverse;
+        border: none;
+      }
+    }
+  }
+
+  &__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    padding: rem(16) rem(24);
+    @include text(14);
+
+    & + & {
+      border-top: 1px solid $color-border-default;
+    }
+  }
+
+  &__row-name {
+    flex: 1;
+    min-width: 0;
+    color: $color-text-primary;
+  }
+
+  &__row-value {
+    flex-shrink: 0;
+    font-weight: 500;
+    color: $color-text-primary;
+  }
+}
