@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import { usePlayers } from "@/api/players";
 import FittedName from "@/components/ui/FittedName/FittedName";
 import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
@@ -5,6 +7,7 @@ import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
 import { possessive } from "@/features/clubs/utils/clubPage";
+import { useSelection } from "@/hooks/useSelection";
 import type { Player } from "@/types/api";
 import { cx } from "@/utils/cx";
 import { shortPlayerNames } from "@/utils/playerNames";
@@ -47,13 +50,15 @@ function topThree(players: Player[], stat: Board["stat"]) {
     .slice(0, 3);
 }
 
-// One stat's leader on a dark top, then the next two
+// One stat's leader on a dark top, then the next two and a View all link
 function Leaderboard({
   board,
   players,
+  allPath,
 }: {
   board: Board;
   players: Player[];
+  allPath: string;
 }) {
   const [leader, ...rest] = topThree(players, board.stat);
   if (!leader) return null;
@@ -100,6 +105,15 @@ function Leaderboard({
           </li>
         ))}
       </ol>
+      {/* Player Stats until the club page has its Squad table */}
+      <Link
+        className="club-top-players__all"
+        to={allPath}
+        aria-label={`View all players by ${board.key}`}
+      >
+        View all
+        <ArrowRightIcon className="club-top-players__all-icon" aria-hidden />
+      </Link>
     </article>
   );
 }
@@ -114,6 +128,7 @@ export default function ClubTopPlayers({
   className,
 }: ClubTopPlayersProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
+  const { pathTo } = useSelection();
   // A player who moved within the league has one row for both clubs
   const players =
     data?.players.filter((player) =>
@@ -138,7 +153,12 @@ export default function ClubTopPlayers({
       {!status && (
         <div className="club-top-players__boards">
           {BOARDS.map((board) => (
-            <Leaderboard key={board.key} board={board} players={players} />
+            <Leaderboard
+              key={board.key}
+              board={board}
+              players={players}
+              allPath={pathTo("/player-stats")}
+            />
           ))}
         </div>
       )}

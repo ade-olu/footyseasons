@@ -32,7 +32,6 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: rem(24);
-      align-items: start;
     }
   }
 
@@ -141,6 +140,31 @@
     flex: 1;
     min-width: 0;
     color: $color-text-primary;
+  }
+
+  // Centred under the rows, like the section headers' links
+  &__all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(8);
+    margin-top: auto;
+    padding: rem(16) rem(24);
+    border-top: 1px solid $color-border-default;
+    @include text(14);
+    color: $color-text-secondary;
+    text-decoration: none;
+    @include press(0.96, color 0.15s);
+
+    &:hover,
+    &:focus-visible {
+      color: $color-text-primary;
+    }
+  }
+
+  &__all-icon {
+    width: rem(16);
+    height: rem(16);
   }
 
   &__row-value {
