@@ -116,7 +116,11 @@ export default function ClubResults({
         () => pageMatches[0],
       )
     : [];
-  const range = `${first + 1}–${first + pageMatches.length}`;
+  // "37–38", or "19" for a page of one
+  const range =
+    pageMatches.length === 1
+      ? String(first + 1)
+      : `${first + 1}–${first + pageMatches.length}`;
 
   return (
     <SectionCard className={classes}>
