@@ -4,6 +4,7 @@
 .club-league-table {
   padding: 0;
   gap: 0;
+  @include data-table-cells;
 
   &__header {
     padding: rem(24);
@@ -66,13 +67,6 @@
   th,
   td {
     padding: rem(16) 0 rem(16) rem(8);
-    border-bottom: 1px solid $color-border-default;
-    @include text(14);
-    font-weight: 400;
-    color: $color-text-primary;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
 
     &:first-child {
       padding-left: 0;
@@ -84,20 +78,11 @@
   }
 
   thead th {
-    height: rem(60);
     padding-block: 0;
-    font-weight: 500;
-    color: $color-text-secondary;
-    background-color: $color-bg-subtle;
-    border-top: 1px solid $color-border-default;
   }
 
   tbody tr:last-child > * {
     border-bottom: none;
-  }
-
-  abbr {
-    text-decoration: none;
   }
 
   th#{&}__club {
@@ -108,32 +93,12 @@
     color: $color-text-secondary;
   }
 
+  [aria-current] > td#{&}__position {
+    color: $color-text-primary;
+  }
+
   td#{&}__points {
     font-weight: 500;
-  }
-
-  // The club this page is about
-  tbody &__row--current > * {
-    font-weight: 500;
-    color: $color-text-primary;
-    background-color: $color-bg-subtle;
-  }
-
-  &__row--current td#{&}__position {
-    color: $color-text-primary;
-  }
-
-  // Other rows shade on hover, as in the standings tables
-  @include can-hover {
-    tbody tr:not(#{&}__row--current):hover > * {
-      background-color: $color-bg-surface-hover;
-    }
-  }
-
-  @include motion-allowed {
-    tbody tr > * {
-      transition: background-color 0.2s;
-    }
   }
 
   &__club-inner {

@@ -27,6 +27,7 @@ $season-chart-slide: 0.4s;
 .season-by-season {
   padding: 0;
   gap: 0;
+  @include data-table-cells;
 
   // Title and description beside the view toggle; on phones it goes under them
   &__header {
@@ -286,13 +287,6 @@ $season-chart-slide: 0.4s;
   th,
   td {
     padding: rem(16) 0 rem(16) rem(16);
-    border-bottom: 1px solid $color-border-default;
-    @include text(14);
-    font-weight: 400;
-    color: $color-text-primary;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
 
     @include below-tablet {
       padding-left: rem(8);
@@ -316,20 +310,11 @@ $season-chart-slide: 0.4s;
   }
 
   thead th {
-    height: rem(60);
     padding-block: 0;
-    font-weight: 500;
-    color: $color-text-secondary;
-    background-color: $color-bg-subtle;
-    border-top: 1px solid $color-border-default;
   }
 
   tbody tr:last-child > * {
     border-bottom: none;
-  }
-
-  abbr {
-    text-decoration: none;
   }
 
   th#{&}__label {
@@ -349,23 +334,6 @@ $season-chart-slide: 0.4s;
     }
   }
 
-  // The selected season
-  tbody &__row--current > * {
-    font-weight: 500;
-    background-color: $color-bg-subtle;
-  }
-
-  @include can-hover {
-    tbody tr:not(#{&}__row--current):hover > * {
-      background-color: $color-bg-surface-hover;
-    }
-  }
-
-  @include motion-allowed {
-    tbody tr > * {
-      transition: background-color 0.2s;
-    }
-  }
 }
 
 @keyframes season-chart-draw {

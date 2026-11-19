@@ -464,11 +464,6 @@ export default function SeasonBySeason({
             {records.toReversed().map((record) => (
               <tr
                 key={record.startYear}
-                className={
-                  record.startYear === season
-                    ? "season-by-season__row--current"
-                    : undefined
-                }
                 aria-current={record.startYear === season ? "true" : undefined}
               >
                 <th scope="row" className="season-by-season__label">

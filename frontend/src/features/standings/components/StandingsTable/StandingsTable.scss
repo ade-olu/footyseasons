@@ -21,6 +21,7 @@ $standings-table-relegation-row-hover: color.mix(
   flex-direction: column;
   min-width: 0;
   container-type: inline-size;
+  @include data-table-cells;
 
   &__scroll {
     overflow-x: auto;
@@ -52,24 +53,6 @@ $standings-table-relegation-row-hover: color.mix(
   td {
     height: rem(60);
     padding: 0;
-    border-bottom: 1px solid $color-border-default;
-    @include text(14);
-    font-weight: 400;
-    color: $color-text-primary;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
-  thead th {
-    font-weight: 500;
-    color: $color-text-secondary;
-    background-color: $color-bg-subtle;
-    border-top: 1px solid $color-border-default;
-  }
-
-  abbr {
-    text-decoration: none;
   }
 
   td#{&}__position {
@@ -85,20 +68,10 @@ $standings-table-relegation-row-hover: color.mix(
     background-color: $standings-table-relegation-row;
   }
 
-  // Rows shade on hover; set on the cells so sticky ones shade too
+  // Relegation rows shade a deeper red
   @include can-hover {
-    &__table tbody tr:hover > * {
-      background-color: $color-bg-surface-hover;
-    }
-
     &__table tbody &__row--relegation:hover > * {
       background-color: $standings-table-relegation-row-hover;
-    }
-  }
-
-  @include motion-allowed {
-    &__table tbody tr > * {
-      transition: background-color 0.2s;
     }
   }
 

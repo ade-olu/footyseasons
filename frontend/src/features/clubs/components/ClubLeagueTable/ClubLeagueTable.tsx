@@ -100,11 +100,6 @@ export default function ClubLeagueTable({
             {rows.map((row) => (
               <tr
                 key={row.clubId}
-                className={
-                  row.clubId === clubId
-                    ? "club-league-table__row--current"
-                    : undefined
-                }
                 aria-current={row.clubId === clubId ? "true" : undefined}
               >
                 <td className="club-league-table__position">

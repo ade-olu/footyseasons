@@ -1,0 +1,54 @@
+@use "functions" as *;
+@use "typography" as *;
+@use "motion" as *;
+@use "colors" as *;
+
+// The app's data tables (standings, players, the club page): 14px centred
+// cells over a 1px line, a 60px header row on the page background, and rows
+// that shade on hover. A row with aria-current (the page's own club) is medium
+// on the page background and doesn't shade. Padding and widths stay with each
+// table. Include it on the element around the table.
+@mixin data-table-cells {
+  th,
+  td {
+    border-bottom: 1px solid $color-border-default;
+    @include text(14);
+    font-weight: 400;
+    color: $color-text-primary;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  thead th {
+    height: rem(60);
+    font-weight: 500;
+    color: $color-text-secondary;
+    background-color: $color-bg-subtle;
+    border-top: 1px solid $color-border-default;
+  }
+
+  abbr {
+    text-decoration: none;
+  }
+
+  tbody [aria-current] > * {
+    font-weight: 500;
+    color: $color-text-primary;
+    background-color: $color-bg-subtle;
+  }
+
+  // Set on the cells, so sticky ones shade too; :where keeps it easy to
+  // override (the standings' relegation rows)
+  @include can-hover {
+    tbody tr:where(:not([aria-current])):hover > * {
+      background-color: $color-bg-surface-hover;
+    }
+  }
+
+  @include motion-allowed {
+    tbody tr > * {
+      transition: background-color 0.2s;
+    }
+  }
+}
