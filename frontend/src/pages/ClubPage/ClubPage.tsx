@@ -3,6 +3,7 @@ import type { LeagueCode } from "@/data/leagues";
 import { useClub } from "@/features/clubs/api/club";
 import { useClubSeasons } from "@/features/clubs/api/clubSeasons";
 import ClubBanner from "@/features/clubs/components/ClubBanner/ClubBanner";
+import ClubLeagueTable from "@/features/clubs/components/ClubLeagueTable/ClubLeagueTable";
 import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighlights";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import PositionChart from "@/features/clubs/components/PositionChart/PositionChart";
@@ -82,14 +83,24 @@ export default function ClubPage({ league, season }: ClubPageProps) {
           <ClubHighlights league={league} season={season} clubId={clubId} />
         </HighlightCards>
       )}
-      {/* The club's league position after every round */}
+      {/* The season's chart and tables, in two columns from tablet width */}
       {isInSeason && (
-        <PositionChart
-          className={onTab("")}
-          league={league}
-          season={season}
-          clubId={clubId}
-        />
+        <div className="club-page__season">
+          {/* The club's league position after every round */}
+          <PositionChart
+            className={`club-page__position ${onTab("")}`}
+            league={league}
+            season={season}
+            clubId={clubId}
+          />
+          {/* Five rows of the table around the club */}
+          <ClubLeagueTable
+            className={`club-page__table ${onTab("")}`}
+            league={league}
+            season={season}
+            clubId={clubId}
+          />
+        </div>
       )}
     </>
   );

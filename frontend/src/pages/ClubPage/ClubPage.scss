@@ -17,6 +17,48 @@
     }
   }
 
+  // Wide: the chart full width, then Results beside a column with the League
+  // table. Tablets: one column. Phones: one column in tab order, table first
+  &__season {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: rem(32) rem(24);
+    align-items: start;
+
+    @include container-from($content-medium) {
+      grid-template-columns: minmax(0, 1fr) rem(408);
+    }
+
+    @include below-tablet {
+      display: flex;
+      flex-direction: column;
+      gap: rem(24);
+
+      // A tab with none of these sections, so it adds no gap
+      &:not(:has(> .club-page__on-tab)) {
+        display: none;
+      }
+    }
+  }
+
+  &__position {
+    grid-column: 1 / -1;
+
+    @include below-tablet {
+      order: 2;
+    }
+  }
+
+  &__table {
+    @include container-from($content-medium) {
+      grid-column: 2;
+    }
+
+    @include below-tablet {
+      order: 1;
+    }
+  }
+
   // A section under another tab
   &__off-tab {
     @include below-tablet {
