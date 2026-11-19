@@ -1,0 +1,44 @@
+@use "@/styles/foundations" as *;
+@use "@/features/clubs/styles/chart" as *;
+
+// Opens 22px below its point (--point-y, set by the chart), or above it
+.chart-tooltip {
+  @include text(12);
+  position: absolute;
+  top: calc(var(--point-y) + #{rem(22)});
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+  padding: rem(16);
+  white-space: nowrap;
+  color: $color-text-inverse-secondary;
+  background-color: $color-bg-inverse;
+  border-radius: $radius-8;
+  box-shadow: $shadow-popover;
+  pointer-events: none;
+
+  @include motion-allowed {
+    transition:
+      left $chart-glide $chart-ease,
+      top $chart-glide $chart-ease,
+      opacity 0.15s ease-out,
+      translate 0.15s ease-out;
+  }
+
+  &--above {
+    top: calc(var(--point-y) - #{rem(22)});
+    transform: translateY(-100%);
+  }
+
+  // Fades out with a small drop, then in again where it's next needed
+  &--hidden {
+    opacity: 0;
+    translate: 0 rem(4);
+  }
+
+  &__summary {
+    font-weight: 500;
+    color: $color-text-inverse;
+  }
+}

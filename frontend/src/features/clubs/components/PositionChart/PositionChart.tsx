@@ -13,6 +13,9 @@ import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
 import { TABLE_PLACES } from "@/data/tablePlaces";
+import ChartLine from "@/features/clubs/components/ChartLine/ChartLine";
+import ChartMarker from "@/features/clubs/components/ChartMarker/ChartMarker";
+import ChartTooltip from "@/features/clubs/components/ChartTooltip/ChartTooltip";
 import { useEasedValues } from "@/features/clubs/hooks/useEasedValues";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { possessive } from "@/features/clubs/utils/clubPage";
@@ -298,60 +301,45 @@ export default function PositionChart({
           </span>
         ))}
 
-        <svg
+        <ChartLine
           ref={lineRef}
           className="position-chart__line"
-          viewBox={`0 0 ${Math.max(total - 1, 1)} 1`}
-          preserveAspectRatio="none"
-          aria-hidden
-        >
-          <polyline points={linePoints} />
-        </svg>
+          lines={[linePoints]}
+          width={Math.max(total - 1, 1)}
+        />
 
         {/* The latest round, with its position */}
-        <span
+        <ChartMarker
           className="position-chart__marker position-chart__marker--latest"
           style={at(xOf(last.round), lineYs[last.round - 1])}
-          aria-hidden
+          accent
         >
           {last.position}
-        </span>
+        </ChartMarker>
 
         {/* Stays after the pointer leaves, so it can fade out */}
         {shown && (
           <>
-            <span
-              className={cx(
-                "position-chart__marker position-chart__marker--active",
-                shown === last && "position-chart__marker--latest",
-                active === null && "position-chart__marker--hidden",
-              )}
+            <ChartMarker
+              className="position-chart__marker"
               style={at(xOf(shown.round), lineYs[shown.round - 1])}
-              aria-hidden
+              accent={shown === last}
+              active
+              hidden={active === null}
             >
               {shown.position}
-            </span>
-            <div
+            </ChartMarker>
+            <ChartTooltip
               ref={tooltipRef}
-              className={cx(
-                "position-chart__tooltip",
-                yOf(shown.position) > 0.5 && "position-chart__tooltip--above",
-                active === null && "position-chart__tooltip--hidden",
-              )}
+              className="position-chart__tooltip"
               style={at(xOf(shown.round), lineYs[shown.round - 1])}
-              data-x={xOf(shown.round)}
-              aria-hidden
-            >
-              <span className="position-chart__tooltip-title">
-                {roundLine(shown)}
-              </span>
-              <span className="position-chart__tooltip-summary">
-                {placeLine(shown)}
-              </span>
-              <span className="position-chart__tooltip-detail">
-                {matchLine(shown)}
-              </span>
-            </div>
+              title={roundLine(shown)}
+              summary={placeLine(shown)}
+              detail={matchLine(shown)}
+              above={yOf(shown.position) > 0.5}
+              hidden={active === null}
+              x={xOf(shown.round)}
+            />
           </>
         )}
 

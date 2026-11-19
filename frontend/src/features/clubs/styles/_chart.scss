@@ -1,0 +1,5 @@
+// Motion shared by the club page's charts: a soft ease-out for drawing the
+// line and following the pointer
+$chart-ease: cubic-bezier(0.22, 1, 0.36, 1);
+$chart-draw: 0.8s;
+$chart-glide: 0.25s;

@@ -1,0 +1,29 @@
+@use "@/styles/foundations" as *;
+@use "@/features/clubs/styles/chart" as *;
+
+.chart-line {
+  position: absolute;
+  overflow: visible;
+
+  @include motion-allowed {
+    animation: chart-line-draw $chart-draw $chart-ease;
+  }
+
+  polyline {
+    fill: none;
+    stroke: $color-text-primary;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+@keyframes chart-line-draw {
+  from {
+    clip-path: inset(-4px 100% -4px -4px);
+  }
+  to {
+    clip-path: inset(-4px -4px -4px -4px);
+  }
+}

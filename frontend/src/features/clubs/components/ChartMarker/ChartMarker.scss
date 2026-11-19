@@ -1,0 +1,56 @@
+@use "@/styles/foundations" as *;
+@use "@/features/clubs/styles/chart" as *;
+
+// Charts place it with left and top, and can pop it in with chart-marker-pop
+.chart-marker {
+  @include text(12);
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: rem(24);
+  height: rem(24);
+  font-weight: 500;
+  color: $color-text-inverse;
+  background-color: $color-bg-inverse;
+  border: 2px solid $color-bg-surface;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  @include motion-allowed {
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  &--accent {
+    color: $color-text-primary;
+    background-color: $color-accent;
+  }
+
+  // The point under the pointer, gliding from point to point
+  &--active {
+    width: rem(28);
+    height: rem(28);
+
+    @include motion-allowed {
+      transition:
+        left $chart-glide $chart-ease,
+        top $chart-glide $chart-ease,
+        opacity 0.15s ease-out,
+        scale 0.2s $ease-out-back;
+    }
+  }
+
+  &--hidden {
+    opacity: 0;
+    scale: 0.8;
+  }
+}
+
+@keyframes chart-marker-pop {
+  from {
+    opacity: 0;
+    scale: 0;
+  }
+}

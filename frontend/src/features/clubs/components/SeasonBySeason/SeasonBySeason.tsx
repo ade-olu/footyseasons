@@ -13,6 +13,9 @@ import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl"
 import type { LeagueCode } from "@/data/leagues";
 import { useClub } from "@/features/clubs/api/club";
 import { useClubHistory } from "@/features/clubs/api/clubHistory";
+import ChartLine from "@/features/clubs/components/ChartLine/ChartLine";
+import ChartMarker from "@/features/clubs/components/ChartMarker/ChartMarker";
+import ChartTooltip from "@/features/clubs/components/ChartTooltip/ChartTooltip";
 import { useEasedValues } from "@/features/clubs/hooks/useEasedValues";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { possessive } from "@/features/clubs/utils/clubPage";
@@ -316,29 +319,18 @@ export default function SeasonBySeason({
               />
             ))}
 
-            <svg
+            <ChartLine
               key={shape}
               className="season-by-season__line"
-              viewBox={`0 0 ${SEASONS.length} 1`}
-              preserveAspectRatio="none"
-              aria-hidden
-            >
-              {runs(byYear).map((run) => (
-                <polyline
-                  key={run[0]}
-                  points={run.map((i) => linePoint(i)).join(" ")}
-                />
-              ))}
-            </svg>
+              lines={runs(byYear).map((run) => run.map(linePoint).join(" "))}
+              width={SEASONS.length}
+            />
 
             {records.map((record) => (
-              <span
+              <ChartMarker
                 key={`${shape}-${record.startYear}`}
-                className={cx(
-                  "season-by-season__point",
-                  record.startYear === season &&
-                    "season-by-season__point--selected",
-                )}
+                className="season-by-season__point"
+                accent={record.startYear === season}
                 style={
                   {
                     ...at(
@@ -348,10 +340,9 @@ export default function SeasonBySeason({
                     "--arrival": arrival(xOf(record.startYear)),
                   } as CSSProperties
                 }
-                aria-hidden
               >
                 {record.position}
-              </span>
+              </ChartMarker>
             ))}
 
             {SEASONS.map((year) => (
@@ -371,36 +362,26 @@ export default function SeasonBySeason({
             {/* Stays after the pointer leaves, so it can fade out */}
             {shown && (
               <>
-                <span
-                  className={cx(
-                    "season-by-season__point season-by-season__point--active",
-                    shown.startYear === season &&
-                      "season-by-season__point--selected",
-                    active === null && "season-by-season__point--hidden",
-                  )}
+                <ChartMarker
+                  className="season-by-season__marker"
                   style={at(xOf(shown.startYear), yOf(shown.position))}
-                  aria-hidden
+                  accent={shown.startYear === season}
+                  active
+                  hidden={active === null}
                 >
                   {shown.position}
-                </span>
-                <div
+                </ChartMarker>
+                <ChartTooltip
                   ref={tooltipRef}
-                  className={cx(
-                    "season-by-season__tooltip",
-                    yOf(shown.position) > 0.5 &&
-                      "season-by-season__tooltip--above",
-                    active === null && "season-by-season__tooltip--hidden",
-                  )}
+                  className="season-by-season__tooltip"
                   style={at(xOf(shown.startYear), yOf(shown.position))}
-                  data-x={xOf(shown.startYear)}
-                  aria-hidden
-                >
-                  <span>{shown.label}</span>
-                  <span className="season-by-season__tooltip-summary">
-                    {placeLine(shown)}
-                  </span>
-                  <span>{recordLine(shown)}</span>
-                </div>
+                  title={shown.label}
+                  summary={placeLine(shown)}
+                  detail={recordLine(shown)}
+                  above={yOf(shown.position) > 0.5}
+                  hidden={active === null}
+                  x={xOf(shown.startYear)}
+                />
               </>
             )}
 
