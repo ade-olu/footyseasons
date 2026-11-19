@@ -39,6 +39,28 @@ function description(venue: Venue, count: number, season: number) {
   return `All ${count} ${matches} of ${seasonLabel(season)}, in date order.`;
 }
 
+// The club's matches at a venue, in date order
+function clubMatches(matches: Match[], clubId: number, venue: Venue) {
+  return matches
+    .filter(({ homeClubId, awayClubId }) =>
+      venue === "home"
+        ? homeClubId === clubId
+        : venue === "away"
+          ? awayClubId === clubId
+          : homeClubId === clubId || awayClubId === clubId,
+    )
+    .sort((a, b) => a.utcDate.localeCompare(b.utcDate));
+}
+
+// Pages back from the newest for the page holding the first match on or
+// after a date, so switching venue keeps the same part of the season
+function pageFrom(matches: Match[], date: string) {
+  const index = matches.findIndex(({ utcDate }) => utcDate >= date);
+  const pageCount = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
+  if (index === -1) return 1;
+  return pageCount - Math.floor(index / PAGE_SIZE);
+}
+
 // A date strip with the matchweek, above the match
 function MatchItem({ match, hidden }: { match: Match; hidden?: boolean }) {
   return (
@@ -56,7 +78,8 @@ function MatchItem({ match, hidden }: { match: Match; hidden?: boolean }) {
 }
 
 // The club's league matches in date order, six a page, all or home or away;
-// it opens on the latest page and the left arrow goes back in the season
+// it opens on the latest page, the left arrow goes back in the season and
+// switching venue keeps the same part of the season
 export default function ClubResults({
   league,
   season,
@@ -91,15 +114,7 @@ export default function ClubResults({
     );
   }
 
-  const matches = data.matches
-    .filter(({ homeClubId, awayClubId }) =>
-      venue === "home"
-        ? homeClubId === clubId
-        : venue === "away"
-          ? awayClubId === clubId
-          : homeClubId === clubId || awayClubId === clubId,
-    )
-    .sort((a, b) => a.utcDate.localeCompare(b.utcDate));
+  const matches = clubMatches(data.matches, clubId, venue);
 
   // In date order, as on FotMob: pages fill from the start of the season, so
   // the newest page holds what's left ("37–38 of 38") with the latest match at
@@ -136,7 +151,14 @@ export default function ClubResults({
           value={venue}
           onChange={(value) => {
             setVenue(value);
-            setPage(1);
+            setPage(
+              pageMatches.length
+                ? pageFrom(
+                    clubMatches(data.matches, clubId, value),
+                    pageMatches[0].utcDate,
+                  )
+                : 1,
+            );
           }}
         />
       </div>
