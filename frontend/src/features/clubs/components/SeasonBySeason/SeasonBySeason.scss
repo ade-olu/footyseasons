@@ -249,14 +249,8 @@ $season-chart-slide: 0.4s;
     color: $color-text-inverse;
   }
 
-  // Screen readers only
   &__live {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+    @include visually-hidden;
   }
 
   &__table {
