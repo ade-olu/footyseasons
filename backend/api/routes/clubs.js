@@ -66,6 +66,43 @@ router.get("/:id", (req, res) => {
   res.json({ club, stats: stats ?? null });
 });
 
+// Get a club's final league record in every season it played, oldest first.
+router.get("/:id/seasons", (req, res) => {
+  const clubId = parseInteger(req.params.id, "id", res);
+  if (clubId === undefined) return;
+
+  const club = db
+    .prepare("SELECT club_id FROM clubs WHERE club_id = ?")
+    .get(clubId);
+
+  if (!club) {
+    return res.status(404).json({ error: `No club found with id ${clubId}` });
+  }
+
+  const seasons = db
+    .prepare(
+      `
+    SELECT
+      s.start_year AS startYear, s.label, l.code AS leagueCode,
+      cs.position, cs.games_played AS gamesPlayed, cs.wins, cs.draws,
+      cs.losses, cs.points, cs.goals_for AS goalsFor,
+      cs.goals_against AS goalsAgainst,
+      s.champion_club_id IS cs.club_id AS isChampion,
+      (SELECT COUNT(*) FROM club_season_stats other
+        WHERE other.season_id = cs.season_id) AS clubCount
+    FROM club_season_stats cs
+    JOIN seasons s ON s.season_id = cs.season_id
+    JOIN leagues l ON l.league_id = s.league_id
+    WHERE cs.club_id = ?
+    ORDER BY s.start_year
+  `,
+    )
+    .all(clubId)
+    .map((season) => ({ ...season, isChampion: season.isChampion === 1 }));
+
+  res.json(seasons);
+});
+
 // Get the matches played by a club, optionally for one season (?season=).
 router.get("/:id/matches", (req, res) => {
   const clubId = parseInteger(req.params.id, "id", res);
