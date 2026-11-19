@@ -76,13 +76,13 @@ export default function ClubLeagueTable({
               <th scope="col" className="club-league-table__club">
                 Club
               </th>
-              <th scope="col">
+              <th scope="col" className="club-league-table__record">
                 <abbr title="Won">W</abbr>
               </th>
-              <th scope="col">
+              <th scope="col" className="club-league-table__record">
                 <abbr title="Drawn">D</abbr>
               </th>
-              <th scope="col">
+              <th scope="col" className="club-league-table__record">
                 <abbr title="Lost">L</abbr>
               </th>
               <th scope="col">
@@ -122,9 +122,9 @@ export default function ClubLeagueTable({
                     </span>
                   </span>
                 </th>
-                <td>{row.wins}</td>
-                <td>{row.draws}</td>
-                <td>{row.losses}</td>
+                <td className="club-league-table__record">{row.wins}</td>
+                <td className="club-league-table__record">{row.draws}</td>
+                <td className="club-league-table__record">{row.losses}</td>
                 <td>{formatGoalDifference(row)}</td>
                 <td className="club-league-table__points">{row.points}</td>
               </tr>

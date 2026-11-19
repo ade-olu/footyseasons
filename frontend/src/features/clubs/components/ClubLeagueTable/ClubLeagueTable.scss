@@ -34,6 +34,15 @@
     width: rem(36);
   }
 
+  // Phones keep #, club, GD and Pts; Home and away has the club's record
+  @include below-tablet {
+    &__col-record,
+    th#{&}__record,
+    td#{&}__record {
+      display: none;
+    }
+  }
+
   &__col-difference {
     width: rem(44);
   }
