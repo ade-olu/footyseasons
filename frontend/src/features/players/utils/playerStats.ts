@@ -1,4 +1,4 @@
-import { SHORT_NAMES } from "@/features/players/data/shortNames";
+import { SHORT_NAMES } from "@/data/shortNames";
 import type { Player, PlayerClub } from "@/types/api"; // Types for API responses
 
 // Position groups: Transfermarkt's main position (code), or the first letter of
