@@ -105,7 +105,7 @@
 
   &__status {
     padding: 0 rem(24) rem(24);
-    @include text(14);
+    @include text(14, $wrap: relaxed);
     color: $color-text-secondary;
 
     @include below-tablet {

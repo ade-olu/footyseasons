@@ -14,7 +14,7 @@ $laptop-end: rem(1120);
   box-shadow: $shadow-resting;
   color: $color-text-primary;
   // The description's size, so 1lh is one description line (HighlightCards' wrapped grid)
-  @include text(12);
+  @include text(12, $wrap: relaxed);
   padding: rem(24);
   border-radius: $radius-16;
 
@@ -158,7 +158,7 @@ $laptop-end: rem(1120);
   }
 
   &__description {
-    @include text(12);
+    @include text(12, $wrap: relaxed);
     color: $color-text-secondary;
   }
 

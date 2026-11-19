@@ -46,7 +46,7 @@
   }
 
   &__status {
-    @include text(14);
+    @include text(14, $wrap: relaxed);
     color: $color-text-secondary;
   }
 }

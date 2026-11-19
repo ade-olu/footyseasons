@@ -46,7 +46,7 @@
 
   &__comparison {
     padding: rem(12);
-    @include text(12);
+    @include text(12, $wrap: relaxed);
     color: $color-text-secondary;
     border-top: 1px solid $color-border-default;
   }

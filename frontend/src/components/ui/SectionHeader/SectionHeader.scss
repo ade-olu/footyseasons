@@ -28,7 +28,7 @@
 
   &__description {
     grid-column: 1;
-    @include text(14);
+    @include text(14, $wrap: relaxed);
     color: $color-text-secondary;
 
     // Phones: full width under the title and link

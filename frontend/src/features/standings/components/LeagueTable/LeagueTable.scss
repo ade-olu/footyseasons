@@ -70,7 +70,7 @@
 
   &__status {
     padding: rem(24);
-    @include text(14);
+    @include text(14, $wrap: relaxed);
     color: $color-text-secondary;
   }
 }
