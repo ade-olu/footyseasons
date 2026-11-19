@@ -9,8 +9,8 @@ player's stats, the award winners and the final day.
 
 > Still in development. The Overview, Standings, Matches and Player Stats pages
 > are done. Clubs is in progress: the directory is done, and each club's page
-> has its banner, highlights, position chart, table, home and away split and
-> results so far.
+> has its banner, highlights, position chart, table, home and away split,
+> results, season-by-season history, titles and awards, and top players so far.
 
 ## Why
 
@@ -36,7 +36,10 @@ the same clean dashboard feel as the apps I use every week.
   last 5 results, and a page for each club with its season summary, best win
   streak, clean sheets, biggest win and defeat, an interactive chart of its
   league position after every round, the table around it, its home and away
-  split, and every result, filterable by home or away
+  split, every result, filterable by home or away, its final position in every
+  season since 2014/15 as a chart or a table, its trophies and awards (all-time
+  titles and cups, counted up to the season you're viewing), and its leaders
+  in goals, assists and minutes
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
   (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
@@ -165,6 +168,7 @@ python 01_create_database.py   # deletes and recreates football.db
 python 02_fetch_matches.py
 # ...
 python 10_fetch_fotmob_stats.py
+python 11_load_honours.py      # trophies from honours.csv, no requests
 ```
 
 A full rebuild takes a few hours, since the scripts wait between requests to
@@ -174,10 +178,11 @@ stay within rate limits.
 
 ```
 backend/
-  01_ … 10_*.py       # data pipeline, run in number order
+  01_ … 11_*.py       # data pipeline, run in number order
   common/             # helpers shared by the pipeline scripts
   schema.sql          # database tables
   awards.csv          # season awards, compiled by hand
+  honours.csv         # every club's trophies, built from Wikipedia's lists
   football.db         # the database
   api/
     server.js         # Express app
@@ -189,12 +194,14 @@ frontend/
     features/         # standings, matches, players, awards, season, clubs
       clubs/
         api/          # the feature's API calls
-        components/   # directory cards, club nav, banner and highlights
+        components/   # directory cards, club page sections and charts
+        data/         # the competitions in Titles and awards
         hooks/        # data combined for the directory
         utils/        # club page helpers (summary, streaks, addresses)
     components/       # shared layout and ui components
     api/              # API calls and caching
     data/             # leagues, short club names, table places
+    assets/           # league and cup logos, fonts
     utils/            # shared helpers (form, matches, seasons)
     styles/           # foundations: colours, type, effects, radii, breakpoints
 ```
