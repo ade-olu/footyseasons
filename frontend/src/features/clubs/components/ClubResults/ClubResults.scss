@@ -1,0 +1,115 @@
+@use "@/styles/foundations" as *;
+
+// The list runs edge to edge, so the card's padding moves to the header
+.club-results {
+  padding: 0;
+  gap: 0;
+
+  // Title and description with the venue toggle beside them from 1440px;
+  // narrower, the toggle goes full width under them so the description fits
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: rem(24);
+    padding: rem(24);
+
+    > .section-header {
+      flex: 1;
+      min-width: 0;
+    }
+
+    @include below-desktop {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    @include below-tablet {
+      padding: rem(24) rem(16);
+    }
+  }
+
+  &__venue {
+    flex-shrink: 0;
+    width: rem(259);
+
+    @include below-desktop {
+      width: 100%;
+    }
+  }
+
+  // A size container, so the rows tighten when the card is narrow
+  &__matches {
+    container-type: inline-size;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  // Keeps a short page as tall as a full one
+  &__match--filler {
+    visibility: hidden;
+  }
+
+  // Grey strip above each match: the date, and the matchweek on the right
+  &__strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(16);
+    padding: rem(16) rem(24);
+    @include text(14);
+    color: $color-text-secondary;
+    white-space: nowrap;
+    background-color: $color-bg-subtle;
+    border-top: 1px solid $color-border-default;
+    border-bottom: 1px solid $color-border-default;
+
+    @include below-tablet {
+      padding: rem(16);
+    }
+  }
+
+  &__date {
+    margin: 0;
+    @include text(14);
+    font-weight: 500;
+  }
+
+  // Takes the card's spare height, with the pager in the middle of it
+  &__footer {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(16);
+    padding: rem(16) rem(24);
+    border-top: 1px solid $color-border-default;
+
+    @include below-tablet {
+      padding: rem(16);
+    }
+  }
+
+  &__count {
+    @include text(14);
+    color: $color-text-secondary;
+    white-space: nowrap;
+  }
+
+  // "1–6 of 38" on phones
+  &__count-long {
+    @include below-tablet {
+      display: none;
+    }
+  }
+
+  &__status {
+    padding: 0 rem(24) rem(24);
+    @include text(14);
+    color: $color-text-secondary;
+
+    @include below-tablet {
+      padding: 0 rem(16) rem(24);
+    }
+  }
+}
