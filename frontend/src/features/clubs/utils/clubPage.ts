@@ -64,12 +64,6 @@ export function possessive(name: string) {
   return name.endsWith("s") ? `${name}'` : `${name}'s`;
 }
 
-// "+44", "0", "-12"
-export function formatGoalDifference({ goalsFor, goalsAgainst }: Standing) {
-  const difference = goalsFor - goalsAgainst;
-  return difference > 0 ? `+${difference}` : String(difference);
-}
-
 // "1 point", "7 points"
 function count(value: number, word: string, plural = `${word}s`) {
   return `${value} ${value === 1 ? word : plural}`;

@@ -9,6 +9,7 @@ import {
 import { getTableName } from "@/data/tableNames";
 import type { Standing } from "@/types/api";
 import type { FormResult } from "@/utils/form";
+import { formatGoalDifference } from "@/utils/goalDifference";
 import { prefersReducedMotion } from "@/utils/motion";
 import "./StandingsTable.scss";
 
@@ -55,12 +56,6 @@ const ZONES: {
 ];
 
 const RELEGATION_ZONES: TableZone[] = ["relegationPlayoff", "relegation"];
-
-// Shows goal difference with a sign, e.g. +44, 0, -12
-function formatGoalDifference(club: Standing) {
-  const difference = club.goalsFor - club.goalsAgainst;
-  return difference > 0 ? `+${difference}` : String(difference);
-}
 
 // Fixed column widths, shared by the table and its floating header
 function TableColumns({ showGoals }: { showGoals: boolean }) {

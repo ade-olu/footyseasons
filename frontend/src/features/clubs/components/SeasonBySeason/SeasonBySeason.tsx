@@ -18,6 +18,7 @@ import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { possessive } from "@/features/clubs/utils/clubPage";
 import { EARLIEST_SEASON, LATEST_SEASON } from "@/hooks/useSelection";
 import type { ClubSeasonRecord } from "@/types/api";
+import { formatGoalDifference } from "@/utils/goalDifference";
 import { prefersReducedMotion } from "@/utils/motion";
 import { seasonLabel } from "@/utils/season";
 import "./SeasonBySeason.scss";
@@ -74,12 +75,6 @@ function placeLine({ position, points }: ClubSeasonRecord) {
 // "26 wins, 7 draws, 5 defeats"
 function recordLine({ wins, draws, losses }: ClubSeasonRecord) {
   return `${count(wins, "win")}, ${count(draws, "draw")}, ${count(losses, "defeat")}`;
-}
-
-// "+44", "0", "-12"
-function goalDifference({ goalsFor, goalsAgainst }: ClubSeasonRecord) {
-  const difference = goalsFor - goalsAgainst;
-  return difference > 0 ? `+${difference}` : String(difference);
 }
 
 // When the line reaches a point (0 to 1 of the draw), undoing its ease-out,
@@ -470,7 +465,7 @@ export default function SeasonBySeason({
                 <td className="season-by-season__wide">
                   {record.goalsAgainst}
                 </td>
-                <td>{goalDifference(record)}</td>
+                <td>{formatGoalDifference(record)}</td>
                 <td className="season-by-season__points">{record.points}</td>
               </tr>
             ))}

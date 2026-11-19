@@ -4,8 +4,8 @@ import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
-import { formatGoalDifference } from "@/features/clubs/utils/clubPage";
 import type { Standing } from "@/types/api";
+import { formatGoalDifference } from "@/utils/goalDifference";
 import "./ClubLeagueTable.scss";
 
 // Props for the ClubLeagueTable component: the selected league, season and

@@ -6,11 +6,11 @@ import { useClub } from "@/features/clubs/api/club";
 import { useClubSeasons } from "@/features/clubs/api/clubSeasons";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import {
-  formatGoalDifference,
   getClubSummary,
   shortClubNames,
 } from "@/features/clubs/utils/clubPage";
 import { EARLIEST_SEASON, LATEST_SEASON } from "@/hooks/useSelection";
+import { formatGoalDifference } from "@/utils/goalDifference";
 import { seasonLabel } from "@/utils/season";
 import "./ClubBanner.scss";
 
