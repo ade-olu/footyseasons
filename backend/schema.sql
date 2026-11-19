@@ -201,3 +201,17 @@ CREATE TABLE fotmob_player_stats (
 
     PRIMARY KEY (season_id, understat_player_id)
 );
+
+
+-- One row per trophy win (league titles and cups, all-time) from the
+-- hand-kept honours.csv, loaded by 11. Seasons before 2014/15 are kept, so a
+-- club's count can stop at any season.
+CREATE TABLE club_honours (
+    competition   TEXT NOT NULL,      -- e.g. "premier_league", "fa_cup", "champions_league"
+    start_year    INTEGER NOT NULL,   -- the season it was won (2025 = 2025/26)
+    club_id       INTEGER NOT NULL,
+
+    FOREIGN KEY (club_id) REFERENCES clubs(club_id),
+
+    PRIMARY KEY (club_id, competition, start_year)
+);
