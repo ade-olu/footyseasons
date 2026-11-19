@@ -4,10 +4,12 @@ import { useSelection } from "@/hooks/useSelection";
 import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import "./SectionHeader.scss";
 
-// Link shown on the right of the header (e.g. "All players ›")
+// Link shown on the right of the header (e.g. "All players ›"); phones show
+// shortLabel, "See all" by default
 type SectionHeaderAction = {
   label: string;
   to: LeaguePagePath;
+  shortLabel?: string;
 };
 
 // Props for the SectionHeader component: a title, plus an optional description and link
@@ -42,7 +44,9 @@ export default function SectionHeader({
         >
           <span className="section-header__action-label">{action.label}</span>
           {/* Shorter label on phones */}
-          <span className="section-header__action-label-short">See all</span>
+          <span className="section-header__action-label-short">
+            {action.shortLabel ?? "See all"}
+          </span>
           <ArrowRightIcon className="section-header__action-icon" aria-hidden />
         </Link>
       )}
