@@ -33,10 +33,10 @@ const PAGE_SIZE = 6;
 
 const TITLE = "Results";
 
-// "All 38 league matches of 2025/26, newest first."
+// "All 38 league matches of 2025/26, in date order."
 function description(venue: Venue, count: number, season: number) {
   const matches = venue === "all" ? "league matches" : `${venue} matches`;
-  return `All ${count} ${matches} of ${seasonLabel(season)}, newest first.`;
+  return `All ${count} ${matches} of ${seasonLabel(season)}, in date order.`;
 }
 
 // A date strip with the matchweek, above the match
@@ -55,8 +55,8 @@ function MatchItem({ match, hidden }: { match: Match; hidden?: boolean }) {
   );
 }
 
-// The club's league matches, newest first, six a page, all or home or away;
-// the pager's left arrow goes back in the season
+// The club's league matches in date order, six a page, all or home or away;
+// it opens on the latest page and the left arrow goes back in the season
 export default function ClubResults({
   league,
   season,
@@ -65,10 +65,10 @@ export default function ClubResults({
 }: ClubResultsProps) {
   const { data, isError } = useSeasonData(league, season);
   const [venue, setVenue] = useState<Venue>("all");
-  // Pages back from the newest: 1 is the latest six matches
+  // Pages back from the newest: 1 is the newest page
   const [page, setPage] = useState(1);
 
-  // Another club or season starts again from page 1
+  // Another club or season starts again from the newest page
   const key = `${league}-${season}-${clubId}`;
   const [shownKey, setShownKey] = useState(key);
   if (key !== shownKey) {
@@ -99,11 +99,14 @@ export default function ClubResults({
           ? awayClubId === clubId
           : homeClubId === clubId || awayClubId === clubId,
     )
-    .sort((a, b) => b.utcDate.localeCompare(a.utcDate));
+    .sort((a, b) => a.utcDate.localeCompare(b.utcDate));
 
+  // In date order, as on FotMob: pages fill from the start of the season, so
+  // the newest page holds what's left ("37–38 of 38") with the latest match at
+  // the bottom, and the left arrow goes back
   const pageCount = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
-  const currentPage = Math.min(page, pageCount);
-  const first = (currentPage - 1) * PAGE_SIZE;
+  const seasonPage = pageCount - Math.min(page, pageCount) + 1;
+  const first = (seasonPage - 1) * PAGE_SIZE;
   const pageMatches = matches.slice(first, first + PAGE_SIZE);
   // Invisible copies keep a short page as tall as a full one, so the pager
   // doesn't move
@@ -113,11 +116,7 @@ export default function ClubResults({
         () => pageMatches[0],
       )
     : [];
-  // Pages and the count run in season order, so the newest matches are the
-  // last page ("33–38 of 38") and the left arrow goes back in the season
-  const seasonPage = pageCount - currentPage + 1;
-  const last = matches.length - first;
-  const range = `${last - pageMatches.length + 1}–${last}`;
+  const range = `${first + 1}–${first + pageMatches.length}`;
 
   return (
     <SectionCard className={classes}>
