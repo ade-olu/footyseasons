@@ -68,15 +68,31 @@
     }
   }
 
-  // Own element with min-width: 0 so the ellipsis works inside the flex row
+  // Fills the space beside the crest, so the name can measure its room;
+  // min-width: 0 lets it shrink inside the flex row
   &__club-name {
+    flex: 1;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  // Short name, swapped for the three-letter code on phones
+  &__club--home &__club-name {
+    text-align: right;
+  }
+
+  // The table name, shorter when it doesn't fit; swapped for the code on phones
+  &__name-short {
+    display: block;
+  }
+
+  &__fitted {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &__name-tla {
     display: none;
   }

@@ -1,4 +1,5 @@
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
+import FittedName from "@/components/ui/FittedName/FittedName";
 import { getTableName } from "@/data/tableNames";
 import {
   isUpcoming,
@@ -21,7 +22,8 @@ type MatchRowOptions = MatchRowProps & {
 
 type Side = "home" | "away";
 
-// Club name (table name, or three-letter code on phones) and crest
+// Club name and crest: the table name, or the short name when it doesn't fit
+// ("Valladolid"); the three-letter code on phones
 function Club({
   match,
   side,
@@ -30,7 +32,11 @@ function Club({
   const id = side === "home" ? match.homeClubId : match.awayClubId;
   const name =
     side === "home" ? match.homeClubDisplayName : match.awayClubDisplayName;
+  const shortName =
+    side === "home" ? match.homeClubShortName : match.awayClubShortName;
   const tla = side === "home" ? match.homeClubTla : match.awayClubTla;
+  const tableName = getTableName(id, name);
+  const shortNames = shortName.length < tableName.length ? [shortName] : [];
   const crestUrl =
     side === "home" ? match.homeClubCrestUrl : match.awayClubCrestUrl;
 
@@ -38,9 +44,18 @@ function Club({
     <p
       className={`match-row__club match-row__club--${side}${lost ? " match-row__club--lost" : ""}`}
     >
-      <span className="match-row__club-name" title={name}>
-        <span className="match-row__name-short">{getTableName(id, name)}</span>
-        <span className="match-row__name-tla">{tla}</span>
+      <span className="match-row__club-name">
+        <span className="match-row__name-short">
+          <FittedName
+            className="match-row__fitted"
+            name={tableName}
+            shortNames={shortNames}
+            title={name}
+          />
+        </span>
+        <span className="match-row__name-tla" title={name}>
+          {tla}
+        </span>
       </span>
       <span className="match-row__crest-slot">
         <ClubCrest className="match-row__crest" src={crestUrl} name={name} />
