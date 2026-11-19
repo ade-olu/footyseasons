@@ -9,7 +9,8 @@ player's stats, the award winners and the final day.
 
 > Still in development. The Overview, Standings, Matches and Player Stats pages
 > are done. Clubs is in progress: the directory is done, and each club's page
-> has its banner, highlights and phone tabs so far.
+> has its banner, highlights, position chart, table, home and away split and
+> results so far.
 
 ## Why
 
@@ -33,7 +34,9 @@ the same clean dashboard feel as the apps I use every week.
   season, with each winner's stats
 - **Clubs:** Every club in the season, A to Z, with its finish, points and
   last 5 results, and a page for each club with its season summary, best win
-  streak, clean sheets, and biggest win and defeat
+  streak, clean sheets, biggest win and defeat, an interactive chart of its
+  league position after every round, the table around it, its home and away
+  split, and every result, filterable by home or away
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
   (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
