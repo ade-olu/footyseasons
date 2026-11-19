@@ -66,7 +66,8 @@ $phone-medium: 412px;
   }
 }
 
-// Below desktop width (1440px): banner titles go from 48 to 40px
+// Below desktop width (1440px): banner titles go from 48 to 40px and the club
+// page's Results header stacks
 @mixin below-desktop {
   @media (max-width: #{$desktop - 0.02px}) {
     @content;

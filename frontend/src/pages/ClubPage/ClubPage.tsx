@@ -6,6 +6,7 @@ import ClubBanner from "@/features/clubs/components/ClubBanner/ClubBanner";
 import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighlights";
 import ClubLeagueTable from "@/features/clubs/components/ClubLeagueTable/ClubLeagueTable";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
+import ClubResults from "@/features/clubs/components/ClubResults/ClubResults";
 import HomeAndAway from "@/features/clubs/components/HomeAndAway/HomeAndAway";
 import PositionChart from "@/features/clubs/components/PositionChart/PositionChart";
 import {
@@ -97,6 +98,13 @@ export default function ClubPage({ league, season }: ClubPageProps) {
           {/* Five rows of the table around the club */}
           <ClubLeagueTable
             className={`club-page__table ${onTab("")}`}
+            league={league}
+            season={season}
+            clubId={clubId}
+          />
+          {/* The club's matches, six a page */}
+          <ClubResults
+            className={`club-page__results ${onTab("matches")}`}
             league={league}
             season={season}
             clubId={clubId}
