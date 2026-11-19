@@ -14,6 +14,7 @@ import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
 import { TABLE_PLACES } from "@/data/tablePlaces";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
+import { possessive } from "@/features/clubs/utils/clubPage";
 import {
   getPositionByRound,
   type RoundPosition,
@@ -35,11 +36,6 @@ const TITLE = "Position by matchweek";
 
 // Room either side of the line for the tooltip to line up with a 28px marker
 const MARKER_OVERHANG = 14;
-
-// "Arsenal's", "Wolverhampton Wanderers'"
-function possessive(name: string) {
-  return name.endsWith("s") ? `${name}'` : `${name}'s`;
-}
 
 // "Top of the table for 31 of 38 rounds.", or the highest and lowest places
 function summary(rounds: RoundPosition[]) {

@@ -59,6 +59,11 @@ export function shortClubNames(club: {
     .sort((a, b) => b.length - a.length);
 }
 
+// "Arsenal's", "Wolverhampton Wanderers'"
+export function possessive(name: string) {
+  return name.endsWith("s") ? `${name}'` : `${name}'s`;
+}
+
 // "+44", "0", "-12"
 export function formatGoalDifference({ goalsFor, goalsAgainst }: Standing) {
   const difference = goalsFor - goalsAgainst;
