@@ -103,6 +103,50 @@ router.get("/:id/seasons", (req, res) => {
   res.json(seasons);
 });
 
+// Get a club's trophies (all-time) and season awards (since 2014/15), each
+// counted up to the selected season (?season=, every season when left out).
+router.get("/:id/honours", (req, res) => {
+  const clubId = parseInteger(req.params.id, "id", res);
+  if (clubId === undefined) return;
+  const startYear = parseSeason(req, res);
+  if (startYear === undefined) return;
+
+  const club = db
+    .prepare("SELECT club_id FROM clubs WHERE club_id = ?")
+    .get(clubId);
+
+  if (!club) {
+    return res.status(404).json({ error: `No club found with id ${clubId}` });
+  }
+
+  const trophies = db
+    .prepare(
+      `
+    SELECT competition, COUNT(*) AS count, MAX(start_year) AS lastStartYear
+    FROM club_honours
+    WHERE club_id = ? AND (? IS NULL OR start_year <= ?)
+    GROUP BY competition
+  `,
+    )
+    .all(clubId, startYear, startYear);
+
+  // A shared award is one row per winner, so count seasons
+  const awards = db
+    .prepare(
+      `
+    SELECT sa.award, COUNT(DISTINCT s.start_year) AS count,
+      MAX(s.start_year) AS lastStartYear
+    FROM season_awards sa
+    JOIN seasons s ON s.season_id = sa.season_id
+    WHERE sa.club_id = ? AND (? IS NULL OR s.start_year <= ?)
+    GROUP BY sa.award
+  `,
+    )
+    .all(clubId, startYear, startYear);
+
+  res.json({ trophies, awards });
+});
+
 // Get the matches played by a club, optionally for one season (?season=).
 router.get("/:id/matches", (req, res) => {
   const clubId = parseInteger(req.params.id, "id", res);
