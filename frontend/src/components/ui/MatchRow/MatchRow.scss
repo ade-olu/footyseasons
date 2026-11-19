@@ -11,7 +11,7 @@
 
   // Narrower columns and gaps on phones, so the codes fit at 360px
   @include below-tablet {
-    grid-template-columns: rem(32) minmax(0, 1fr) auto minmax(0, 1fr) rem(32);
+    grid-template-columns: rem(36) minmax(0, 1fr) auto minmax(0, 1fr) rem(36);
     gap: rem(8);
     padding: rem(16);
   }
