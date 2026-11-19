@@ -4,6 +4,7 @@ import { useClub } from "@/features/clubs/api/club";
 import { useClubSeasons } from "@/features/clubs/api/clubSeasons";
 import ClubBanner from "@/features/clubs/components/ClubBanner/ClubBanner";
 import ClubHighlights from "@/features/clubs/components/ClubHighlights/ClubHighlights";
+import ClubHonours from "@/features/clubs/components/ClubHonours/ClubHonours";
 import ClubLeagueTable from "@/features/clubs/components/ClubLeagueTable/ClubLeagueTable";
 import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import ClubResults from "@/features/clubs/components/ClubResults/ClubResults";
@@ -127,6 +128,14 @@ export default function ClubPage({ league, season }: ClubPageProps) {
         season={season}
         clubId={clubId}
       />
+      {/* League titles, cups and season awards */}
+      {isInSeason && (
+        <ClubHonours
+          className={onTab("history")}
+          season={season}
+          clubId={clubId}
+        />
+      )}
       {/* The club's leaders in goals, assists and minutes */}
       {isInSeason && club.data && (
         <ClubTopPlayers
