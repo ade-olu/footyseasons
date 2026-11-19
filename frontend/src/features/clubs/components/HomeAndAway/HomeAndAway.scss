@@ -1,0 +1,106 @@
+@use "@/styles/foundations" as *;
+
+.home-and-away {
+  &__comparison {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+
+  &__split {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+  }
+
+  &__totals {
+    display: flex;
+    justify-content: space-between;
+    gap: rem(16);
+  }
+
+  &__total {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
+
+    &--away {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+
+  &__total-value {
+    @include text(28);
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+
+  &__total-label {
+    @include text(14);
+    color: $color-text-secondary;
+  }
+
+  // Home and away shares of the points, split by a 4px gap
+  &__bar {
+    display: flex;
+    gap: rem(4);
+    height: rem(8);
+    border-radius: $radius-full;
+    overflow: hidden;
+  }
+
+  &__bar-home,
+  &__bar-away {
+    flex-basis: 0;
+  }
+
+  &__bar-home {
+    background-color: $color-accent;
+  }
+
+  &__bar-away {
+    background-color: $color-bg-inverse;
+  }
+
+  &__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: rem(8);
+    padding: rem(12) 0;
+    @include text(14);
+    color: $color-text-primary;
+
+    & + & {
+      border-top: 1px solid $color-border-default;
+    }
+  }
+
+  &__label {
+    color: $color-text-secondary;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  &__away {
+    text-align: right;
+  }
+
+  // The better side is medium, the other muted; level rows stay as they are
+  &__row--home &__home,
+  &__row--away &__away {
+    font-weight: 500;
+  }
+
+  &__row--home &__away,
+  &__row--away &__home {
+    color: $color-text-secondary;
+  }
+}
