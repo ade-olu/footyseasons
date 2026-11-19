@@ -1,5 +1,4 @@
 import {
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -17,6 +16,7 @@ import ChartLine from "@/features/clubs/components/ChartLine/ChartLine";
 import ChartMarker from "@/features/clubs/components/ChartMarker/ChartMarker";
 import ChartTooltip from "@/features/clubs/components/ChartTooltip/ChartTooltip";
 import { useEasedValues } from "@/features/clubs/hooks/useEasedValues";
+import { useTapOutside } from "@/features/clubs/hooks/useTapOutside";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { possessive } from "@/features/clubs/utils/clubPage";
 import {
@@ -132,14 +132,7 @@ export default function PositionChart({
   }, [shownRound]);
 
   // A tap anywhere else closes the tooltip
-  useEffect(() => {
-    if (active === null) return;
-    const close = (event: globalThis.PointerEvent) => {
-      if (!plotRef.current?.contains(event.target as Node)) setActive(null);
-    };
-    document.addEventListener("pointerdown", close);
-    return () => document.removeEventListener("pointerdown", close);
-  }, [active]);
+  useTapOutside(plotRef, active !== null, () => setActive(null));
 
   const club = data?.standings.standings.find((row) => row.clubId === clubId);
   const rounds = data

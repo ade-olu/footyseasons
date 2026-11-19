@@ -1,5 +1,4 @@
 import {
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -17,6 +16,7 @@ import ChartLine from "@/features/clubs/components/ChartLine/ChartLine";
 import ChartMarker from "@/features/clubs/components/ChartMarker/ChartMarker";
 import ChartTooltip from "@/features/clubs/components/ChartTooltip/ChartTooltip";
 import { useEasedValues } from "@/features/clubs/hooks/useEasedValues";
+import { useTapOutside } from "@/features/clubs/hooks/useTapOutside";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { possessive } from "@/features/clubs/utils/clubPage";
 import { EARLIEST_SEASON, LATEST_SEASON } from "@/hooks/useSelection";
@@ -188,14 +188,7 @@ export default function SeasonBySeason({
   }, [shownYear]);
 
   // A tap anywhere else closes the tooltip
-  useEffect(() => {
-    if (active === null) return;
-    const close = (event: globalThis.PointerEvent) => {
-      if (!plotRef.current?.contains(event.target as Node)) setActive(null);
-    };
-    document.addEventListener("pointerdown", close);
-    return () => document.removeEventListener("pointerdown", close);
-  }, [active]);
+  useTapOutside(plotRef, active !== null, () => setActive(null));
 
   const name = club.data?.club.displayName;
   const classes = cx("season-by-season", className);
