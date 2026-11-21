@@ -53,11 +53,3 @@ export const TROPHIES: Honour[] = [
   { key: "club_world_cup", name: "FIFA Club World Cup" },
   { key: "intercontinental_cup", name: "Intercontinental Cup" },
 ].map((trophy) => ({ ...trophy, logo: trophy.logo ?? cupLogo(trophy.key) }));
-
-// Season awards, in the order of the Overview's season awards
-export const AWARDS: Honour[] = [
-  { key: "player", name: "Player of the Season" },
-  { key: "manager", name: "Manager of the Season" },
-  { key: "goalkeeper", name: "Goalkeeper of the Season" },
-  { key: "young_player", name: "Young Player of the Season" },
-];

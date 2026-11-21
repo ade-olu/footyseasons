@@ -2,9 +2,8 @@ import { CupStar as TrophyIcon } from "reicon-react";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import { useClubHonours } from "@/features/clubs/api/clubHonours";
-import { AWARDS, TROPHIES, type Honour } from "@/features/clubs/data/honours";
-import { EARLIEST_SEASON, LATEST_SEASON } from "@/hooks/useSelection";
-import type { ClubHonour } from "@/types/api";
+import { TROPHIES } from "@/features/clubs/data/honours";
+import { LATEST_SEASON } from "@/hooks/useSelection";
 import { cx } from "@/utils/cx";
 import { seasonLabel } from "@/utils/season";
 import "./ClubHonours.scss";
@@ -17,26 +16,17 @@ type ClubHonoursProps = {
   className?: string;
 };
 
-const TITLE = "Titles and awards";
+const TITLE = "Trophies";
 
-// "All-time trophies, awards since 2014/15.", up to an earlier season
+// "All-time trophies.", or up to an earlier season
 function description(season: number) {
-  const since = `awards since ${seasonLabel(EARLIEST_SEASON)}`;
   return season === LATEST_SEASON
-    ? `All-time trophies, ${since}.`
-    : `All-time trophies up to ${seasonLabel(season)}, ${since}.`;
+    ? "All-time trophies."
+    : `All-time trophies up to ${seasonLabel(season)}.`;
 }
 
-// The club's honours in the list's order, only those it has won
-function won(list: Honour[], counts: Map<string, ClubHonour>) {
-  return list.flatMap((honour) => {
-    const count = counts.get(honour.key);
-    return count ? [{ ...honour, ...count }] : [];
-  });
-}
-
-// League titles and cups (all-time) and season awards (since 2014/15), each
-// counted up to the selected season; hidden when the club has none
+// League titles and cups, all-time, counted up to the selected season; hidden
+// when the club has none
 export default function ClubHonours({
   season,
   clubId,
@@ -45,10 +35,11 @@ export default function ClubHonours({
   const { data } = useClubHonours(clubId, season);
   if (!data) return null;
 
-  const items = [
-    ...won(TROPHIES, new Map(data.trophies.map((t) => [t.competition, t]))),
-    ...won(AWARDS, new Map(data.awards.map((a) => [a.award, a]))),
-  ];
+  const counts = new Map(data.trophies.map((t) => [t.competition, t]));
+  const items = TROPHIES.flatMap((trophy) => {
+    const count = counts.get(trophy.key);
+    return count ? [{ ...trophy, ...count }] : [];
+  });
   if (items.length === 0) return null;
 
   return (

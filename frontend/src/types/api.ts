@@ -77,8 +77,8 @@ export type ClubSeasons = {
   startYears: number[]; // Oldest first
 };
 
-// GET /api/clubs/:id/honours: trophies (all-time) and season awards (since
-// 2014/15), each counted up to the selected season
+// GET /api/clubs/:id/honours: all-time trophies, counted up to the selected
+// season
 export type ClubHonour = {
   count: number;
   lastStartYear: number; // The season it was last won (2025 = 2025/26)
@@ -86,7 +86,6 @@ export type ClubHonour = {
 
 export type ClubHonoursResponse = {
   trophies: (ClubHonour & { competition: string })[];
-  awards: (ClubHonour & { award: string })[];
 };
 
 // One season in GET /api/clubs/:id/seasons (oldest first): the final table row

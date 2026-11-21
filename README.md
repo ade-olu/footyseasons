@@ -10,7 +10,7 @@ player's stats, the award winners and the final day.
 > Still in development. The Overview, Standings, Matches and Player Stats pages
 > are done. Clubs is in progress: the directory is done, and each club's page
 > has its banner, highlights, position chart, table, home and away split,
-> results, season-by-season history, titles and awards, and top players so far.
+> results, season-by-season history, trophies, and top players so far.
 
 ## Why
 
@@ -37,8 +37,8 @@ the same clean dashboard feel as the apps I use every week.
   streak, clean sheets, biggest win and defeat, an interactive chart of its
   league position after every round, the table around it, its home and away
   split, every result, filterable by home or away, its final position in every
-  season since 2014/15 as a chart or a table, its trophies and awards (all-time
-  titles and cups, counted up to the season you're viewing), and its leaders
+  season since 2014/15 as a chart or a table, its trophies (all-time titles and
+  cups, counted up to the season you're viewing), and its leaders
   in goals, assists and minutes
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
@@ -195,7 +195,7 @@ frontend/
       clubs/
         api/          # the feature's API calls
         components/   # directory cards, club page sections and charts
-        data/         # the competitions in Titles and awards
+        data/         # the competitions in Trophies
         hooks/        # data combined for the directory
         utils/        # club page helpers (summary, streaks, addresses)
     components/       # shared layout and ui components
