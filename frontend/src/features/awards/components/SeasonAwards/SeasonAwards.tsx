@@ -4,6 +4,7 @@ import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import type { Award, AwardType } from "@/types/api"; // Types for API responses
+import { countLabel } from "@/utils/plural";
 import "./SeasonAwards.scss";
 
 // Card titles for each award
@@ -19,11 +20,6 @@ type SeasonAwardsProps = {
   league: LeagueCode;
   season: number;
 };
-
-// "9 Goals", "1 Goal"
-function countLabel(value: number, singular: string, plural: string) {
-  return `${value} ${value === 1 ? singular : plural}`;
-}
 
 // Stats line in the card's green pill
 function getStats(award: Award) {

@@ -29,6 +29,7 @@ import {
 } from "@/features/clubs/utils/positionByRound";
 import { seasonLabel } from "@/utils/season";
 import { cx } from "@/utils/cx";
+import { countLabel } from "@/utils/plural";
 import "./PositionChart.scss";
 
 // Props for the PositionChart component: the selected league, season and club,
@@ -73,7 +74,7 @@ function roundLine({ round, match }: RoundPosition) {
 
 // "6th, 3 points"
 function placeLine({ position, points }: RoundPosition) {
-  return `${ordinal(position)}, ${points} ${points === 1 ? "point" : "points"}`;
+  return `${ordinal(position)}, ${countLabel(points, "point")}`;
 }
 
 // "Man United 0–1 Arsenal"

@@ -7,6 +7,7 @@ import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
 import type { PlayersResponse, Standing } from "@/types/api"; // Types for API responses
 import { isFinished, totalGoals } from "@/utils/match";
+import { plural } from "@/utils/plural";
 
 // Everything the highlight cards need, worked out from the standings, matches and players responses
 type HighlightsData = {
@@ -121,7 +122,7 @@ export default function SeasonHighlights({
         <HighlightCard
           title="Best Win Streak"
           value={streakClub.shortName}
-          description={`${streak} consecutive ${streak === 1 ? "win" : "wins"}`}
+          description={`${streak} consecutive ${plural(streak, "win")}`}
           club={{ name: streakClub.displayName, crestUrl: streakClub.crestUrl }}
           shortNames={[
             getTableName(streakClub.clubId, streakClub.displayName),

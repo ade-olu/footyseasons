@@ -1,6 +1,7 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import type { LeagueCode } from "@/data/leagues";
 import { isPlayed } from "@/utils/match";
+import { plural } from "@/utils/plural";
 import "./MatchesBanner.scss";
 
 // One part of the home win / draw / away win split
@@ -60,7 +61,7 @@ function getBannerContent({ standings, matches }: SeasonData): {
         : `${played.length} of ${total} matches played in the ${label} season, ${range}.`,
     shares: [
       { side: "home", count: homeWins, label: "home wins" },
-      { side: "draw", count: draws, label: draws === 1 ? "draw" : "draws" },
+      { side: "draw", count: draws, label: plural(draws, "draw") },
       { side: "away", count: awayWins, label: "away wins" },
     ],
   };

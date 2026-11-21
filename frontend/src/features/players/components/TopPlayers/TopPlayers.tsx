@@ -4,6 +4,7 @@ import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
 import type { LeagueCode } from "@/data/leagues";
+import { plural } from "@/utils/plural";
 import "./TopPlayers.scss";
 
 // Number of players shown on the overview
@@ -83,7 +84,7 @@ export default function TopPlayers({
                 <p className="top-players__stat">
                   <span className="top-players__stat-value">{value}</span>
                   <span className="top-players__stat-label">
-                    {value === 1 ? STATS[stat].singular : STATS[stat].label}
+                    {plural(value, STATS[stat].singular, STATS[stat].label)}
                   </span>
                 </p>
               </li>

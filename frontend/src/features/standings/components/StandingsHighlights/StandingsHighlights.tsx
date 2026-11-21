@@ -5,6 +5,7 @@ import { getTableName } from "@/data/tableNames";
 import { TABLE_PLACES } from "@/data/tablePlaces";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
+import { countLabel } from "@/utils/plural";
 
 // Everything the cards need, worked out from the standings
 type StandingsHighlightsData = {
@@ -91,7 +92,7 @@ export default function StandingsHighlights({
     <>
       <HighlightCard
         title={isFinal ? "Title Margin" : "Lead at the Top"}
-        value={`${margin} ${margin === 1 ? "pt" : "pts"}`}
+        value={countLabel(margin, "pt")}
         description={
           runnerUp
             ? `${leader.displayName} over ${runnerUp.displayName}`

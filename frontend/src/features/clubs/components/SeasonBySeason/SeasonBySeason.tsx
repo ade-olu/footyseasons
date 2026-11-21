@@ -29,6 +29,7 @@ import { formatGoalDifference } from "@/utils/goalDifference";
 import { prefersReducedMotion } from "@/utils/motion";
 import { seasonLabel } from "@/utils/season";
 import { cx } from "@/utils/cx";
+import { countLabel } from "@/utils/plural";
 import "./SeasonBySeason.scss";
 
 // Props for the SeasonBySeason component: the selected league, season and
@@ -61,7 +62,7 @@ function description(name: string, records: ClubSeasonRecord[]) {
   const titles = records.filter(({ isChampion }) => isChampion).length;
   const since = `${possessive(name)} final league position in each season since ${seasonLabel(EARLIEST_SEASON)}`;
   const won = titles
-    ? `, with ${titles} ${titles === 1 ? "title" : "titles"} in that time.`
+    ? `, with ${countLabel(titles, "title")} in that time.`
     : ".";
   const gaps =
     records.length < SEASONS.length
@@ -70,19 +71,14 @@ function description(name: string, records: ClubSeasonRecord[]) {
   return `${since}${won}${gaps}`;
 }
 
-// "1 win", "7 draws"
-function count(value: number, word: string) {
-  return `${value} ${word}${value === 1 ? "" : "s"}`;
-}
-
 // "1st, 85 points"
 function placeLine({ position, points }: ClubSeasonRecord) {
-  return `${ordinal(position)}, ${count(points, "point")}`;
+  return `${ordinal(position)}, ${countLabel(points, "point")}`;
 }
 
 // "26 wins, 7 draws, 5 defeats"
 function recordLine({ wins, draws, losses }: ClubSeasonRecord) {
-  return `${count(wins, "win")}, ${count(draws, "draw")}, ${count(losses, "defeat")}`;
+  return `${countLabel(wins, "win")}, ${countLabel(draws, "draw")}, ${countLabel(losses, "defeat")}`;
 }
 
 // When the line reaches a point (0 to 1 of the draw), undoing its ease-out,

@@ -3,6 +3,7 @@ import { useSeasonData } from "@/api/seasonData";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import { best, isFinished, margin, totalGoals } from "@/utils/match";
+import { countLabel } from "@/utils/plural";
 import "./MatchOfTheSeason.scss";
 
 // Props for the MatchOfTheSeason component: the selected league and season start year
@@ -77,7 +78,7 @@ export default function MatchOfTheSeason({
             {`${match.homeClubDisplayName} vs ${match.awayClubDisplayName}`}
           </p>
           <p className="match-of-the-season__description">
-            {`${goals} ${goals === 1 ? "goal" : "goals"}, the most in any ${label} ${leagueName} match.`}
+            {`${countLabel(goals, "goal")}, the most in any ${label} ${leagueName} match.`}
           </p>
         </div>
       </div>

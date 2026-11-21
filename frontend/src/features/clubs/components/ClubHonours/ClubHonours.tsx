@@ -6,6 +6,7 @@ import { TROPHIES } from "@/features/clubs/data/honours";
 import { LATEST_SEASON } from "@/hooks/useSelection";
 import { cx } from "@/utils/cx";
 import { seasonLabel } from "@/utils/season";
+import { countLabel } from "@/utils/plural";
 import "./ClubHonours.scss";
 
 // Props for the ClubHonours component: the selected season and club, plus a
@@ -74,7 +75,7 @@ export default function ClubHonours({
             </div>
             <p
               className="club-honours__count"
-              aria-label={`${item.count} ${item.count === 1 ? "time" : "times"}`}
+              aria-label={countLabel(item.count, "time")}
             >
               {item.count}
             </p>

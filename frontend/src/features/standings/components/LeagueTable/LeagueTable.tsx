@@ -11,6 +11,7 @@ import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import { TABLE_PLACES } from "@/data/tablePlaces";
 import { getClubForm } from "@/utils/form";
 import type { Standing } from "@/types/api"; // Types for API responses
+import { countLabel, plural } from "@/utils/plural";
 import "./LeagueTable.scss";
 
 // Which matches the table counts
@@ -90,8 +91,8 @@ export default function LeagueTable({ league, season }: LeagueTableProps) {
     const games = Math.max(0, ...rows.map((club) => club.gamesPlayed));
     description =
       matchFilter === "overall"
-        ? `${prefix} ${leagueName} standings after ${games} ${games === 1 ? "matchweek" : "matchweeks"}.`
-        : `${prefix} ${leagueName} ${matchFilter} table after ${games} ${matchFilter} ${games === 1 ? "game" : "games"}.`;
+        ? `${prefix} ${leagueName} standings after ${countLabel(games, "matchweek")}.`
+        : `${prefix} ${leagueName} ${matchFilter} table after ${games} ${matchFilter} ${plural(games, "game")}.`;
   }
 
   return (

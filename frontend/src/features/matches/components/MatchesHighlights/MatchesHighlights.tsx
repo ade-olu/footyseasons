@@ -5,6 +5,7 @@ import type { LeagueCode } from "@/data/leagues";
 import { getTableName } from "@/data/tableNames";
 import type { PlayedMatch } from "@/types/api"; // Types for API responses
 import { best, isFinished, margin, totalGoals } from "@/utils/match";
+import { countLabel } from "@/utils/plural";
 
 // Props for the MatchesHighlights component: the selected league and season start year (2025 = 2025/26)
 type MatchesHighlightsProps = {
@@ -82,7 +83,7 @@ export default function MatchesHighlights({
   const biggestWin = best(finished, margin, totalGoals);
   const common = mostCommonScore(finished);
   const commonMatches = common
-    ? `${common.count} ${common.count === 1 ? "match" : "matches"}`
+    ? countLabel(common.count, "match", "matches")
     : "";
 
   // Returns a fragment so each card is a direct child of the page grid

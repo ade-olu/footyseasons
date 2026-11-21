@@ -5,6 +5,7 @@ import { ordinal } from "@/features/clubs/utils/clubDirectory";
 import { leaguePath } from "@/hooks/useSelection";
 import type { Match, PlayedMatch, Standing } from "@/types/api";
 import { best, isFinished, margin, totalGoals } from "@/utils/match";
+import { countLabel } from "@/utils/plural";
 import { seasonLabel } from "@/utils/season";
 
 // "Brighton & Hove Albion" -> "brighton-hove-albion", "Atlético" -> "atletico"
@@ -64,11 +65,6 @@ export function possessive(name: string) {
   return name.endsWith("s") ? `${name}'` : `${name}'s`;
 }
 
-// "1 point", "7 points"
-function count(value: number, word: string, plural = `${word}s`) {
-  return `${value} ${value === 1 ? word : plural}`;
-}
-
 // "2025/26 Premier League champions by 7 points, with 26 wins, 7 draws and 5 losses."
 export function getClubSummary(
   club: Standing,
@@ -78,7 +74,7 @@ export function getClubSummary(
   season: number,
 ) {
   const competition = `${seasonLabel(season)} ${getLeagueName(league)}`;
-  const record = `with ${count(club.wins, "win")}, ${count(club.draws, "draw")} and ${count(club.losses, "loss", "losses")}`;
+  const record = `with ${countLabel(club.wins, "win")}, ${countLabel(club.draws, "draw")} and ${countLabel(club.losses, "loss", "losses")}`;
   const relegation = TABLE_PLACES[`${league}-${season}`]?.relegation ?? [];
   const finish = club.position === null ? null : ordinal(club.position);
 
@@ -86,7 +82,7 @@ export function getClubSummary(
     const runnerUp = standings.find(({ clubId }) => clubId !== championClubId);
     const gap = runnerUp ? club.points - runnerUp.points : 0;
     const margin =
-      gap > 0 ? `by ${count(gap, "point")}` : "on goal difference";
+      gap > 0 ? `by ${countLabel(gap, "point")}` : "on goal difference";
     return `${competition} champions ${margin}, ${record}.`;
   }
   if (club.position !== null && relegation.includes(club.position)) {
