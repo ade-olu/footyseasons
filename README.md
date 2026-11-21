@@ -73,16 +73,17 @@ Transfermarkt ─────┤
 footylogos.com ────┘
 ```
 
-Ten Python scripts in `backend/` pull data from five sources into one SQLite
-file. The Express API serves it as JSON, and the React app fetches from the API.
+Thirteen Python scripts in `backend/` pull data from five sources into one
+SQLite file. The Express API serves it as JSON, and the React app fetches from
+the API.
 
-| Source                                                                       | Used for                                                 |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------- |
-| [football-data.org](https://www.football-data.org/)                          | Clubs, matches and tables from 2023/24 onwards           |
-| [Understat](https://understat.com/)                                          | Older match results and all player stats                 |
-| [FotMob](https://www.fotmob.com/)                                            | Player photos and names, defending and goalkeeping stats |
-| [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) | Player birth dates and positions                         |
-| [footylogos.com](https://footylogos.com/)                                    | Club crests                                              |
+| Source                                                                       | Used for                                                                      |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [football-data.org](https://www.football-data.org/)                          | Clubs, matches and tables from 2023/24 onwards                                |
+| [Understat](https://understat.com/)                                          | Older match results and all player stats                                      |
+| [FotMob](https://www.fotmob.com/)                                            | Player and manager photos, player names, defending and goalkeeping stats      |
+| [transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) | Player birth dates and positions, lineups, shirt numbers, values and managers |
+| [footylogos.com](https://footylogos.com/)                                    | Club crests                                                                   |
 
 ### Rebuilding old league tables
 
@@ -189,7 +190,7 @@ python 02_fetch_matches.py
 # ...
 python 10_fetch_fotmob_stats.py
 python 11_load_honours.py      # trophies from honours.csv, no requests
-python 12_load_lineups.py      # lineups and managers from transfermarkt-datasets
+python 12_load_lineups.py      # lineups and managers, no requests once cached
 python 13_fetch_manager_photos.py
 ```
 
@@ -241,5 +242,6 @@ and features only import shared code, never each other.
 
 A personal, non-commercial project. Data from football-data.org, Understat and
 FotMob, player and manager photos and names from FotMob, birth dates, positions,
-lineups and managers from transfermarkt-datasets, season awards and European places from Wikipedia and
-crests from footylogos.com. Club names and crests belong to their clubs.
+lineups and managers from transfermarkt-datasets, season awards and European
+places from Wikipedia and crests from footylogos.com. Club names and crests
+belong to their clubs.
