@@ -108,6 +108,16 @@ Positions come from Transfermarkt rather than Understat, because Understat lists
 every position a player covered in a season in alphabetical order, which would
 put a winger like Bryan Mbeumo ("D F M") among the defenders.
 
+### Picking the most-used XI
+
+Transfermarkt's lineups give the formation and positions of every league start.
+The pipeline keeps them as counts per club and season, and the API picks the
+XI: the club's most common formation, its most common set of 11 positions, then
+for each position the player who started there most, with no player picked
+twice. Arsenal's 2025/26 XI comes out as the 4-3-3 that won the league, with Eze
+ahead of Ødegaard (17 starts to 15). Managers' photos come from FotMob, matched
+by club, season and record, since the two sites spell names differently.
+
 ## API
 
 Runs on `http://localhost:3001` locally and at
