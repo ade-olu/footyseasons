@@ -33,14 +33,16 @@ the same clean dashboard feel as the apps I use every week.
 - **Season awards:** Player, manager, goalkeeper and young player of the
   season, with each winner's stats
 - **Clubs:** Every club in the season, A to Z, with its finish, points and
-  last 5 results, and a page for each club with its season summary, best win
-  streak, clean sheets, biggest win and defeat, an interactive chart of its
-  league position after every round, the table around it, its home and away
-  split, every result, filterable by home or away, its final position in every
-  season since 2014/15 as a chart or a table, its trophies (all-time titles and
-  cups, counted up to the season you're viewing), and its leaders in attack
-  (goals, assists, chances created) and defence (tackles, interceptions,
-  clearances)
+  last 5 results, and a page for each club:
+  - **Overview:** A season summary, best win streak, clean sheets, biggest win
+    and defeat, an interactive chart of its league position after every
+    round, the table around it, and its home and away split
+  - **Matches:** Every result, filterable by home or away
+  - **History:** Its final position in every season since 2014/15, as a chart
+    or a table, and its all-time trophies, counted up to the season you're
+    viewing
+  - **Squad:** Its top players in attack (goals, assists, chances created)
+    and defence (tackles, interceptions, clearances)
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
   (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
