@@ -9,15 +9,12 @@ Safe to re-run: the table is rebuilt each time. I cache downloads in
 cache/; delete it to refetch everything. Run 06_fetch_understat.py first.
 """
 
-import csv
-import gzip
 import os
 import re
 import sqlite3
 import time
 import unicodedata
 from collections import Counter, defaultdict
-import requests
 
 from common.cache import read_json, write_json
 from common.db import DB_FILE
@@ -35,10 +32,10 @@ from common.player_fixes import (
     POSITION_OVERRIDES,
     TRANSFERMARKT_IDS,
 )
+from common.transfermarkt import read_transfermarkt
 
 
 CACHE_DIR = "cache"
-TRANSFERMARKT_URL = "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data"
 PHOTO_URL = "https://images.fotmob.com/image_resources/playerimages/{}.png"
 
 # Transfermarkt's position groups -> the app's codes
@@ -154,20 +151,6 @@ def match_players(understat_players, season_players, by_name):
 def best_ids(matches):
     # Most common id if seasons disagree
     return {uid: ids.most_common(1)[0][0] for uid, ids in matches.items()}
-
-
-def read_transfermarkt(table):
-    path = os.path.join(CACHE_DIR, "transfermarkt", f"{table}.csv.gz")
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        print(f"Downloading {table}.csv.gz...")
-        response = requests.get(f"{TRANSFERMARKT_URL}/{table}.csv.gz", timeout=300)
-        response.raise_for_status()
-        with open(path, "wb") as file:
-            file.write(response.content)
-
-    with gzip.open(path, "rt", encoding="utf-8") as file:
-        yield from csv.DictReader(file)
 
 
 def load_transfermarkt():
