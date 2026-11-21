@@ -1,3 +1,4 @@
+import PageBanner from "@/components/ui/PageBanner/PageBanner";
 import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import { useClubDirectory } from "@/features/clubs/hooks/useClubDirectory";
 import { EARLIEST_SEASON } from "@/hooks/useSelection";
@@ -21,28 +22,17 @@ export default function ClubsBanner({ league, season }: ClubsBannerProps) {
   ];
 
   return (
-    <section
+    <PageBanner
       className="clubs-banner"
-      aria-labelledby="clubs-banner-title"
-      aria-busy={!data && !isError}
+      title="Clubs"
+      description={
+        data &&
+        `Results, squads and league history since ${seasonLabel(EARLIEST_SEASON)} for all ${data.clubs.length} clubs in the ${seasonLabel(season)} ${getLeagueName(league)}.`
+      }
+      error="Couldn't load the clubs."
+      isError={isError}
+      isLoading={!data && !isError}
     >
-      <div className="clubs-banner__text">
-        <h2 id="clubs-banner-title" className="clubs-banner__title">
-          Clubs
-        </h2>
-        {isError && (
-          <p className="clubs-banner__description" role="alert">
-            Couldn't load the clubs.
-          </p>
-        )}
-        {data && (
-          <p className="clubs-banner__description">
-            Results, squads and league history since{" "}
-            {seasonLabel(EARLIEST_SEASON)} for all {data.clubs.length} clubs in
-            the {seasonLabel(season)} {getLeagueName(league)}.
-          </p>
-        )}
-      </div>
 
       {/* dt = label, dd = value; CSS shows the value first */}
       <dl className="clubs-banner__metrics">
@@ -53,6 +43,6 @@ export default function ClubsBanner({ league, season }: ClubsBannerProps) {
           </div>
         ))}
       </dl>
-    </section>
+    </PageBanner>
   );
 }
