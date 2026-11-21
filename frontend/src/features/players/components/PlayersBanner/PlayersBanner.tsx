@@ -1,6 +1,7 @@
 import { usePlayers } from "@/api/players";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
 import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
+import PageBanner from "@/components/ui/PageBanner/PageBanner";
 import Podium from "@/components/ui/Podium/Podium";
 import { getLeagueName, type LeagueCode } from "@/data/leagues";
 import {
@@ -58,31 +59,21 @@ export default function PlayersBanner({ league, season }: PlayersBannerProps) {
     : [];
 
   return (
-    <section
+    <PageBanner
       className="players-banner"
-      aria-labelledby="players-banner-title"
-      aria-busy={!data && !isError}
+      title="Player Stats"
+      description={
+        data &&
+        `Goals, chances and expected stats for all ${data.totals.players} players who played in the ${seasonLabel(season)} ${leagueName}.`
+      }
+      error="Couldn't load the players."
+      isError={isError}
+      isLoading={!data && !isError}
+      podium
     >
-      <div className="players-banner__text">
-        <h2 id="players-banner-title" className="players-banner__title">
-          Player Stats
-        </h2>
-        {isError && (
-          <p className="players-banner__description" role="alert">
-            Couldn't load the players.
-          </p>
-        )}
-        {data && (
-          <p className="players-banner__description">
-            Goals, chances and expected stats for all {data.totals.players}{" "}
-            players who played in the {seasonLabel(season)} {leagueName}.
-          </p>
-        )}
-      </div>
-
       {podium.length > 0 && (
         <Podium label="Top 3 for goals plus assists" steps={podium} />
       )}
-    </section>
+    </PageBanner>
   );
 }
