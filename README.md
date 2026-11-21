@@ -22,34 +22,34 @@ the same clean dashboard feel as the apps I use every week.
 ## Features
 
 - **Season overview:** Headline stats, the champion, top 5 of the table, top
-  scorers and assist providers, and the final day's results
+  scorers and assist providers, and the final day's results.
 - **Full league table:** Overall, home and away views, last-5 form, and
-  European and relegation places for every season
+  European and relegation places for every season.
 - **Every result:** Each matchweek's results by day, a summary of the round,
-  the season's home win, draw and away win split, and the match of the season
+  the season's home win, draw and away win split, and the match of the season.
 - **Player stats:** The top goal contributors, season leaders in attack,
   defence and goalkeeping, and every player in a sortable table of general,
-  defending or goalkeeping stats you can search and filter by position and club
+  defending or goalkeeping stats you can search and filter by position and club.
 - **Season awards:** Player, manager, goalkeeper and young player of the
-  season, with each winner's stats
+  season, with each winner's stats.
 - **Clubs:** Every club in the season, A to Z, with its finish, points and
   last 5 results, and a page for each club:
   - **Overview:** A season summary, best win streak, clean sheets, biggest win
     and defeat, an interactive chart of its league position after every
-    round, the table around it, and its home and away split
-  - **Matches:** Every result, filterable by home or away
+    round, the table around it, and its home and away split.
+  - **Matches:** Every result, filterable by home or away.
   - **History:** Its final position in every season since 2014/15, as a chart
     or a table, and its all-time trophies, counted up to the season you're
-    viewing
+    viewing.
   - **Squad:** Its top players in attack (goals, assists, chances created)
-    and defence (tackles, interceptions, clearances)
+    and defence (tackles, interceptions, clearances).
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
   (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
-  linked to
+  linked to.
 - **Responsive:** Works from phones up to wide desktop screens, with
   swipeable award and leader cards, table headers that stay in view, and tabs
-  for each part of a club's page
+  for each part of a club's page.
 
 ## Tech Stack
 
