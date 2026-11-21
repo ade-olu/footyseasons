@@ -112,19 +112,24 @@ put a winger like Bryan Mbeumo ("D F M") among the defenders.
 
 Runs on `http://localhost:3001` locally and at
 [footyseasons.vercel.app/api](https://footyseasons.vercel.app/api/leagues) in
-production. League routes take an optional `?season=` with
-the season's start year (`2024` = 2024/25) and default to the latest season.
+production. Most routes take an optional `?season=` with the season's start
+year (`2024` = 2024/25) and default to the latest season; a club's `matches`
+and `honours` cover every season without it.
 
-| Method | Endpoint                          | Description                                              |
-| ------ | --------------------------------- | -------------------------------------------------------- |
-| GET    | `/api/leagues`                    | Gets the leagues and their seasons.                      |
-| GET    | `/api/leagues/:code/standings`    | Gets the table, with home and away records.              |
-| GET    | `/api/leagues/:code/matches`      | Gets every match in the season.                          |
-| GET    | `/api/leagues/:code/players`      | Gets player stats, sortable by goals, xG and more.       |
-| GET    | `/api/leagues/:code/awards`       | Gets the season's award winners.                         |
-| GET    | `/api/leagues/:code/club-seasons` | Gets every club's seasons in the league (no `?season=`). |
-| GET    | `/api/clubs/:id`                  | Gets a club and its stats for the season.                |
-| GET    | `/api/clubs/:id/matches`          | Gets a club's matches.                                   |
+| Method | Endpoint                          | Description                                                       |
+| ------ | --------------------------------- | ----------------------------------------------------------------- |
+| GET    | `/api/leagues`                    | Gets the leagues and their seasons.                               |
+| GET    | `/api/leagues/:code/standings`    | Gets the table, with home and away records.                       |
+| GET    | `/api/leagues/:code/matches`      | Gets every match in the season.                                   |
+| GET    | `/api/leagues/:code/players`      | Gets player stats, sortable by goals, xG and more.                |
+| GET    | `/api/leagues/:code/awards`       | Gets the season's award winners.                                  |
+| GET    | `/api/leagues/:code/club-seasons` | Gets every club's seasons in the league (no `?season=`).          |
+| GET    | `/api/clubs/:id`                  | Gets a club and its stats for the season.                         |
+| GET    | `/api/clubs/:id/matches`          | Gets a club's matches.                                            |
+| GET    | `/api/clubs/:id/seasons`          | Gets a club's final record in every season (no `?season=`).       |
+| GET    | `/api/clubs/:id/honours`          | Gets a club's trophies, counted up to the season.                 |
+| GET    | `/api/clubs/:id/lineup`           | Gets a club's most-used XI and its managers.                      |
+| GET    | `/api/clubs/:id/squad`            | Gets each player's shirt number, position, age, height and value. |
 
 League codes: `PL` (Premier League), `PD` (La Liga), `SA` (Serie A), `BL1` (Bundesliga), `FL1`
 (Ligue 1).
