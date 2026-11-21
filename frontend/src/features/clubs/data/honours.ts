@@ -1,8 +1,8 @@
 import { LEAGUES, type LeagueCode } from "@/data/leagues";
 
-// Cup logos in src/assets/competitions/<key>.svg (footylogos.com, and
-// Wikimedia Commons for the Cup Winners' Cup and Trophée des Champions); a
-// competition without one shows the trophy
+// Cup logos in src/assets/competitions/<key>.svg (footylogos.com,
+// football-logos.cc and Wikimedia Commons); a competition without one shows
+// the trophy
 const LOGOS = import.meta.glob<string>("@/assets/competitions/*.svg", {
   eager: true,
   query: "?url",
