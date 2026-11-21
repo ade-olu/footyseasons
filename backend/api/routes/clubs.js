@@ -8,6 +8,13 @@ const { parseInteger, parseSeason } = require("../params");
 
 const router = express.Router();
 
+// Whole years from a "YYYY-MM-DD" birth date to date, or null
+function ageOn(dateOfBirth, date) {
+  if (!dateOfBirth) return null;
+  const age = Number(date.slice(0, 4)) - Number(dateOfBirth.slice(0, 4));
+  return dateOfBirth.slice(5) > date.slice(5) ? age - 1 : age;
+}
+
 // The club's season for ?season=, or its latest; undefined if it didn't play
 function findClubSeason(clubId, startYear) {
   return db
@@ -251,6 +258,62 @@ router.get("/:id/lineup", (req, res) => {
     lines,
     managers: regular.length > 0 ? regular : managers,
   });
+});
+
+// Get each player's profile in a club's squad for one season (?season=,
+// defaults to its latest).
+router.get("/:id/squad", (req, res) => {
+  const clubId = parseInteger(req.params.id, "id", res);
+  if (clubId === undefined) return;
+  const startYear = parseSeason(req, res);
+  if (startYear === undefined) return;
+
+  const club = db
+    .prepare("SELECT club_id FROM clubs WHERE club_id = ?")
+    .get(clubId);
+
+  if (!club) {
+    return res.status(404).json({ error: `No club found with id ${clubId}` });
+  }
+
+  const season = findClubSeason(clubId, startYear);
+  if (!season) return res.json({ players: [] });
+
+  // Position is the one started at most, else Transfermarkt's main one
+  const players = db
+    .prepare(
+      `
+    SELECT
+      ups.understat_player_id AS understatId,
+      sp.shirt_number AS shirtNumber,
+      COALESCE(
+        (SELECT ps.position FROM position_starts ps
+          WHERE ps.season_id = ups.season_id AND ps.club_id = upc.club_id
+            AND ps.transfermarkt_id = pp.transfermarkt_id
+          ORDER BY ps.starts DESC LIMIT 1),
+        tp.sub_position
+      ) AS position,
+      tp.country, pp.date_of_birth AS dateOfBirth,
+      tp.height_cm AS heightCm, sp.market_value_eur AS marketValue
+    FROM understat_player_stats ups
+    JOIN understat_player_clubs upc
+      ON upc.player_stats_id = ups.id AND upc.club_id = ?
+    LEFT JOIN player_profiles pp
+      ON pp.understat_player_id = ups.understat_player_id
+    LEFT JOIN transfermarkt_players tp
+      ON tp.transfermarkt_id = pp.transfermarkt_id
+    LEFT JOIN squad_players sp ON sp.season_id = ups.season_id
+      AND sp.club_id = upc.club_id AND sp.transfermarkt_id = pp.transfermarkt_id
+    WHERE ups.season_id = ?
+  `,
+    )
+    .all(clubId, season.seasonId)
+    .map(({ dateOfBirth, ...player }) => ({
+      ...player,
+      age: ageOn(dateOfBirth, `${season.startYear}-08-01`),
+    }));
+
+  res.json({ players });
 });
 
 // Get the matches played by a club, optionally for one season (?season=).
