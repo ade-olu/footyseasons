@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight as ArrowRightIcon } from "reicon-react";
 import { usePlayers } from "@/api/players";
@@ -5,6 +6,7 @@ import FittedName from "@/components/ui/FittedName/FittedName";
 import PlayerPhoto from "@/components/ui/PlayerPhoto/PlayerPhoto";
 import SectionCard from "@/components/ui/SectionCard/SectionCard";
 import SectionHeader from "@/components/ui/SectionHeader/SectionHeader";
+import SegmentedControl from "@/components/ui/SegmentedControl/SegmentedControl";
 import type { LeagueCode } from "@/data/leagues";
 import { possessive } from "@/features/clubs/utils/clubPage";
 import { useSelection } from "@/hooks/useSelection";
@@ -24,16 +26,42 @@ type ClubTopPlayersProps = {
 };
 
 type Board = {
-  key: string;
+  key: string; // For the description and View all, "chances created"
   label: string; // "Top Scorer", "Joint Top Scorer" when level
   stat: (player: Player) => number;
 };
 
-const BOARDS: Board[] = [
-  { key: "goals", label: "Top Scorer", stat: (player) => player.goals },
-  { key: "assists", label: "Top Assists", stat: (player) => player.assists },
-  { key: "minutes", label: "Most Minutes", stat: (player) => player.minutes },
-];
+type View = "attack" | "defence";
+
+// Defending stats come from FotMob, so a player without them counts 0
+const BOARDS: Record<View, Board[]> = {
+  attack: [
+    { key: "goals", label: "Top Scorer", stat: (player) => player.goals },
+    { key: "assists", label: "Top Assists", stat: (player) => player.assists },
+    {
+      key: "chances created",
+      label: "Most Chances Created",
+      stat: (player) => player.keyPasses,
+    },
+  ],
+  defence: [
+    {
+      key: "tackles",
+      label: "Most Tackles",
+      stat: (player) => player.tackles ?? 0,
+    },
+    {
+      key: "interceptions",
+      label: "Most Interceptions",
+      stat: (player) => player.interceptions ?? 0,
+    },
+    {
+      key: "clearances",
+      label: "Most Clearances",
+      stat: (player) => player.clearances ?? 0,
+    },
+  ],
+};
 
 const TITLE = "Top players";
 
@@ -118,8 +146,14 @@ function Leaderboard({
   );
 }
 
-// The club's leaders in goals, assists and minutes: three across, or a
-// carousel when narrow
+// "Arsenal's leaders in goals, assists and chances created."
+function description(clubName: string, boards: Board[]) {
+  const [first, second, third] = boards.map(({ key }) => key);
+  return `${possessive(clubName)} leaders in ${first}, ${second} and ${third}.`;
+}
+
+// The club's leaders in attack or defence: three across, or a carousel when
+// narrow
 export default function ClubTopPlayers({
   league,
   season,
@@ -129,11 +163,18 @@ export default function ClubTopPlayers({
 }: ClubTopPlayersProps) {
   const { data, isError } = usePlayers(league, season, "goals", "all");
   const { pathTo } = useSelection();
+  const [view, setView] = useState<View>("attack");
+  const boardsRef = useRef<HTMLDivElement>(null);
   // A player who moved within the league has one row for both clubs
   const players =
     data?.players.filter((player) =>
       player.clubs.some((club) => club.clubId === clubId),
     ) ?? [];
+
+  // Defending stats start in 2016/17, so earlier seasons only have Attack
+  const hasDefence = data?.hasDefensiveStats ?? true;
+  const shown = hasDefence ? view : "attack";
+  const boards = BOARDS[shown];
 
   let status: string | null = null;
   if (!data) status = isError ? "Couldn't load the players." : "Loading…";
@@ -144,15 +185,25 @@ export default function ClubTopPlayers({
       <div className="club-top-players__header">
         <SectionHeader
           title={TITLE}
-          description={
-            status ??
-            `${possessive(clubName)} leaders in goals, assists and minutes.`
-          }
+          description={status ?? description(clubName, boards)}
+        />
+        <SegmentedControl
+          className="club-top-players__view"
+          label="Top players stats"
+          options={[
+            { value: "attack", label: "Attack" },
+            { value: "defence", label: "Defence", disabled: !hasDefence },
+          ]}
+          value={shown}
+          onChange={(value) => {
+            setView(value);
+            boardsRef.current?.scrollTo({ left: 0 });
+          }}
         />
       </div>
       {!status && (
-        <div className="club-top-players__boards">
-          {BOARDS.map((board) => (
+        <div ref={boardsRef} className="club-top-players__boards">
+          {boards.map((board) => (
             <Leaderboard
               key={board.key}
               board={board}

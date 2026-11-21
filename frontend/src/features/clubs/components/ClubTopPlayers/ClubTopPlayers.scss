@@ -26,6 +26,37 @@
     }
   }
 
+  // Title and description beside the view toggle; on phones it goes under them
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: rem(24);
+
+    > .section-header {
+      flex: 1;
+      min-width: 0;
+    }
+
+    // Wraps onto 2 lines, well clear of the toggle
+    @include tablet-up {
+      gap: rem(48);
+
+      .section-header__description {
+        max-width: rem(560);
+      }
+    }
+
+    @include below-tablet {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__view {
+    flex-shrink: 0;
+    width: rem(182);
+  }
+
   // Three across from a 900px content area
   &__boards {
     @include container-from($content-medium) {
