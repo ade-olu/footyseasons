@@ -1,11 +1,12 @@
 """
 common/fotmob.py
-Requests to fotmob.com, shared by 04, 09 and 10. FotMob has no official API:
+Requests to fotmob.com, shared by 04, 09, 10 and 13. FotMob has no official API:
 these are the JSON endpoints its own pages load, which could change without warning.
 """
 
 import gzip
 import json
+from collections import Counter, defaultdict
 
 import requests
 
@@ -36,3 +37,24 @@ def fetch_league_season(league, year):
         f"{FOTMOB_URL}/leagues",
         {"id": league["fotmob"], "season": f"{year}/{year + 1}"},
     )
+
+
+def match_teams(fixtures, matches):
+    # FotMob team id -> club_id, by majority vote over games on the same day
+    # with the same score
+    by_day = defaultdict(list)
+    for match in matches:
+        by_day[match["utc_date"][:10]].append(match)
+
+    votes = defaultdict(Counter)
+    for fixture in fixtures:
+        score = fixture["status"].get("scoreStr")
+        if not score:
+            continue
+        home_goals, away_goals = (int(goals) for goals in score.split(" - "))
+        for match in by_day[fixture["status"]["utcTime"][:10]]:
+            if (match["home_goals"], match["away_goals"]) == (home_goals, away_goals):
+                votes[fixture["home"]["id"]][match["home_club_id"]] += 1
+                votes[fixture["away"]["id"]][match["away_club_id"]] += 1
+
+    return {team_id: count.most_common(1)[0][0] for team_id, count in votes.items()}

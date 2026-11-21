@@ -10,7 +10,7 @@ INSERT OR REPLACE wipes 05's columns, so re-run 05 after this.
 
 import time
 import sqlite3
-from collections import Counter, defaultdict
+from collections import defaultdict
 
 from common import fotmob
 from common.db import DB_FILE, ensure_season, find_season_id, get_season_clubs
@@ -205,24 +205,8 @@ def build_matches(data, club_ids):
 
 
 def fotmob_rounds(fixtures, matches):
-    # FotMob's official round for each (home, away) pair. FotMob team ids are
-    # learned from games on the same day with the same score (majority vote)
-    by_day = defaultdict(list)
-    for match in matches:
-        by_day[match["utc_date"][:10]].append(match)
-
-    votes = defaultdict(Counter)
-    for fixture in fixtures:
-        score = fixture["status"].get("scoreStr")
-        if not score:
-            continue
-        home_goals, away_goals = (int(goals) for goals in score.split(" - "))
-        for match in by_day[fixture["status"]["utcTime"][:10]]:
-            if (match["home_goals"], match["away_goals"]) == (home_goals, away_goals):
-                votes[fixture["home"]["id"]][match["home_club_id"]] += 1
-                votes[fixture["away"]["id"]][match["away_club_id"]] += 1
-
-    club_ids = {team_id: count.most_common(1)[0][0] for team_id, count in votes.items()}
+    # FotMob's official round for each (home, away) pair
+    club_ids = fotmob.match_teams(fixtures, matches)
     return {
         (club_ids[fixture["home"]["id"]], club_ids[fixture["away"]["id"]]): int(fixture["round"])
         for fixture in fixtures
