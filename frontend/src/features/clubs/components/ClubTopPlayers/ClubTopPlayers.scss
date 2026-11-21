@@ -94,10 +94,14 @@
     min-width: 0;
   }
 
+  // One line at 12px, shortening ("Chances Created") when it doesn't fit
   &__label {
-    @include text(14);
+    overflow: hidden;
+    @include text(12);
     font-weight: 400;
     color: $color-text-inverse-secondary;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   // Names stay on one line, shortening ("V. Gyökeres") when they don't fit

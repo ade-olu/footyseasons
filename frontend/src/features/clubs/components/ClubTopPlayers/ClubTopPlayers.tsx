@@ -28,6 +28,7 @@ type ClubTopPlayersProps = {
 type Board = {
   key: string; // For the description and View all, "chances created"
   label: string; // "Top Scorer", "Joint Top Scorer" when level
+  shortLabel?: string; // When the label doesn't fit on one line
   stat: (player: Player) => number;
 };
 
@@ -41,6 +42,7 @@ const BOARDS: Record<View, Board[]> = {
     {
       key: "chances created",
       label: "Most Chances Created",
+      shortLabel: "Chances Created",
       stat: (player) => player.keyPasses,
     },
   ],
@@ -53,6 +55,7 @@ const BOARDS: Record<View, Board[]> = {
     {
       key: "interceptions",
       label: "Most Interceptions",
+      shortLabel: "Interceptions",
       stat: (player) => player.interceptions ?? 0,
     },
     {
@@ -91,13 +94,20 @@ function Leaderboard({
   const [leader, ...rest] = topThree(players, board.stat);
   if (!leader) return null;
   const isJoint = rest.length > 0 && board.stat(rest[0]) === board.stat(leader);
+  const joint = isJoint ? "Joint " : "";
 
   return (
     <article className="club-top-players__board">
       <div className="club-top-players__hero">
         <div className="club-top-players__info">
-          <h3 className="club-top-players__label">
-            {isJoint ? `Joint ${board.label}` : board.label}
+          <h3>
+            <FittedName
+              className="club-top-players__label"
+              name={`${joint}${board.label}`}
+              shortNames={
+                board.shortLabel ? [`${joint}${board.shortLabel}`] : []
+              }
+            />
           </h3>
           <FittedName
             className="club-top-players__name"
