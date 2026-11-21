@@ -244,9 +244,13 @@ router.get("/:id/lineup", (req, res) => {
   const managers = db
     .prepare(
       `
-    SELECT name, matches, wins, draws, losses FROM club_managers
-    WHERE season_id = ? AND club_id = ?
-    ORDER BY first_match
+    SELECT
+      cm.name, cm.matches, cm.wins, cm.draws, cm.losses,
+      mp.photo_url AS photoUrl
+    FROM club_managers cm
+    LEFT JOIN manager_profiles mp ON mp.name = cm.name
+    WHERE cm.season_id = ? AND cm.club_id = ?
+    ORDER BY cm.first_match
   `,
     )
     .all(season.seasonId, clubId);
