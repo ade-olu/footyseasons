@@ -8,6 +8,22 @@ const { parseInteger, parseSeason } = require("../params");
 
 const router = express.Router();
 
+// The club's season for ?season=, or its latest; undefined if it didn't play
+function findClubSeason(clubId, startYear) {
+  return db
+    .prepare(
+      `
+    SELECT cs.season_id AS seasonId, s.start_year AS startYear
+    FROM club_season_stats cs
+    JOIN seasons s ON s.season_id = cs.season_id
+    WHERE cs.club_id = ? AND (? IS NULL OR s.start_year = ?)
+    ORDER BY s.start_year DESC
+    LIMIT 1
+  `,
+    )
+    .get(clubId, startYear, startYear);
+}
+
 // Get a club's profile and stats for one season (?season=, defaults to its latest).
 router.get("/:id", (req, res) => {
   const clubId = parseInteger(req.params.id, "id", res);
@@ -150,18 +166,7 @@ router.get("/:id/lineup", (req, res) => {
     return res.status(404).json({ error: `No club found with id ${clubId}` });
   }
 
-  const season = db
-    .prepare(
-      `
-    SELECT cs.season_id AS seasonId
-    FROM club_season_stats cs
-    JOIN seasons s ON s.season_id = cs.season_id
-    WHERE cs.club_id = ? AND (? IS NULL OR s.start_year = ?)
-    ORDER BY s.start_year DESC
-    LIMIT 1
-  `,
-    )
-    .get(clubId, startYear, startYear);
+  const season = findClubSeason(clubId, startYear);
 
   if (!season) {
     return res.json({
