@@ -15,6 +15,10 @@ import { TABLE_PLACES } from "@/data/tablePlaces";
 import ChartLine from "@/features/clubs/components/ChartLine/ChartLine";
 import ChartMarker from "@/features/clubs/components/ChartMarker/ChartMarker";
 import ChartTooltip from "@/features/clubs/components/ChartTooltip/ChartTooltip";
+import {
+  useChartScrub,
+  type ScrubOptions,
+} from "@/features/clubs/hooks/useChartScrub";
 import { useEasedValues } from "@/features/clubs/hooks/useEasedValues";
 import { useTapOutside } from "@/features/clubs/hooks/useTapOutside";
 import { ordinal } from "@/features/clubs/utils/clubDirectory";
@@ -111,8 +115,7 @@ export default function PositionChart({
   const plotRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  // A finger on the plot: whether it has moved, and if its round was open
-  const dragRef = useRef<{ moved: boolean; wasOpen: boolean } | null>(null);
+  const scrub = useChartScrub();
 
   // Keeps the tooltip inside the line's ends, centred on its point where it fits
   useLayoutEffect(() => {
@@ -182,41 +185,22 @@ export default function PositionChart({
     return Math.min(Math.max(round + 1, 1), rounds.length);
   };
 
+  // Touch: sliding a finger scrubs through the rounds; a second tap on the
+  // same round closes it
+  const touch: ScrubOptions<number> = {
+    pointAt: roundAt,
+    active,
+    shown: shownRound,
+    show,
+    close: () => setActive(null),
+  };
+
   const handlePointerMove = (event: PointerEvent) => {
     if (event.pointerType === "mouse") show(roundAt(event.clientX));
-    else handleTouchMove(event);
+    else scrub.move(event, touch);
   };
   const handlePointerLeave = (event: PointerEvent) => {
     if (event.pointerType === "mouse") setActive(null);
-  };
-  // Touch: sliding a finger scrubs through the rounds; a second tap on the
-  // same round closes it
-  const handlePointerDown = (event: PointerEvent) => {
-    if (event.pointerType === "mouse") return;
-    const round = roundAt(event.clientX);
-    dragRef.current = { moved: false, wasOpen: round === active };
-    event.currentTarget.setPointerCapture(event.pointerId);
-    show(round);
-  };
-  const handleTouchMove = (event: PointerEvent) => {
-    const drag = dragRef.current;
-    if (!drag) return;
-    const round = roundAt(event.clientX);
-    if (round === shownRound) return;
-    drag.moved = true;
-    show(round);
-  };
-  const handlePointerUp = (event: PointerEvent) => {
-    const drag = dragRef.current;
-    dragRef.current = null;
-    if (event.pointerType !== "mouse" && drag && !drag.moved && drag.wasOpen) {
-      setActive(null);
-    }
-  };
-  // The page took the touch to scroll up or down
-  const handlePointerCancel = () => {
-    dragRef.current = null;
-    setActive(null);
   };
   const handleKeyDown = (event: KeyboardEvent) => {
     const current = active ?? rounds.length;
@@ -245,9 +229,9 @@ export default function PositionChart({
         aria-label={`${TITLE}. Use the arrow keys to read each round.`}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerCancel}
+        onPointerDown={(event) => scrub.down(event, touch)}
+        onPointerUp={() => scrub.up(touch)}
+        onPointerCancel={() => scrub.cancel(touch)}
         data-no-drawer-swipe
         onKeyDown={handleKeyDown}
         onBlur={() => setActive(null)}
