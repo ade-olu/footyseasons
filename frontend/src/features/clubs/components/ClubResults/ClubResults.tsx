@@ -94,6 +94,9 @@ export default function ClubResults({
   const [venue, setVenue] = useState<Venue>("all");
   // Pages back from the newest: 1 is the newest page
   const [page, setPage] = useState(1);
+  // The date venue switches keep to, until the pager moves, so switching back
+  // returns to the same page
+  const [anchor, setAnchor] = useState<string | null>(null);
 
   // Another club or season starts again from the newest page
   const key = `${league}-${season}-${clubId}`;
@@ -101,6 +104,7 @@ export default function ClubResults({
   if (key !== shownKey) {
     setShownKey(key);
     setPage(1);
+    setAnchor(null);
   }
 
   const classes = cx("club-results", className);
@@ -154,13 +158,12 @@ export default function ClubResults({
           options={VENUES}
           value={venue}
           onChange={(value) => {
+            const date = anchor ?? pageMatches[0]?.utcDate ?? null;
             setVenue(value);
+            setAnchor(date);
             setPage(
-              pageMatches.length
-                ? pageFrom(
-                    clubMatches(data.matches, clubId, value),
-                    pageMatches[0].utcDate,
-                  )
+              date
+                ? pageFrom(clubMatches(data.matches, clubId, value), date)
                 : 1,
             );
           }}
@@ -188,7 +191,10 @@ export default function ClubResults({
             <Pager
               page={seasonPage}
               pageCount={pageCount}
-              onChange={(shown) => setPage(pageCount - shown + 1)}
+              onChange={(shown) => {
+                setPage(pageCount - shown + 1);
+                setAnchor(null);
+              }}
               previousLabel="Earlier matches"
               nextLabel="Later matches"
             />
