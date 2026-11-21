@@ -215,3 +215,78 @@ CREATE TABLE club_honours (
 
     PRIMARY KEY (club_id, competition, start_year)
 );
+
+
+-- Every player in a league lineup, filled by 12.
+CREATE TABLE transfermarkt_players (
+    transfermarkt_id  INTEGER PRIMARY KEY,
+    name              TEXT NOT NULL,
+    country           TEXT,               -- e.g. "England"
+    height_cm         INTEGER,
+    sub_position      TEXT                -- current, e.g. "Centre-Back"
+);
+
+
+-- One row per player per club-season, bench included, filled by 12.
+CREATE TABLE squad_players (
+    season_id         INTEGER NOT NULL,
+    club_id           INTEGER NOT NULL,
+    transfermarkt_id  INTEGER NOT NULL,
+    shirt_number      INTEGER,            -- the one used most
+    market_value_eur  INTEGER,            -- at 30 June of the season's end
+
+    FOREIGN KEY (season_id)        REFERENCES seasons(season_id),
+    FOREIGN KEY (club_id)          REFERENCES clubs(club_id),
+    FOREIGN KEY (transfermarkt_id) REFERENCES transfermarkt_players(transfermarkt_id),
+
+    PRIMARY KEY (season_id, club_id, transfermarkt_id)
+) WITHOUT ROWID;
+
+
+-- League starts per player and position, filled by 12.
+CREATE TABLE position_starts (
+    season_id         INTEGER NOT NULL,
+    club_id           INTEGER NOT NULL,
+    transfermarkt_id  INTEGER NOT NULL,
+    position          TEXT NOT NULL,      -- e.g. "LB"
+    starts            INTEGER NOT NULL,
+
+    FOREIGN KEY (season_id)        REFERENCES seasons(season_id),
+    FOREIGN KEY (club_id)          REFERENCES clubs(club_id),
+    FOREIGN KEY (transfermarkt_id) REFERENCES transfermarkt_players(transfermarkt_id),
+
+    PRIMARY KEY (season_id, club_id, transfermarkt_id, position)
+) WITHOUT ROWID;
+
+
+-- League starts per formation and set of 11 positions, filled by 12.
+CREATE TABLE lineup_shapes (
+    season_id   INTEGER NOT NULL,
+    club_id     INTEGER NOT NULL,
+    formation   TEXT NOT NULL,            -- Transfermarkt's, e.g. "4-3-3 Attacking"
+    positions   TEXT NOT NULL,            -- sorted, e.g. "CB,CB,CF,..."
+    starts      INTEGER NOT NULL,
+
+    FOREIGN KEY (season_id) REFERENCES seasons(season_id),
+    FOREIGN KEY (club_id)   REFERENCES clubs(club_id),
+
+    PRIMARY KEY (season_id, club_id, formation, positions)
+) WITHOUT ROWID;
+
+
+-- League record per manager per club-season, filled by 12.
+CREATE TABLE club_managers (
+    season_id    INTEGER NOT NULL,
+    club_id      INTEGER NOT NULL,
+    name         TEXT NOT NULL,           -- e.g. "Mikel Arteta"
+    matches      INTEGER NOT NULL,
+    wins         INTEGER NOT NULL,
+    draws        INTEGER NOT NULL,
+    losses       INTEGER NOT NULL,
+    first_match  TEXT NOT NULL,           -- "YYYY-MM-DD"
+
+    FOREIGN KEY (season_id) REFERENCES seasons(season_id),
+    FOREIGN KEY (club_id)   REFERENCES clubs(club_id),
+
+    PRIMARY KEY (season_id, club_id, name)
+) WITHOUT ROWID;
