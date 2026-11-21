@@ -290,3 +290,11 @@ CREATE TABLE club_managers (
 
     PRIMARY KEY (season_id, club_id, name)
 ) WITHOUT ROWID;
+
+
+-- FotMob photo per manager in club_managers, filled by 13.
+CREATE TABLE manager_profiles (
+    name        TEXT PRIMARY KEY,         -- as in club_managers
+    fotmob_id   INTEGER NOT NULL,
+    photo_url   TEXT NOT NULL
+);
