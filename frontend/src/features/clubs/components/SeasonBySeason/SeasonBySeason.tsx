@@ -154,7 +154,8 @@ export default function SeasonBySeason({
   );
 
   // Phones scroll the chart sideways: open with the selected season in view,
-  // gliding to another season once open
+  // gliding to another season once open, and again whenever the chart shows
+  // after being hidden (its tab reopening)
   const hasChart = view === "chart" && records.length > 0;
   const scrolledRef = useRef(false);
   useLayoutEffect(() => {
@@ -163,14 +164,24 @@ export default function SeasonBySeason({
       scrolledRef.current = false;
       return;
     }
-    const column = scroller.scrollWidth / SEASONS.length;
-    const index = Math.max(SEASONS.indexOf(season), 0);
-    scroller.scrollTo({
-      left: (index + 0.5) * column - scroller.clientWidth / 2,
-      behavior:
-        scrolledRef.current && !prefersReducedMotion() ? "smooth" : "instant",
-    });
+    const centre = (smooth: boolean) => {
+      const column = scroller.scrollWidth / SEASONS.length;
+      const index = Math.max(SEASONS.indexOf(season), 0);
+      scroller.scrollTo({
+        left: (index + 0.5) * column - scroller.clientWidth / 2,
+        behavior: smooth && !prefersReducedMotion() ? "smooth" : "instant",
+      });
+    };
+    centre(scrolledRef.current);
     scrolledRef.current = true;
+
+    let hidden = scroller.clientWidth === 0;
+    const observer = new ResizeObserver(() => {
+      if (hidden && scroller.clientWidth > 0) centre(false);
+      hidden = scroller.clientWidth === 0;
+    });
+    observer.observe(scroller);
+    return () => observer.disconnect();
   }, [season, clubId, hasChart]);
 
   // Keeps the tooltip within the visible part of the chart, centred on its
