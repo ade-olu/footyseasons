@@ -128,6 +128,10 @@ export default function SeasonBySeason({
   const tooltipRef = useRef<HTMLDivElement>(null);
   // Whether the last press was a mouse, so its click doesn't toggle the tooltip
   const pointerTypeRef = useRef("mouse");
+  // A finger scrubbing through the seasons, and whether the last press did, so
+  // its click is skipped
+  const dragRef = useRef<{ moved: boolean; wasOpen: boolean } | null>(null);
+  const scrubbedRef = useRef(false);
 
   const records = data?.filter(({ leagueCode }) => leagueCode === league) ?? [];
   const byYear = new Map(records.map((record) => [record.startYear, record]));
@@ -229,18 +233,80 @@ export default function SeasonBySeason({
     return byYear.has(year) ? year : null;
   };
 
+  // The played season nearest the pointer, for scrubbing past gaps
+  const nearestAt = (clientX: number) => {
+    const box = plotRef.current!.getBoundingClientRect();
+    const across = ((clientX - box.left) / box.width) * SEASONS.length - 0.5;
+    const distance = (year: number) => Math.abs(SEASONS.indexOf(year) - across);
+    return played.reduce<number | null>(
+      (best, year) =>
+        best === null || distance(year) < distance(best) ? year : best,
+      null,
+    );
+  };
+
+  // Scrolls a scrubbed season into view on phones
+  const keepInView = (year: number) => {
+    const scroller = scrollRef.current!;
+    const column = scroller.scrollWidth / SEASONS.length;
+    const left = SEASONS.indexOf(year) * column;
+    if (left < scroller.scrollLeft) scroller.scrollLeft = left;
+    else if (left + column > scroller.scrollLeft + scroller.clientWidth) {
+      scroller.scrollLeft = left + column - scroller.clientWidth;
+    }
+  };
+
   const handlePointerMove = (event: PointerEvent) => {
-    if (event.pointerType !== "mouse") return;
-    const year = yearAt(event.clientX);
-    if (year === null) setActive(null);
-    else show(year);
+    if (event.pointerType === "mouse") {
+      const year = yearAt(event.clientX);
+      if (year === null) setActive(null);
+      else show(year);
+      return;
+    }
+    const drag = dragRef.current;
+    const year = nearestAt(event.clientX);
+    if (!drag || year === null || year === shownYear) return;
+    drag.moved = true;
+    show(year);
+    keepInView(year);
   };
   const handlePointerLeave = (event: PointerEvent) => {
     if (event.pointerType === "mouse") setActive(null);
   };
-  // Touch: a tap opens a season, and a second tap on it closes it
+  // Touch: sliding a finger scrubs through the seasons, anywhere on the plot
+  // where it doesn't scroll, and from the open season's column on phones,
+  // where a sideways drag elsewhere scrolls
+  const handlePointerDown = (event: PointerEvent) => {
+    pointerTypeRef.current = event.pointerType;
+    scrubbedRef.current = false;
+    if (event.pointerType === "mouse") return;
+    const scroller = scrollRef.current!;
+    const scrolls = scroller.scrollWidth > scroller.clientWidth + 1;
+    const onGrip = (event.target as Element).closest(
+      ".season-by-season__grip",
+    );
+    const year = nearestAt(event.clientX);
+    if ((scrolls && !onGrip) || year === null) return;
+    dragRef.current = { moved: false, wasOpen: year === active };
+    scrubbedRef.current = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    show(year);
+  };
+  // A second tap on the open season closes it
+  const handlePointerUp = () => {
+    const drag = dragRef.current;
+    dragRef.current = null;
+    if (drag && !drag.moved && drag.wasOpen) setActive(null);
+  };
+  // The page took the touch to scroll up or down
+  const handlePointerCancel = () => {
+    if (!dragRef.current) return;
+    dragRef.current = null;
+    setActive(null);
+  };
+  // Touch on phones: a tap opens a season, and a second tap on it closes it
   const handleClick = (event: { clientX: number }) => {
-    if (pointerTypeRef.current === "mouse") return;
+    if (pointerTypeRef.current === "mouse" || scrubbedRef.current) return;
     const year = yearAt(event.clientX);
     if (year === null || year === active) setActive(null);
     else show(year);
@@ -287,11 +353,12 @@ export default function SeasonBySeason({
             style={{ "--seasons": SEASONS.length } as CSSProperties}
             tabIndex={0}
             aria-label={`${TITLE}. Use the arrow keys to read each season.`}
-            onPointerDown={(event) => {
-              pointerTypeRef.current = event.pointerType;
-            }}
+            data-no-drawer-swipe
+            onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             onBlur={() => setActive(null)}
@@ -355,6 +422,14 @@ export default function SeasonBySeason({
             {/* Stays after the pointer leaves, so it can fade out */}
             {shown && (
               <>
+                {/* A drag from the open season's column scrubs on phones */}
+                {active !== null && (
+                  <div
+                    className="season-by-season__grip"
+                    style={at(xOf(shown.startYear), 0)}
+                    aria-hidden
+                  />
+                )}
                 <ChartMarker
                   className="season-by-season__marker"
                   style={at(xOf(shown.startYear), yOf(shown.position))}
