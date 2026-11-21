@@ -38,8 +38,9 @@ the same clean dashboard feel as the apps I use every week.
   league position after every round, the table around it, its home and away
   split, every result, filterable by home or away, its final position in every
   season since 2014/15 as a chart or a table, its trophies (all-time titles and
-  cups, counted up to the season you're viewing), and its leaders
-  in goals, assists and minutes
+  cups, counted up to the season you're viewing), and its leaders in attack
+  (goals, assists, chances created) and defence (tackles, interceptions,
+  clearances)
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
   (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
