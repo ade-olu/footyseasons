@@ -175,7 +175,7 @@ def load_players(names):
                 row["name"] or names[player],
                 row["country_of_citizenship"] or None,
                 int(float(height)) if height and float(height) > 0 else None,
-                row["sub_position"] or None,
+                POSITIONS.get(row["sub_position"]),
             )
     for player, name in names.items():
         players.setdefault(player, (name, None, None, None))

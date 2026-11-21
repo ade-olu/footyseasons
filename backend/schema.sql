@@ -223,7 +223,7 @@ CREATE TABLE transfermarkt_players (
     name              TEXT NOT NULL,
     country           TEXT,               -- e.g. "England"
     height_cm         INTEGER,
-    sub_position      TEXT                -- current, e.g. "Centre-Back"
+    sub_position      TEXT                -- current, e.g. "CB"
 );
 
 
