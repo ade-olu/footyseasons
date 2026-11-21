@@ -10,7 +10,8 @@ player's stats, the award winners and the final day.
 > Still in development. The Overview, Standings, Matches and Player Stats pages
 > are done. Clubs is in progress: the directory is done, and each club's page
 > has its banner, highlights, position chart, table, home and away split,
-> results, season-by-season history, trophies, and top players so far.
+> results, season-by-season history, trophies, top players and most-used XI
+> so far.
 
 ## Why
 
@@ -42,7 +43,8 @@ the same clean dashboard feel as the apps I use every week.
     or a table, and its all-time trophies, counted up to the season you're
     viewing.
   - **Squad:** Its top players in attack (goals, assists, chances created)
-    and defence (tackles, interceptions, clearances).
+    and defence (tackles, interceptions, clearances), and its most-used XI on a
+    pitch, with the season's managers.
 - **Shareable URLs:** The league and season live in the URL
   (`/serie-a/standings?season=2016-2017`), and each club has its own address
   (`/premier-league/clubs/57/arsenal?season=2025-2026`), so any page can be
@@ -172,6 +174,8 @@ python 02_fetch_matches.py
 # ...
 python 10_fetch_fotmob_stats.py
 python 11_load_honours.py      # trophies from honours.csv, no requests
+python 12_load_lineups.py      # lineups and managers from transfermarkt-datasets
+python 13_fetch_manager_photos.py
 ```
 
 A full rebuild takes a few hours, since the scripts wait between requests to
@@ -181,7 +185,7 @@ stay within rate limits.
 
 ```
 backend/
-  01_ … 11_*.py       # data pipeline, run in number order
+  01_ … 13_*.py       # data pipeline, run in number order
   common/             # helpers shared by the pipeline scripts
   schema.sql          # database tables
   awards.csv          # season awards, compiled by hand
@@ -215,12 +219,12 @@ and features only import shared code, never each other.
 
 ## Roadmap
 
-- The rest of each club's page (charts, results, squad and more)
+- The rest of each club's page (the squad table)
 - Charts for player and club stats
 
 ## Credits
 
 A personal, non-commercial project. Data from football-data.org, Understat and
-FotMob, player photos and names from FotMob, birth dates and positions from
-transfermarkt-datasets, season awards and European places from Wikipedia and
+FotMob, player and manager photos and names from FotMob, birth dates, positions,
+lineups and managers from transfermarkt-datasets, season awards and European places from Wikipedia and
 crests from footylogos.com. Club names and crests belong to their clubs.
