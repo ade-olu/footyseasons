@@ -65,7 +65,9 @@ export default function ClubHonours({
               />
             )}
             <div className="club-honours__info">
-              <h3 className="club-honours__name">{item.name}</h3>
+              <h3 className="club-honours__name" title={item.name}>
+                {item.name}
+              </h3>
               <p className="club-honours__last">
                 Last won {seasonLabel(item.lastStartYear)}
               </p>

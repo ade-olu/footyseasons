@@ -74,13 +74,16 @@
     min-width: 0;
   }
 
+  // Wraps to a second line rather than cutting off
   &__name {
+    display: -webkit-box;
     overflow: hidden;
     @include text(14);
     font-weight: 500;
     color: $color-text-primary;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   &__last {
