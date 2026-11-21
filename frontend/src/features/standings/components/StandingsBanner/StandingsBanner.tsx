@@ -1,5 +1,6 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
 import ClubCrest from "@/components/ui/ClubCrest/ClubCrest";
+import PageBanner from "@/components/ui/PageBanner/PageBanner";
 import Podium from "@/components/ui/Podium/Podium";
 import type { LeagueCode } from "@/data/leagues";
 import type { Standing } from "@/types/api"; // Types for API responses
@@ -43,26 +44,15 @@ export default function StandingsBanner({
   const content = data ? getBannerContent(data) : null;
 
   return (
-    <section
+    <PageBanner
       className="standings-banner"
-      aria-labelledby="standings-banner-title"
-      aria-busy={!content && !isError}
+      title="Standings"
+      description={content?.description}
+      error="Couldn't load the standings."
+      isError={isError}
+      isLoading={!content && !isError}
+      podium
     >
-      <div className="standings-banner__text">
-        <h2 id="standings-banner-title" className="standings-banner__title">
-          Standings
-        </h2>
-        {isError && (
-          <p className="standings-banner__description" role="alert">
-            Couldn't load the standings.
-          </p>
-        )}
-        {content && (
-          <p className="standings-banner__description">
-            {content.description}
-          </p>
-        )}
-      </div>
 
       {content && (
         <Podium
@@ -83,6 +73,6 @@ export default function StandingsBanner({
           }))}
         />
       )}
-    </section>
+    </PageBanner>
   );
 }
