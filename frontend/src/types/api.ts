@@ -88,6 +88,36 @@ export type ClubHonoursResponse = {
   trophies: (ClubHonour & { competition: string })[];
 };
 
+// GET /api/clubs/:id/lineup: the most-used XI and the season's managers
+export type LineupPlayer = {
+  understatId: number | null;
+  playerName: string;
+  photoUrl: string | null;
+  shirtNumber: number | null;
+  starts: number; // At this position
+};
+
+export type LineupSlot = {
+  position: string; // e.g. "LB"
+  player: LineupPlayer | null;
+};
+
+export type ClubManager = {
+  name: string;
+  matches: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  photoUrl: string | null;
+};
+
+export type ClubLineupResponse = {
+  formation: string | null; // e.g. "4-3-3"; null without lineups
+  formationStarts: number;
+  lines: LineupSlot[][]; // Goalkeeper first, each line left to right
+  managers: ClubManager[]; // In the order they served
+};
+
 // One season in GET /api/clubs/:id/seasons (oldest first): the final table row
 export type ClubSeasonRecord = {
   startYear: number;
