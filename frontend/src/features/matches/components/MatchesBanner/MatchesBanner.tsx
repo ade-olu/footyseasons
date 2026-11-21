@@ -1,4 +1,5 @@
 import { useSeasonData, type SeasonData } from "@/api/seasonData";
+import PageBanner from "@/components/ui/PageBanner/PageBanner";
 import type { LeagueCode } from "@/data/leagues";
 import { isPlayed } from "@/utils/match";
 import { plural } from "@/utils/plural";
@@ -74,24 +75,14 @@ export default function MatchesBanner({ league, season }: MatchesBannerProps) {
   const played = content?.shares.reduce((sum, s) => sum + s.count, 0) ?? 0;
 
   return (
-    <section
+    <PageBanner
       className="matches-banner"
-      aria-labelledby="matches-banner-title"
-      aria-busy={!content && !isError}
+      title="Matches"
+      description={content?.description}
+      error="Couldn't load the matches."
+      isError={isError}
+      isLoading={!content && !isError}
     >
-      <div className="matches-banner__text">
-        <h2 id="matches-banner-title" className="matches-banner__title">
-          Matches
-        </h2>
-        {isError && (
-          <p className="matches-banner__description" role="alert">
-            Couldn't load the matches.
-          </p>
-        )}
-        {content && (
-          <p className="matches-banner__description">{content.description}</p>
-        )}
-      </div>
 
       {/* Each column is as wide as its share, with its bar below */}
       {content && played > 0 && (
@@ -122,6 +113,6 @@ export default function MatchesBanner({ league, season }: MatchesBannerProps) {
           ))}
         </div>
       )}
-    </section>
+    </PageBanner>
   );
 }
