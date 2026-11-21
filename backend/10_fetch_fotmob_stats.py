@@ -151,7 +151,7 @@ def main():
             missing_stats.append(f"{league['code']} {year}: {', '.join(missing)}")
         all_unmatched += [(league["code"], year, p) for p in unmatched]
 
-    # Last script in the pipeline: reclaim the space left by the re-inserts
+    # Reclaim the space left by the re-inserts
     connection.execute("VACUUM")
     connection.close()
 
