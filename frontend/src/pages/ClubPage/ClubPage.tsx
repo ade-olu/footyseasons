@@ -10,6 +10,7 @@ import ClubNav from "@/features/clubs/components/ClubNav/ClubNav";
 import ClubResults from "@/features/clubs/components/ClubResults/ClubResults";
 import ClubTopPlayers from "@/features/clubs/components/ClubTopPlayers/ClubTopPlayers";
 import HomeAndAway from "@/features/clubs/components/HomeAndAway/HomeAndAway";
+import MostUsedXI from "@/features/clubs/components/MostUsedXI/MostUsedXI";
 import PositionChart from "@/features/clubs/components/PositionChart/PositionChart";
 import SeasonBySeason from "@/features/clubs/components/SeasonBySeason/SeasonBySeason";
 import {
@@ -141,6 +142,15 @@ export default function ClubPage({ league, season }: ClubPageProps) {
         <ClubTopPlayers
           className={onTab("squad")}
           league={league}
+          season={season}
+          clubId={clubId}
+          clubName={club.data.club.displayName}
+        />
+      )}
+      {/* The players who started most in the most-used formation */}
+      {isInSeason && club.data && (
+        <MostUsedXI
+          className={onTab("squad")}
           season={season}
           clubId={clubId}
           clubName={club.data.club.displayName}

@@ -1,0 +1,301 @@
+@use "@/styles/foundations" as *;
+
+// Wide screens: the half pitch lies sideways, goal on the left. Phones: upright,
+// goal at the bottom
+.most-used-xi {
+  background-color: $color-bg-inverse;
+  border-color: $color-bg-inverse;
+
+  .section-header__title {
+    color: $color-text-inverse;
+  }
+
+  .section-header__description {
+    color: $color-text-inverse-secondary;
+  }
+
+  &__pitch {
+    --step: 20.25%;
+    position: relative;
+    height: rem(456);
+    border: 1px solid $color-pitch-line;
+    border-radius: $radius-8;
+    overflow: hidden;
+
+    // Four or more outfield lines spread further up the pitch
+    &--deep {
+      --step: calc(48.3% / (var(--outfield) - 1));
+    }
+
+    // Taller for a line of 5
+    &--packed {
+      height: rem(536);
+    }
+  }
+
+  &__box,
+  &__goal-area,
+  &__arc,
+  &__circle {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+  }
+
+  &__box,
+  &__goal-area {
+    left: -1px;
+    border: 1px solid $color-pitch-line;
+  }
+
+  &__box {
+    width: rem(200);
+    height: rem(304);
+  }
+
+  &__goal-area {
+    width: rem(60);
+    height: rem(152);
+  }
+
+  // The part of the penalty circle outside the box
+  &__arc {
+    left: calc(rem(200) - 1px);
+    width: rem(40); // 8px past the tip, so it isn't clipped
+    height: rem(120);
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: rem(-12);
+      left: rem(-112);
+      width: rem(144);
+      height: rem(144);
+      border: 1px solid $color-pitch-line;
+      border-radius: 50%;
+    }
+  }
+
+  &__circle {
+    right: rem(-90);
+    width: rem(180);
+    height: rem(180);
+    border: 1px solid $color-pitch-line;
+    border-radius: 50%;
+  }
+
+  &__line {
+    --x: calc(35.7% + (var(--line) - 1) * var(--step));
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--x) - rem(52));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: rem(36);
+    width: rem(104);
+
+    &--goalkeeper {
+      --x: #{rem(128)};
+    }
+
+    &--crowded {
+      gap: rem(16);
+    }
+
+    &--packed {
+      gap: rem(12);
+    }
+  }
+
+  &__player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem(8);
+    width: rem(104);
+    min-width: 0;
+    min-height: rem(88);
+  }
+
+  &__photo {
+    width: rem(48);
+    height: rem(48);
+
+    // Shrinks the cut-out so the whole head fits, shoulders on the bottom edge
+    &:is(img) {
+      padding: 0 rem(2);
+      object-fit: contain;
+      object-position: bottom;
+      background-color: $color-bg-photo-inverse;
+    }
+
+    &.player-photo--initials {
+      color: $color-text-inverse-secondary;
+      background-color: $color-bg-photo-inverse;
+      border: none;
+    }
+  }
+
+  // A long surname can run past its slot, centred
+  &__name {
+    display: flex;
+    justify-content: center;
+    gap: rem(4);
+    @include text(12);
+    white-space: nowrap;
+  }
+
+  &__number,
+  &__starts {
+    color: $color-text-inverse-secondary;
+  }
+
+  &__surname {
+    font-weight: 500;
+    color: $color-text-inverse;
+  }
+
+  &__starts {
+    margin-top: rem(-4);
+    @include text(12);
+  }
+
+  &__managers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(16) rem(48);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__manager {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__manager-info {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
+  }
+
+  &__manager-name {
+    @include text(14);
+    font-weight: 500;
+    color: $color-text-inverse;
+  }
+
+  &__manager-detail {
+    @include text(12);
+    color: $color-text-inverse-secondary;
+  }
+
+  @include container-up-to($content-phone) {
+    &__pitch {
+      height: calc(rem(322) + (var(--rows) - 1) * rem(114));
+    }
+
+    &__box,
+    &__goal-area,
+    &__arc,
+    &__circle {
+      top: auto;
+      left: 50%;
+      translate: -50% 0;
+    }
+
+    &__box,
+    &__goal-area {
+      bottom: -1px;
+    }
+
+    &__box {
+      width: rem(224);
+      height: rem(120);
+    }
+
+    &__goal-area {
+      width: rem(136);
+      height: rem(52);
+    }
+
+    &__arc {
+      bottom: calc(rem(120) - 1px);
+      width: rem(88);
+      height: rem(32);
+
+      &::before {
+        top: rem(8);
+        left: rem(-8);
+        width: rem(104);
+        height: rem(104);
+      }
+    }
+
+    &__circle {
+      top: rem(-56);
+      right: auto;
+      width: rem(112);
+      height: rem(112);
+    }
+
+    &__line {
+      top: auto;
+      right: 0;
+      bottom: calc(rem(162) + (var(--row) - 1) * rem(114));
+      left: 0;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: rem(16);
+      width: auto;
+
+      &--goalkeeper {
+        bottom: rem(16);
+      }
+
+      &--crowded {
+        gap: 0;
+      }
+
+      // A line of 5: the 3 central players, and the wide pair on their own row
+      // (in front of them, or behind them in defence)
+      &--packed {
+        display: grid;
+        grid-template-columns: repeat(3, rem(104));
+        justify-content: center;
+        gap: rem(26) rem(16);
+
+        > :first-child,
+        > :last-child {
+          grid-row: 2;
+        }
+
+        > :last-child {
+          grid-column: 3;
+        }
+      }
+
+      &--packed#{&}--defence {
+        > :first-child,
+        > :last-child {
+          grid-row: 1;
+        }
+
+        > :not(:first-child, :last-child) {
+          grid-row: 2;
+        }
+      }
+    }
+
+    &__player {
+      flex: 0 1 rem(104);
+      width: auto;
+    }
+  }
+}
