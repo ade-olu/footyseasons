@@ -103,8 +103,8 @@ router.get("/:id/seasons", (req, res) => {
   res.json(seasons);
 });
 
-// Get a club's trophies (all-time) and season awards (since 2014/15), each
-// counted up to the selected season (?season=, every season when left out).
+// Get a club's all-time trophies, counted up to the selected season (?season=,
+// every season when left out).
 router.get("/:id/honours", (req, res) => {
   const clubId = parseInteger(req.params.id, "id", res);
   if (clubId === undefined) return;
@@ -130,21 +130,7 @@ router.get("/:id/honours", (req, res) => {
     )
     .all(clubId, startYear, startYear);
 
-  // A shared award is one row per winner, so count seasons
-  const awards = db
-    .prepare(
-      `
-    SELECT sa.award, COUNT(DISTINCT s.start_year) AS count,
-      MAX(s.start_year) AS lastStartYear
-    FROM season_awards sa
-    JOIN seasons s ON s.season_id = sa.season_id
-    WHERE sa.club_id = ? AND (? IS NULL OR s.start_year <= ?)
-    GROUP BY sa.award
-  `,
-    )
-    .all(clubId, startYear, startYear);
-
-  res.json({ trophies, awards });
+  res.json({ trophies });
 });
 
 // Get the matches played by a club, optionally for one season (?season=).
